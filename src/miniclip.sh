@@ -1,0 +1,1 @@
+alias mpt_8bpe_build="BUILD_ENV=Staging sh build.sh emscripten && npm run debug";
