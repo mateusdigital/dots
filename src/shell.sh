@@ -14,9 +14,15 @@
 ##  Copyright : stdmatt - 2018                                                ##
 ##                                                                            ##
 ##  Description :                                                             ##
-##    Some aliases and functions to the life in shell easier.          ##
+##    Some aliases and functions to the life in shell easier.                 ##
 ##                                                                            ##
 ##---------------------------------------------------------------------------~##
+
+##----------------------------------------------------------------------------##
+## Imports                                                                    ##
+##----------------------------------------------------------------------------##
+source "/usr/local/src/pixelwizards/shellscript_utils/main.sh"
+
 
 ##----------------------------------------------------------------------------##
 ## ls                                                                         ##
@@ -24,3 +30,36 @@
 alias ls="ls -F -G -h -p";
 alias la="ls -A";
 alias ll="ls -l"
+
+
+##----------------------------------------------------------------------------##
+## Files                                                                      ##
+##   Open the Filesystem Manager into a given path.                           ##
+##   If no path was given open the current dir.                               ## 
+##----------------------------------------------------------------------------##
+files()
+{
+    ## Initialize the destination path to the current dir.
+    local path=".";
+
+    ## Check if the input is comming from a pipe (stdin) or
+    ## from the arguments...
+    if [ -t 0 ]; then
+        ## User (Myself actually :P) passed a custom path...
+        if [ ! -z "$1" ]; then
+            path=$1;
+        fi;
+    else
+        read path;
+    fi;
+
+    local curr_os=$(pw_os_get_simple_name);
+    local files_mgr="";
+    if [ "$curr_os" == "$(PW_OS_OSX)" ]; then 
+        files_mgr="open";
+    fi;
+
+
+    ## Don't write the error messages into the terminal.
+    $files_mgr 2> /dev/null $path;
+}
