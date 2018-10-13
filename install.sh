@@ -17,19 +17,23 @@
 ##    Super, super simple (and inclomple) install script for dots.            ##
 ##---------------------------------------------------------------------------~##
 
-## @incomplete(stdmatt): Today this only installs the file on the installation 
+## @incomplete(stdmatt): Today this only installs the file on the installation
 ##  directory, but doesn't make an entry on the .bashrc file (which is needed
-##  in order to bash load our stuff).  
+##  in order to bash load our stuff).
 
 ##----------------------------------------------------------------------------##
 ## Variables                                                                  ##
 ##----------------------------------------------------------------------------##
 INSTALL_DIR="$HOME/.stdmatt/dots";
 
+
 ##----------------------------------------------------------------------------##
 ## Script                                                                     ##
 ##----------------------------------------------------------------------------##
+## Install the script files.
+##   Clear the installation directory.
 rm -rf "$INSTALL_DIR";
 mkdir "$INSTALL_DIR";
 
+##   Copy all scripts to it.
 cp -R ./src/* $INSTALL_DIR;
