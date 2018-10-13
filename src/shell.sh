@@ -33,9 +33,25 @@ alias ll="ls -l"
 
 
 ##----------------------------------------------------------------------------##
+## PATH                                                                       ##
+##----------------------------------------------------------------------------##
+PATH-add()
+{
+    if [ -z "$1" ]; then
+        echo "[PATH-add] Empty path - Ignoring...";
+        return 1;
+    fi;
+
+    PATH="$1:$PATH";
+    echo "[PATH-add] Success...";
+    echo "$PATH";
+}
+
+
+##----------------------------------------------------------------------------##
 ## Files                                                                      ##
 ##   Open the Filesystem Manager into a given path.                           ##
-##   If no path was given open the current dir.                               ## 
+##   If no path was given open the current dir.                               ##
 ##----------------------------------------------------------------------------##
 files()
 {
@@ -55,7 +71,7 @@ files()
 
     local curr_os=$(pw_os_get_simple_name);
     local files_mgr="";
-    if [ "$curr_os" == "$(PW_OS_OSX)" ]; then 
+    if [ "$curr_os" == "$(PW_OS_OSX)" ]; then
         files_mgr="open";
     fi;
 
