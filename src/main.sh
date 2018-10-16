@@ -31,3 +31,4 @@ PROJECT_ROOT_DIR="$HOME/.stdmatt/dots";
 source "$PROJECT_ROOT_DIR/miniclip.sh"
 source "$PROJECT_ROOT_DIR/gitcheck.sh"
 source "$PROJECT_ROOT_DIR/shell.sh"
+source "$PROJECT_ROOT_DIR/dosbox.sh"
