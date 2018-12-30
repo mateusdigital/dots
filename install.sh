@@ -41,10 +41,10 @@ _install_source_on()
         pw_log_fatal "$PATH_TO_INSTALL does not exists - Aborting...";
     fi;
 
-    local result=$(cat "$PATH_TO_INSTALL" | grep "$INSTALL_DIR/main.sh");
+    local result=$(cat "$PATH_TO_INSTALL" | grep "source $INSTALL_DIR/main.sh");
     if [ -z "$result" ]; then
-        echo "## stdmatt's dots ##" >> "$PATH_TO_INSTALL";
-        echo "$INSTALL_DIR/main.sh" >> "$PATH_TO_INSTALL";
+        echo "## stdmatt's dots ##"        >> "$PATH_TO_INSTALL";
+        echo "source $INSTALL_DIR/main.sh" >> "$PATH_TO_INSTALL";
     fi;
 
     echo "Done...";
