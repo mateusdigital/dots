@@ -5,34 +5,42 @@
 ##                   \__ \ || (_| | | | | | | (_| | |_| |_                    ##
 ##                   |___/\__\__,_|_| |_| |_|\__,_|\__|\__|                   ##
 ##                                                                            ##
-##  File      : main.sh                                                       ##
+##  File      : misc.sh                                                       ##
 ##  Project   : dots                                                          ##
-##  Date      : Oct 08, 2017                                                  ##
+##  Date      : Jan 06, 2019                                                  ##
 ##  License   : GPLv3                                                         ##
 ##  Author    : stdmatt <stdmatt@pixelwizards.io>                             ##
-##  Copyright : stdmatt - 2018                                                ##
+##  Copyright : stdmatt - 2019                                                ##
 ##                                                                            ##
 ##  Description :                                                             ##
-##    This is the only file that will be sourced in .bashrc (.bash_profile)   ##
-##    so everything that dots needs to source must be sourced from this file  ##
-##    This will make all the stuff avaiable but without the hassle of         ##
-##    need to include everything by hand.                                     ##
-##    Thanks me later....                                                     ##
+##    My custom PS1.                                                          ##
 ##---------------------------------------------------------------------------~##
 
-##----------------------------------------------------------------------------##
-## Variables                                                                  ##
-##----------------------------------------------------------------------------##
-PROJECT_ROOT_DIR="$HOME/.stdmatt/dots";
 
 ##----------------------------------------------------------------------------##
-## Imports                                                                    ##
+## Constants                                                                  ##
 ##----------------------------------------------------------------------------##
-source "$PROJECT_ROOT_DIR/dosbox.sh"
-source "$PROJECT_ROOT_DIR/gitcheck.sh"
-source "$PROJECT_ROOT_DIR/miniclip.sh"
-source "$PROJECT_ROOT_DIR/misc.sh"
-source "$PROJECT_ROOT_DIR/python.sh"
-source "$PROJECT_ROOT_DIR/PS1.sh"
-source "$PROJECT_ROOT_DIR/shell.sh"
-source "$PROJECT_ROOT_DIR/youtube-dl.sh"
+COLOR_PWD=64
+# COLOR_GIT=66
+COLOR_GIT=241
+COLOR_PROMPT=247
+
+
+##----------------------------------------------------------------------------##
+## Functions                                                                  ##
+##----------------------------------------------------------------------------##
+parse_git_branch()
+{
+	BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+	if [ ! "${BRANCH}" == "" ]; then
+        echo "(${BRANCH})";
+	else
+		echo ""
+	fi
+}
+
+
+##----------------------------------------------------------------------------##
+## Exports                                                                    ##
+##----------------------------------------------------------------------------##
+export PS1="\n\[\033[38;5;${COLOR_PWD}m\]\W\[$(tput sgr0)\]:\[\033[38;5;${COLOR_GIT}m\]\`parse_git_branch\`\[$(tput sgr0)\]\n\[$(tput bold)\033[38;5;${COLOR_PROMPT}m\]λ\[$(tput sgr0)\] "
