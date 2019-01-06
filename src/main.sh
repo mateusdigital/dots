@@ -31,6 +31,7 @@ PROJECT_ROOT_DIR="$HOME/.stdmatt/dots";
 source "$PROJECT_ROOT_DIR/dosbox.sh"
 source "$PROJECT_ROOT_DIR/gitcheck.sh"
 source "$PROJECT_ROOT_DIR/miniclip.sh"
+source "$PROJECT_ROOT_DIR/misc.sh"
 source "$PROJECT_ROOT_DIR/python.sh"
 source "$PROJECT_ROOT_DIR/shell.sh"
 source "$PROJECT_ROOT_DIR/youtube-dl.sh"
