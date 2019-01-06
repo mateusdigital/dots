@@ -25,6 +25,8 @@ COLOR_PWD=64
 COLOR_GIT=241
 COLOR_PROMPT=247
 
+STR_PROMPT="λ";
+
 
 ##----------------------------------------------------------------------------##
 ## Functions                                                                  ##
@@ -43,4 +45,4 @@ parse_git_branch()
 ##----------------------------------------------------------------------------##
 ## Exports                                                                    ##
 ##----------------------------------------------------------------------------##
-export PS1="\n\[\033[38;5;${COLOR_PWD}m\]\W\[$(tput sgr0)\]:\[\033[38;5;${COLOR_GIT}m\]\`parse_git_branch\`\[$(tput sgr0)\]\n\[$(tput bold)\033[38;5;${COLOR_PROMPT}m\]λ\[$(tput sgr0)\] "
+export PS1="\n\[\033[38;5;${COLOR_PWD}m\]\W\[$(tput sgr0)\]:\[\033[38;5;${COLOR_GIT}m\]\`parse_git_branch\`\[$(tput sgr0)\]\n\[$(tput bold)\033[38;5;${COLOR_PROMPT}m\]${STR_PROMPT}\[$(tput sgr0)\] "
