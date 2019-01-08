@@ -19,6 +19,14 @@
 ##----------------------------------------------------------------------------##
 ## Aliaes                                                                     ##
 ##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
+## 8BPE
 alias mpt_8bpe_build="BUILD_ENV=Staging sh build.sh emscripten && npm run debug";
 alias mpt_8bpe_clean="BUILD_ENV=Staging sh build.sh clean";
 alias mpt_8bpe_run="npm run server"
+
+
+##------------------------------------------------------------------------------
+## PACIO
+alias mpt_pacio_start_maestro="gosh maestro && make seixas_console";
+alias mpt_pacio_start_core="gosh core && npm run serve";
