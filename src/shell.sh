@@ -25,16 +25,16 @@ source "/usr/local/src/pixelwizards/shellscript_utils/main.sh"
 ##----------------------------------------------------------------------------##
 ## find-name                                                                  ##
 ##----------------------------------------------------------------------------##
-find-name() 
-{ 
+find-name()
+{
     test -z "$1" && \
         echo "Missing start path - Aborting..." && \
         return 1;
-    
+
     test -z "$2" && \
         echo "Missing filename regex - Aborting..." && \
         return 1;
-    
+
     find "$1" -iname "$2";
 }
 
@@ -92,4 +92,12 @@ files()
 
     ## Don't write the error messages into the terminal.
     $files_mgr 2> /dev/null $path;
+}
+
+##----------------------------------------------------------------------------##
+## sudo                                                                       ##
+##----------------------------------------------------------------------------##
+please()
+{
+    sudo $@;
 }
