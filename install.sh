@@ -27,6 +27,8 @@ source /usr/local/src/pixelwizards/shellscript_utils/main.sh
 ## Variables                                                                  ##
 ##----------------------------------------------------------------------------##
 INSTALL_DIR="$HOME/.stdmatt/dots";
+PYTHON_EXTENSIONS="pdfkit";
+BREW_EXTENSIONS="Caskroom/cask/wkhtmltopdf";
 
 
 ##----------------------------------------------------------------------------##
@@ -77,3 +79,15 @@ elif [ -n "$USE_BASH_PROFILE" ]; then
 else
     _install_source_on $DEFAULT_BASH_RC;
 fi
+
+##
+## Install python extensions.
+for item in $PYTHON_EXTENSIONS; do
+    sudo pip install "$item";
+done;
+
+##
+## Install brew extensions.
+for item in $BREW_EXTENSIONS; do
+    brew install "$item";
+done;
