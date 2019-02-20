@@ -27,15 +27,8 @@ source "/usr/local/src/pixelwizards/shellscript_utils/main.sh"
 ##----------------------------------------------------------------------------##
 find-name()
 {
-    test -z "$1" && \
-        echo "Missing start path - Aborting..." && \
-        return 1;
-
-    test -z "$2" && \
-        echo "Missing filename regex - Aborting..." && \
-        return 1;
-
-    find "$1" -iname "$2";
+    local script_dir=$(pw_get_script_dir);
+    $script_dir/find_name.py $@;
 }
 
 ##----------------------------------------------------------------------------##
