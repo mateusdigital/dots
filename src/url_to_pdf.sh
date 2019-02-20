@@ -19,7 +19,7 @@
 ##---------------------------------------------------------------------------~##
 ## Functions                                                                  ##
 ##---------------------------------------------------------------------------~##
-##---------------------------------------------------------------------------~--
+##------------------------------------------------------------------------------
 url-to-pdf()
 {
     local URL="$1";
@@ -33,4 +33,21 @@ url-to-pdf()
 
     echo "import pdfkit; pdfkit.from_url(\"${URL}\", \"${output_path}\")" | python - > /dev/null
     echo "Done...";
+}
+
+##------------------------------------------------------------------------------
+open-article()
+{
+    local owncloud_path="$HOME/owncloud/articles";
+
+    local URL="$1";
+    local output_path="$(basename "$URL").pdf";
+
+    if [ ! -e "$owncloud_path/$output_path" ]; then
+        url-to-pdf "$URL";
+        mv "$output_path" "$owncloud_path/$output_path"
+    fi;
+
+    ## XXX(stdmatt): Only works for OSX right now...
+    open "$owncloud_path/$output_path";
 }
