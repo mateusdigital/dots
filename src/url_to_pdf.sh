@@ -40,14 +40,44 @@ open-article()
 {
     local owncloud_path="$HOME/owncloud/articles";
 
+    ##
+    ## Declare the variables that we gonna need.
+    ## Url to download.
     local URL="$1";
-    local output_path="$(basename "$URL").pdf";
 
-    if [ ! -e "$owncloud_path/$output_path" ]; then
-        url-to-pdf "$URL";
-        mv "$output_path" "$owncloud_path/$output_path"
+    ## Section that the pdf will be saved.
+    local section="$2";
+    test -z "$section" && \
+        section="default_section";
+
+    ## Cleaned up filename - without the .html extension.
+    local file_name=$(basename "$URL" | \
+        sed s@".htm"@""@g             | \
+        sed s@".html"@""@g);
+
+    ## Cleaned up site name - withou the http(s):// and with '.', '/' removed.
+    local site_name=$(echo "$URL"  | \
+        sed s@"http://www\."@""@g  | \
+        sed s@"https://www\."@""@g | \
+        sed s@"\/"@"_"@g           | \
+        sed s@"\."@"_"@g);
+
+    ## Filename of the output pdf.
+    local final_file_name="${file_name}__${site_name}";
+
+    ##
+    ## Check if already have this article saved.
+    ##   If we don't have save it!
+    local found=$(find "$owncloud_path" -iname "$final_file_name");
+    local output_path="$owncloud_path/$section/$final_file_name";
+    if [ -z "$found" ]; then
+        echo "not found";
+        mkdir -p "$owncloud_path/$section";
+        echo "import pdfkit; pdfkit.from_url(\"${URL}\", \"${output_path}\")" | python - > /dev/null
+    else
+        output_path="$found";
     fi;
 
     ## XXX(stdmatt): Only works for OSX right now...
-    open "$owncloud_path/$output_path";
+    open "$output_path";
 }
