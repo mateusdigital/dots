@@ -103,6 +103,12 @@ todo() {
     code $HOME/ownCloud/todo.txt
 }
 
+edit-profile()
+{
+    ## @XXX(stdmatt): Only works at the OSX right now.
+    code $HOME/.bash_profile
+}
+
 ##----------------------------------------------------------------------------##
 ## Documentation                                                              ##
 ##----------------------------------------------------------------------------##
