@@ -66,26 +66,29 @@ cp -R ./src/* $INSTALL_DIR;
 
 ##
 ## Add a entry on the .bash_rc / .bash_profile so we can use the dots files.
-DEFAULT_BASH_RC=$(pw_get_default_bashrc_or_profile);
-USE_BASH_RC=$(pw_getopt_exists "$@" "--bashrc");
-USE_BASH_PROFILE=$(pw_getopt_exists $@ "--bash-profile");
+default_bash_rc=$(pw_get_default_bashrc_or_profile);
+use_bash_rc=$(pw_getopt_exists "$@" "--bashrc");
+use_bash_profile=$(pw_getopt_exists $@ "--bash-profile");
+install_everything=$(pw_getopt_exists $@ "--everything");
 
-if [ -n "$USE_BASH_RC" ]; then
+if [ -n "$use_bash_rc" ]; then
     _install_source_on "$HOME/.bashrc";
-elif [ -n "$USE_BASH_PROFILE" ]; then
+elif [ -n "$use_bash_profile" ]; then
     _install_source_on "$HOME/.bash_profile";
 else
-    _install_source_on $DEFAULT_BASH_RC;
+    _install_source_on $default_bash_rc;
 fi
 
-##
-## Install python extensions.
-for item in $PYTHON_EXTENSIONS; do
-    sudo pip install "$item";
-done;
+if [ -n "$install_everything" ]; then
+    ##
+    ## Install python extensions.
+    for item in $PYTHON_EXTENSIONS; do
+        sudo pip install "$item";
+    done;
 
-##
-## Install brew extensions.
-for item in $BREW_EXTENSIONS; do
-    brew install "$item";
-done;
+    ##
+    ## Install brew extensions.
+    for item in $BREW_EXTENSIONS; do
+        brew install "$item";
+    done;
+fi;
