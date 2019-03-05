@@ -17,5 +17,44 @@
 ##                                                                            ##
 ##---------------------------------------------------------------------------~##
 
+##----------------------------------------------------------------------------##
+## Functions                                                                  ##
+##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
+_gitcheck()
+{
+    ##
+    ## Check if we want gitcheck in another directory.
+    local directory=".";
+    if [ -n "$1" ]; then
+        if [ "${#1}" -ge "2" ] && [ ${1:0:2} != "--" ]; then
+            directory="$1";
+        fi;
+    fi;
 
-alias gitcheck-raq="gitcheck --remote --all-branch --quiet";
+    ##
+    ## Directory must be valid.
+    if [ ! -d "$directory" ]; then
+        echo "Invalid directory - Aborting... "
+        echo "  Path: ($directory)";
+        return 1;
+    fi;
+
+    ##
+    ## Since gitcheck doesn't accept a directory (or I'm too lazy to actually
+    ## check in the documentation, we changing the directory ;D
+    cd "$directory";
+        local the_real_gitcheck=$(which gitcheck)
+        $the_real_gitcheck --quiet ##$2 $3; ## Maybe we passed other arguents as well..
+    cd -;
+}
+
+##------------------------------------------------------------------------------
+gitcheck() {
+    _gitcheck "$1";
+}
+
+##------------------------------------------------------------------------------
+gitcheck-raq() {
+   _gitcheck  "$1" --remote --all-branch
+}
