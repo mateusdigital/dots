@@ -39,7 +39,10 @@ url-to-pdf()
 open-article()
 {
     local owncloud_path="$HOME/owncloud/articles";
-
+    if [ ! -d $"owncloud_path" ]; then
+        echo "Directory $owncloud_path isn't found.";
+        return 1;
+    fi;
     ##
     ## Declare the variables that we gonna need.
     ## Url to download.
