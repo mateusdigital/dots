@@ -60,7 +60,7 @@ _install_source_on()
 ## Install the script files.
 ##   Clear the installation directory.
 rm -rf "$INSTALL_DIR";
-mkdir "$INSTALL_DIR";
+mkdir -p "$INSTALL_DIR";
 ##   Copy all scripts to it.
 cp -R ./src/* $INSTALL_DIR;
 
