@@ -39,11 +39,7 @@ url-to-pdf()
 open-article()
 {
     local owncloud_path="$HOME/ownCloud/articles";
-
-    if [ ! -d $"owncloud_path" ]; then
-        echo "Directory $owncloud_path isn't found.";
-        return 1;
-    fi;
+    mkdir -p "$owncloud_path";
 
     ##
     ## Declare the variables that we gonna need.
