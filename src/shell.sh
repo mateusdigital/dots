@@ -31,6 +31,7 @@ find-name()
     $script_dir/find_name.py $@;
 }
 
+
 ##----------------------------------------------------------------------------##
 ## ls                                                                         ##
 ##----------------------------------------------------------------------------##
@@ -103,11 +104,16 @@ todo() {
     code $HOME/ownCloud/todo.txt
 }
 
+books() {
+    code $HOME/ownCloud/books.txt
+}
+
 edit-profile()
 {
     ## @XXX(stdmatt): Only works at the OSX right now.
     code $HOME/.bash_profile
 }
+
 
 ##----------------------------------------------------------------------------##
 ## Documentation                                                              ##
