@@ -25,6 +25,7 @@
 ##----------------------------------------------------------------------------##
 PROJECT_ROOT_DIR="$HOME/.stdmatt/dots";
 
+
 ##----------------------------------------------------------------------------##
 ## Imports                                                                    ##
 ##----------------------------------------------------------------------------##
@@ -32,9 +33,9 @@ source "$PROJECT_ROOT_DIR/dosbox.sh"
 source "$PROJECT_ROOT_DIR/gitcheck.sh"
 source "$PROJECT_ROOT_DIR/miniclip.sh"
 source "$PROJECT_ROOT_DIR/misc.sh"
-source "$PROJECT_ROOT_DIR/python.sh"
 source "$PROJECT_ROOT_DIR/PS1.sh"
+source "$PROJECT_ROOT_DIR/python.sh"
 source "$PROJECT_ROOT_DIR/shell.sh"
-source "$PROJECT_ROOT_DIR/youtube-dl.sh"
 source "$PROJECT_ROOT_DIR/tinyurl.sh"
 source "$PROJECT_ROOT_DIR/url_to_pdf.sh"
+source "$PROJECT_ROOT_DIR/youtube-dl.sh"
