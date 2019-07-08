@@ -104,6 +104,11 @@ todo() {
     code $HOME/ownCloud/todo.txt
 }
 
+money() {
+    code $HOME/ownCloud/money.txt
+}
+
+
 books() {
     code $HOME/ownCloud/books.txt
 }
