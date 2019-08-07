@@ -10,7 +10,7 @@
 ##  Date      : Oct 12, 2018                                                  ##
 ##  License   : GPLv3                                                         ##
 ##  Author    : stdmatt <stdmatt@pixelwizards.io>                             ##
-##  Copyright : stdmatt - 2018                                                ##
+##  Copyright : stdmatt - 2018, 2019                                          ##
 ##                                                                            ##
 ##  Description :                                                             ##
 ##    Some aliases and functions to the life in shell easier.                 ##
@@ -21,6 +21,7 @@
 ## Imports                                                                    ##
 ##----------------------------------------------------------------------------##
 source "/usr/local/src/pixelwizards/shellscript_utils/main.sh"
+
 
 ##----------------------------------------------------------------------------##
 ## find-name                                                                  ##
