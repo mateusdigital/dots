@@ -10,7 +10,7 @@
 ##  Date      : Oct 08, 2017                                                  ##
 ##  License   : GPLv3                                                         ##
 ##  Author    : stdmatt <stdmatt@pixelwizards.io>                             ##
-##  Copyright : stdmatt - 2018                                                ##
+##  Copyright : stdmatt - 2018, 2019                                          ##
 ##                                                                            ##
 ##  Description :                                                             ##
 ##    This is the only file that will be sourced in .bashrc (.bash_profile)   ##
@@ -31,7 +31,6 @@ PROJECT_ROOT_DIR="$HOME/.stdmatt/dots";
 ##----------------------------------------------------------------------------##
 source "$PROJECT_ROOT_DIR/dosbox.sh"
 source "$PROJECT_ROOT_DIR/gitcheck.sh"
-source "$PROJECT_ROOT_DIR/miniclip.sh"
 source "$PROJECT_ROOT_DIR/misc.sh"
 source "$PROJECT_ROOT_DIR/PS1.sh"
 source "$PROJECT_ROOT_DIR/python.sh"
