@@ -30,6 +30,7 @@ PROJECT_ROOT_DIR="$HOME/.stdmatt/dots";
 ## Imports                                                                    ##
 ##----------------------------------------------------------------------------##
 source "$PROJECT_ROOT_DIR/dosbox.sh"
+source "$PROJECT_ROOT_DIR/emscripten.sh"
 source "$PROJECT_ROOT_DIR/gitcheck.sh"
 source "$PROJECT_ROOT_DIR/misc.sh"
 source "$PROJECT_ROOT_DIR/PS1.sh"
