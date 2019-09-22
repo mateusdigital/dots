@@ -33,17 +33,17 @@ STR_PROMPT="λ";
 ##------------------------------------------------------------------------------
 parse_git_branch()
 {
-	BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
-	if [ ! "${BRANCH}" == "" ]; then
+    BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+    if [ ! "${BRANCH}" == "" ]; then
         local TAG=$(git describe --tags $(git rev-list --tags --max-count=1) 2> /dev/null);
         if [ -n "$TAG" ]; then
             echo "(${BRANCH}:${TAG})";
         else
             echo "(${BRANCH})";
         fi;
-	else
-		echo ""
-	fi
+    else
+       echo ""
+    fi
 }
 
 
