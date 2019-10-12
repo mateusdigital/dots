@@ -12,7 +12,17 @@
 ##  Copyright : stdmatt - 2019                                                ##
 ##                                                                            ##
 ##  Description :                                                             ##
+##     Makes the python's simple http server can be started in a              ##
+##     deamon-ish way.                                                        ##
 ##                                                                            ##
+##     So we can just call the function in the directory that we want         ##
+##     to serve and the script will take care of make the old server goes     ##
+##     away!                                                                  ##
+##                                                                            ##
+##     Today I got married <3 Hope that I can live a very beautiful life      ##
+##     with Sasha - like we're already doing!                                 ##
+##                                                                            ##
+##     Quite happy!!!                                                         ##
 ##----------------------------------------------------------------------------##
 
 ##------------------------------------------------------------------------------
