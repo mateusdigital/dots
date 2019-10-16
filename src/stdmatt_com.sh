@@ -33,7 +33,7 @@ mount_stdmatt_com()
     sshfs "$STDMATT_COM_USER_AT_HOST:" "$STDMATT_COM_MOUNT_POINT"  \
         -ovolname="$STDMATT_COM_USER_AT_HOST"                       \
         -p 22                                                       \
-        -o transform_symlinks                                       \
+        -o follow_symlinks                                       \
         -o idmap=user                                               \
         -C
 }
