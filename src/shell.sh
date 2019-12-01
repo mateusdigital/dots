@@ -101,6 +101,13 @@ edit-profile()
     ed "$PROFILE_PATH";
 }
 
+reload-profile()
+{
+    local PROFILE_PATH=$(pw_get_default_bashrc_or_profile);
+    source "$PROFILE_PATH";
+
+    echo "[reload-profile] Done...";
+}
 
 ##----------------------------------------------------------------------------##
 ## Documentation                                                              ##
