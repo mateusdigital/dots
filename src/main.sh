@@ -30,6 +30,7 @@ PROJECT_ROOT_DIR="$HOME/.stdmatt/dots";
 ## Imports                                                                    ##
 ##----------------------------------------------------------------------------##
 source "$PROJECT_ROOT_DIR/dosbox.sh"
+source "$PROJECT_ROOT_DIR/editor.sh"
 source "$PROJECT_ROOT_DIR/emscripten.sh"
 source "$PROJECT_ROOT_DIR/gitcheck.sh"
 source "$PROJECT_ROOT_DIR/http-server.sh"
@@ -40,3 +41,4 @@ source "$PROJECT_ROOT_DIR/tinyurl.sh"
 source "$PROJECT_ROOT_DIR/url_to_pdf.sh"
 source "$PROJECT_ROOT_DIR/youtube-dl.sh"
 source "$PROJECT_ROOT_DIR/stdmatt_com.sh"
+source "$PROJECT_ROOT_DIR/windows_hacks.sh"
