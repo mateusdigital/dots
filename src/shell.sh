@@ -98,7 +98,7 @@ please()
 edit-profile()
 {
     local PROFILE_PATH=$(pw_get_default_bashrc_or_profile);
-    ed $HOME/.bash_profile
+    ed "$PROFILE_PATH";
 }
 
 
