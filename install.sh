@@ -76,3 +76,4 @@ else
     _install_source_on $default_bash_rc;
 fi
 
+ln -f /c/Python38/python.exe /c/Python38/python3.exe
