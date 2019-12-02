@@ -27,8 +27,6 @@ source /usr/local/src/stdmatt/shellscript_utils/main.sh
 ## Variables                                                                  ##
 ##----------------------------------------------------------------------------##
 INSTALL_DIR="$HOME/.stdmatt/dots";
-PYTHON_EXTENSIONS="pdfkit";
-BREW_EXTENSIONS="Caskroom/cask/wkhtmltopdf";
 
 
 ##----------------------------------------------------------------------------##
@@ -69,7 +67,6 @@ cp -R ./src/* $INSTALL_DIR;
 default_bash_rc=$(pw_get_default_bashrc_or_profile);
 use_bash_rc=$(pw_getopt_exists "$@" "--bashrc");
 use_bash_profile=$(pw_getopt_exists $@ "--bash-profile");
-install_everything=$(pw_getopt_exists $@ "--everything");
 
 if [ -n "$use_bash_rc" ]; then
     _install_source_on "$HOME/.bashrc";
@@ -79,16 +76,3 @@ else
     _install_source_on $default_bash_rc;
 fi
 
-if [ -n "$install_everything" ]; then
-    ##
-    ## Install python extensions.
-    for item in $PYTHON_EXTENSIONS; do
-        sudo pip install "$item";
-    done;
-
-    ##
-    ## Install brew extensions.
-    for item in $BREW_EXTENSIONS; do
-        brew install "$item";
-    done;
-fi;
