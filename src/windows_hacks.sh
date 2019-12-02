@@ -1,5 +1,5 @@
 ##------------------------------------------------------------------------------
-__Windows_Hack_Set_PATH()
+__Windows_Hacks_Set_PATH()
 {
     local WINDOWS_PATH="";
     ## Unix-Like stuff...
@@ -26,19 +26,14 @@ __Windows_Hack_Set_PATH()
 }
 
 ##------------------------------------------------------------------------------
-__Windows_Hack_Set_Aliases()
+__Windows_Hacks_Create_Links()
 {
-    alias python27="/c/Python27/python";
-    alias python38="";
+    ln -f /c/Python38/python.exe /c/Python38/python3.exe
 }
 
-python3()
-{
-    /c/Python38/python "$@";
-}
+
 
 ##------------------------------------------------------------------------------
 if [ "$(pw_os_get_simple_name)" == "$(PW_OS_WINDOWS)" ]; then
-    __Windows_Hack_Set_PATH;
-    __Windows_Hack_Set_Aliases;
+    __Windows_Hacks_Set_PATH;
 fi;
