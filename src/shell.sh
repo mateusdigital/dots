@@ -57,28 +57,31 @@ PATH-add()
 files()
 {
     ## Initialize the destination path to the current dir.
-    local path=".";
+    local TARGET_PATH=".";
 
     ## Check if the input is comming from a pipe (stdin) or
     ## from the arguments...
     if [ -t 0 ]; then
         ## User (Myself actually :P) passed a custom path...
         if [ ! -z "$1" ]; then
-            path=$1;
+            TARGET_PATH=$1;
         fi;
     else
-        read path;
+        read TARGET_PATH;
     fi;
 
-    local curr_os=$(pw_os_get_simple_name);
-    local files_mgr="";
-    if [ "$curr_os" == "$(PW_OS_OSX)" ]; then
-        files_mgr="open";
-    fi;
+    local CURR_OS=$(pw_os_get_simple_name);
+    local FILE_MANAGER="";
 
+    ## TODO(stdmatt): Make work on GNU.
+    if [ "$CURR_OS" == "$(PW_OS_OSX)" ]; then
+        FILE_MANAGER="open";
+    elif [ "$CURR_OS" == "$(PW_OS_WINDOWS)" ]; then
+        FILE_MANAGER="explorer.exe";
+    fi;
 
     ## Don't write the error messages into the terminal.
-    $files_mgr 2> /dev/null $path;
+    $FILE_MANAGER 2> /dev/null $TARGET_PATH;
 }
 
 ##----------------------------------------------------------------------------##
