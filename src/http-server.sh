@@ -25,7 +25,6 @@
 ##     Quite happy!!!                                                         ##
 ##----------------------------------------------------------------------------##
 
-
 ##----------------------------------------------------------------------------##
 ## Imports                                                                    ##
 ##----------------------------------------------------------------------------##
@@ -41,17 +40,10 @@ TEMP_DIRECTORY="/var/tmp";
 TEMP_FILENAME="http-server.temp";
 TEMP_FULLPATH="${TEMP_DIRECTORY}/${TEMP_FILENAME}"
 
-pw_killall()
-{
-    ps aex | grep "python" > "$TEMP_FULLPATH";
-    while read LINE; do
-        ##LINE="$(pw_trim $LINE)";
-        local PID=$(echo "$LINE" | cut -d " " -f1);
-        echo "Killing PID: ($PID)";
-        kill "$PID";
-    done < $TEMP_FULLPATH;
-}
-
+##----------------------------------------------------------------------------##
+## Private Functions                                                          ##
+##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
 _http_ensure_directories()
 {
     ## notice(stdmatt): On Windows MINGW64_NT-10.0-18362 bash shell
