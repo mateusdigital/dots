@@ -21,6 +21,7 @@ __Windows_Hacks_Set_PATH()
     ## Installed Applications...
         WINDOWS_PATH+="/c/CMake/bin:";
         WINDOWS_PATH+="/c/VSCodium/bin:";
+        WINDOWS_PATH+="/c/LLVM/bin:"
 
     PATH="$WINDOWS_PATH";
 }
