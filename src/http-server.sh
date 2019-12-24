@@ -25,7 +25,6 @@
 ##     Quite happy!!!                                                         ##
 ##----------------------------------------------------------------------------##
 
-
 ##----------------------------------------------------------------------------##
 ## Imports                                                                    ##
 ##----------------------------------------------------------------------------##
@@ -36,9 +35,28 @@ source "/usr/local/src/stdmatt/shellscript_utils/main.sh"
 ## Constants                                                                  ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
-HTTP_SERVER_CMD="python -m SimpleHTTPServer";
-HTTP_SERVER_PORT="8000";
+HTTP_SERVER_CMD="python3 -m http.server 8000 --bind localhost";
+TEMP_DIRECTORY="/var/tmp";
+TEMP_FILENAME="http-server.temp";
+TEMP_FULLPATH="${TEMP_DIRECTORY}/${TEMP_FILENAME}"
 
+##----------------------------------------------------------------------------##
+## Private Functions                                                          ##
+##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
+_http_ensure_directories()
+{
+    ## notice(stdmatt): On Windows MINGW64_NT-10.0-18362 bash shell
+    ## we don't have the /var/tmp directory. So we need to create it.
+    if [ ! -d "$TEMP_DIRECTORY" ]; then
+        pw_log_warning                                             \
+            "Temporary directory ($TEMP_DIRECTORY) doesn't exists" \
+            "Creating it now...";
+
+        pw_as_super_user \
+            mkdir -pv "$TEMP_DIRECTORY";
+    fi;
+}
 
 ##----------------------------------------------------------------------------##
 ## Functions                                                                  ##
@@ -46,21 +64,18 @@ HTTP_SERVER_PORT="8000";
 ##------------------------------------------------------------------------------
 http-kill()
 {
-    local TEMP_FILENAME="/var/tmp/http-server.temp"
+    _http_ensure_directories;
 
-    ## notice(stdmatt): need to use "aex" flags, cause since were are forking
-    ## the process it will not show up so nicely in just plain ps(1).
-    ps aex > "$TEMP_FILENAME";
-    local PS_RESULT=$(pw_trim $(cat "$TEMP_FILENAME" | grep "$HTTP_SERVER_CMD"));
-    if [ -n "$PS_RESULT" ]; then
-        local HTTP_SERVER_PID=$(echo "$PS_RESULT" | cut -d " " -f1);
+    local HTTP_SERVER_PID=$(cat "$TEMP_FULLPATH");
+    if [ -n "$HTTP_SERVER_PID" ]; then
         echo "[http-kill] (PID: $HTTP_SERVER_PID) - Killing it...";
         kill -9 "$HTTP_SERVER_PID";
     else
         echo "[http-kill] No running server...";
     fi;
-}
 
+    echo "" > "$TEMP_FULLPATH";
+}
 
 ##------------------------------------------------------------------------------
 http-server()
@@ -71,11 +86,12 @@ http-server()
     fi;
 
     http-kill;
-
     echo "[http-server] Start to serve at ($PWD)...";
+
     ## Double fork trick:
     ##    https://stackoverflow.com/a/3430969
     ##    https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap11.html#tag_11_01_03
-    local FULL_CMD="$HTTP_SERVER_CMD $HTTP_SERVER_PORT";
-    ($FULL_CMD  >/dev/null 2>&1 &) &
+    local FULL_CMD="$HTTP_SERVER_CMD";
+    ($FULL_CMD  >/dev/null 2>&1 & echo "$!" > $TEMP_FULLPATH ) &
+    echo "[http-sever] PID for http-serve is: $(cat $TEMP_FULLPATH)"
 }

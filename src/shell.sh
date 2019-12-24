@@ -24,16 +24,6 @@ source "/usr/local/src/stdmatt/shellscript_utils/main.sh"
 
 
 ##----------------------------------------------------------------------------##
-## find-name                                                                  ##
-##----------------------------------------------------------------------------##
-find-name()
-{
-    local script_dir=$(pw_get_script_dir);
-    $script_dir/find_name.py $@;
-}
-
-
-##----------------------------------------------------------------------------##
 ## ls                                                                         ##
 ##----------------------------------------------------------------------------##
 alias ls="ls -F -G -h -p";
@@ -44,6 +34,7 @@ alias ll="ls -l"
 ##----------------------------------------------------------------------------##
 ## PATH                                                                       ##
 ##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
 PATH-add()
 {
     if [ -z "$1" ]; then
@@ -62,36 +53,44 @@ PATH-add()
 ##   Open the Filesystem Manager into a given path.                           ##
 ##   If no path was given open the current dir.                               ##
 ##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
 files()
 {
     ## Initialize the destination path to the current dir.
-    local path=".";
+    local TARGET_PATH=".";
+    local OLD_CWD="$PWD";
 
     ## Check if the input is comming from a pipe (stdin) or
     ## from the arguments...
     if [ -t 0 ]; then
         ## User (Myself actually :P) passed a custom path...
         if [ ! -z "$1" ]; then
-            path=$1;
+            TARGET_PATH=$1;
         fi;
     else
-        read path;
+        read TARGET_PATH;
+    fi;
+    TARGET_PATH="$(pw_realpath $TARGET_PATH)";
+
+    ## TODO(stdmatt): Make work on GNU.
+    local CURR_OS=$(pw_os_get_simple_name);
+    local FILE_MANAGER="";
+
+    if [ "$CURR_OS" == "$(PW_OS_OSX)" ]; then
+        FILE_MANAGER="open";
+    elif [ "$CURR_OS" == "$(PW_OS_WINDOWS)" ]; then
+        FILE_MANAGER="explorer.exe";
     fi;
 
-    local curr_os=$(pw_os_get_simple_name);
-    local files_mgr="";
-    if [ "$curr_os" == "$(PW_OS_OSX)" ]; then
-        files_mgr="open";
-    fi;
-
-
-    ## Don't write the error messages into the terminal.
-    $files_mgr 2> /dev/null $path;
+    cd "$TARGET_PATH";
+        $FILE_MANAGER 2> /dev/null .
+    cd "$OLD_CWD";
 }
 
 ##----------------------------------------------------------------------------##
 ## sudo                                                                       ##
 ##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
 please()
 {
     sudo $@;
@@ -99,27 +98,22 @@ please()
 
 
 ##----------------------------------------------------------------------------##
-## Others                                                                     ##
+## Profile                                                                    ##
 ##----------------------------------------------------------------------------##
-todo() {
-    code $HOME/ownCloud/todo.txt
-}
-
-money() {
-    code $HOME/ownCloud/money.txt
-}
-
-
-books() {
-    code $HOME/ownCloud/books.txt
-}
-
+##------------------------------------------------------------------------------
 edit-profile()
 {
-    ## @XXX(stdmatt): Only works at the OSX right now.
-    code $HOME/.bash_profile
+    local PROFILE_PATH=$(pw_get_default_bashrc_or_profile);
+    ed "$PROFILE_PATH";
 }
 
+reload-profile()
+{
+    local PROFILE_PATH=$(pw_get_default_bashrc_or_profile);
+    source "$PROFILE_PATH";
+
+    echo "[reload-profile] Done...";
+}
 
 ##----------------------------------------------------------------------------##
 ## Documentation                                                              ##
