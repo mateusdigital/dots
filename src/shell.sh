@@ -58,6 +58,7 @@ files()
 {
     ## Initialize the destination path to the current dir.
     local TARGET_PATH=".";
+    local OLD_CWD="$PWD";
 
     ## Check if the input is comming from a pipe (stdin) or
     ## from the arguments...
@@ -69,19 +70,21 @@ files()
     else
         read TARGET_PATH;
     fi;
+    TARGET_PATH="$(pw_realpath $TARGET_PATH)";
 
+    ## TODO(stdmatt): Make work on GNU.
     local CURR_OS=$(pw_os_get_simple_name);
     local FILE_MANAGER="";
 
-    ## TODO(stdmatt): Make work on GNU.
     if [ "$CURR_OS" == "$(PW_OS_OSX)" ]; then
         FILE_MANAGER="open";
     elif [ "$CURR_OS" == "$(PW_OS_WINDOWS)" ]; then
         FILE_MANAGER="explorer.exe";
     fi;
 
-    ## Don't write the error messages into the terminal.
-    $FILE_MANAGER 2> /dev/null $TARGET_PATH;
+    cd "$TARGET_PATH";
+        $FILE_MANAGER 2> /dev/null .
+    cd "$OLD_CWD";
 }
 
 ##----------------------------------------------------------------------------##
