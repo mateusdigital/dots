@@ -108,6 +108,7 @@ edit-profile()
     ed "$PROFILE_PATH";
 }
 
+##------------------------------------------------------------------------------
 reload-profile()
 {
     local PROFILE_PATH=$(pw_get_default_bashrc_or_profile);
@@ -115,9 +116,3 @@ reload-profile()
 
     echo "[reload-profile] Done...";
 }
-
-##----------------------------------------------------------------------------##
-## Documentation                                                              ##
-##----------------------------------------------------------------------------##
-alias man="manpdf";
-alias pydoc="pypdf";
