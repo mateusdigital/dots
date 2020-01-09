@@ -72,11 +72,12 @@ files()
     fi;
     TARGET_PATH="$(pw_realpath $TARGET_PATH)";
 
-    ## TODO(stdmatt): Make work on GNU.
     local CURR_OS=$(pw_os_get_simple_name);
     local FILE_MANAGER="";
 
-    if [ "$CURR_OS" == "$(PW_OS_OSX)" ]; then
+    if [ "$CURR_OS" == "$(PW_OS_GNU_LINUX)" ]; then
+        FILE_MANAGER="xdg-open";
+    elif [ "$CURR_OS" == "$(PW_OS_OSX)" ]; then
         FILE_MANAGER="open";
     elif [ "$CURR_OS" == "$(PW_OS_WINDOWS)" ]; then
         FILE_MANAGER="explorer.exe";
