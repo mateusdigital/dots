@@ -81,6 +81,8 @@ files()
         FILE_MANAGER="open";
     elif [ "$CURR_OS" == "$(PW_OS_WINDOWS)" ]; then
         FILE_MANAGER="explorer.exe";
+    elif [ "$CURR_OS" == "$(PW_OS_WSL)" ]; then
+        FILE_MANAGER="explorer.exe";
     fi;
 
     cd "$TARGET_PATH";
