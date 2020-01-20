@@ -27,7 +27,7 @@ source /usr/local/src/stdmatt/shellscript_utils/main.sh
 ## Variables                                                                  ##
 ##----------------------------------------------------------------------------##
 INSTALL_DIR="$HOME/.stdmatt/dots";
-
+SCRIPT_DIR="$(pw_get_script_dir)";
 
 ##----------------------------------------------------------------------------##
 ## Functions                                                                  ##
@@ -54,13 +54,15 @@ _install_source_on()
 ##----------------------------------------------------------------------------##
 ## Script                                                                     ##
 ##----------------------------------------------------------------------------##
+echo "[Installing dots]";
+
 ##
 ## Install the script files.
 ##   Clear the installation directory.
 rm -rf "$INSTALL_DIR";
 mkdir -p "$INSTALL_DIR";
 ##   Copy all scripts to it.
-cp -R ./src/* $INSTALL_DIR;
+cp -R $SCRIPT_DIR/src/* $INSTALL_DIR;
 
 ##
 ## Add a entry on the .bash_rc / .bash_profile so we can use the dots files.
