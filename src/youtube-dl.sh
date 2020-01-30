@@ -19,13 +19,39 @@
 ##---------------------------------------------------------------------------~##
 ## Functions                                                                  ##
 ##---------------------------------------------------------------------------~##
-##------------------------------------------------------------------------------
 youtube-dl-mp3()
 {
     local URL="$1";
-    test -z "$URL"                        \
-        && echo "Empty url - Aborting..." \
+    test -z "$URL"                                         \
+        && echo "[youtube-dl-mp3] Empty url - Aborting..." \
         return 1;
 
     youtube-dl --extract-audio --audio-format mp3 "$URL";
+}
+
+##------------------------------------------------------------------------------
+youtube-dl-playlist()
+{
+    local URL="$1";
+    test -z "$URL"                                              \
+        && echo "[youtube-dl-playlist] Empty url - Aborting..." \
+        return 1;
+
+    youtube-dl -o                                             \
+        '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' \
+        "$URL";
+}
+
+
+##------------------------------------------------------------------------------
+youtube-dl-channel()
+{
+    local URL="$1";
+    test -z "$URL"                                             \
+        && echo "[youtube-dl-channel] Empty url - Aborting..." \
+        return 1;
+
+    youtube-dl -o                                                          \
+        '%(uploader)s/%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' \
+        "$URL"
 }
