@@ -29,12 +29,22 @@ __Windows_Hacks_Set_PATH()
 ##------------------------------------------------------------------------------
 __Windows_Hacks_Create_Links()
 {
+    ## XXX(stdmatt): Is this needed???
     ln -f /c/Python38/python.exe /c/Python38/python3.exe
 }
 
+##------------------------------------------------------------------------------
+__Windows_Hacks_Create_Exports()
+{
+    ## manpdf  
+    ## todo(stdmatt): Find a way to define this setting in a more general way
+    export MANPDF_READER="/mnt/c/Program Files (x86)/Foxit Software/Foxit Reader/FoxitReader.exe"
+}
 
 
 ##------------------------------------------------------------------------------
 if [ "$(pw_os_get_simple_name)" == "$(PW_OS_WINDOWS)" ]; then
     __Windows_Hacks_Set_PATH;
+elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
+    __Windows_Hacks_Create_Exports;
 fi;

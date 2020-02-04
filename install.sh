@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 ##~---------------------------------------------------------------------------##
 ##                        _      _                 _   _                      ##
 ##                    ___| |_ __| |_ __ ___   __ _| |_| |_                    ##
@@ -11,7 +11,7 @@
 ##  Date      : Oct 08, 2017                                                  ##
 ##  License   : GPLv3                                                         ##
 ##  Author    : stdmatt <stdmatt@pixelwizards.io>                             ##
-##  Copyright : stdmatt - 2018                                                ##
+##  Copyright : stdmatt - 2018, 2020                                          ##
 ##                                                                            ##
 ##  Description :                                                             ##
 ##    Super, super simple (and inclomple) install script for dots.            ##
@@ -22,11 +22,13 @@
 ##----------------------------------------------------------------------------##
 source /usr/local/src/stdmatt/shellscript_utils/main.sh
 
+
 ##----------------------------------------------------------------------------##
 ## Variables                                                                  ##
 ##----------------------------------------------------------------------------##
 INSTALL_DIR="$HOME/.stdmatt/dots";
 SCRIPT_DIR="$(pw_get_script_dir)";
+
 
 ##----------------------------------------------------------------------------##
 ## Functions                                                                  ##
