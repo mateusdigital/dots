@@ -1,0 +1,94 @@
+ // To view the default settings, hold "alt" while clicking on the "Settings" button.
+// For documentation on these settings, see: https://aka.ms/terminal-documentation
+{
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}", // - Powershell
+    // "defaultProfile": "{c6eaf9f4-32a7-5fdc-b5cf-066e8a4b1e42}", // - Git Bash
+    "profiles": [
+      // Powershell
+      {
+        "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+        "name": "Windows PowerShell",
+        "commandline": "powershell.exe",
+        "fontFace": "Jetbrains Mono",
+        "fontSize": 10,
+        "colorScheme":  "Dracula"
+  
+      },
+      // Git Bash
+      {
+        "guid": "{c6eaf9f4-32a7-5fdc-b5cf-066e8a4b1e42}",
+        "name": "Git Bash",
+        "commandline": "C:/Git/bin/bash.exe",
+        "icon": "C:/Program Files/Git/mingw64/share/git/git-for-windows.ico",
+        "startingDirectory": "%USERPROFILE%/Documents/Projects/wargaming/juyd_new",
+        "fontFace": "Jetbrains Mono",
+        "fontSize": 10
+      },
+      // WSL
+      {
+        "guid": "{c6eaf9f4-32a7-5fdc-b5cf-066e8a4b1e40}",
+        "hidden": false,
+        "name": "Ubuntu-18.04",
+        "source": "Windows.Terminal.Wsl",
+        "fontFace": "Jetbrains Mono",
+        "fontSize": 10
+      },
+  
+      //
+      // Hidden Profiles
+      {
+        "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+        "hidden": true,
+        "name": "Azure Cloud Shell",
+        "source": "Windows.Terminal.Azure"
+      }
+    ],
+    // Add any keybinding overrides to this array.
+    // To unbind a default keybinding, set the command to "unbound"
+    "keybindings": [
+      { "command": "moveFocusDown",  "keys": ["alt+shift+j"] },
+      { "command": "moveFocusLeft",  "keys": ["alt+shift+h"] },
+      { "command": "moveFocusRight", "keys": ["alt+shift+l"] },
+      { "command": "moveFocusUp",    "keys": ["alt+shift+k"] },
+  
+      { "command": "resizePaneDown",  "keys": ["ctrl+shift+j"] },
+      { "command": "resizePaneLeft",  "keys": ["ctrl+shift+h"] },
+      { "command": "resizePaneRight", "keys": ["ctrl+shift+l"] },
+      { "command": "resizePaneUp",    "keys": ["ctrl+shift+k"] }
+    ],
+  "schemes":  [
+    {
+      "name":  "Dracula",
+  
+      "background":  "#25292b",
+      "foreground":  "#d3b280",
+      // "foreground":  "#e5e5e5",
+  
+  
+      "black":  "#21222C",
+      "brightBlack":  "#6272A4",
+  
+      "red":  "#973c33",
+      "brightRed":  "#FF6E6E",
+  
+      "green":  "#19cb00",
+      "brightGreen":  "#69FF94",
+  
+      "yellow":  "#cecb00",
+      "brightYellow":  "#FFFFA5",
+  
+      "blue":  "#3463ba",
+      "brightBlue":  "#D6ACFF",
+  
+      "purple":  "#cd7fd2",
+      "brightPurple":  "#FF92DF",
+  
+      "cyan":  "#0dcdcd",
+      "brightCyan":  "#A4FFFF",
+  
+      "white":  "#e5e5e5",
+      "brightWhite":  "#FFFFFF"
+    }
+  ]
+  }
