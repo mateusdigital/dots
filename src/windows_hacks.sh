@@ -34,17 +34,26 @@ __Windows_Hacks_Create_Links()
 }
 
 ##------------------------------------------------------------------------------
-__Windows_Hacks_Create_Exports()
+__WSL_Hacks_Create_Exports()
 {
     ## manpdf  
     ## todo(stdmatt): Find a way to define this setting in a more general way
     export MANPDF_READER="/mnt/c/Program Files (x86)/Foxit Software/Foxit Reader/FoxitReader.exe"
 }
 
+##------------------------------------------------------------------------------
+__WSL_Hacks_Create_Aliases()
+{
+    local GIT_BASH_WINDOWS_PATH="C:/Git/bin/bash.exe";
+    local GIT_BASH_WSL_PATH="$(wslpath $GIT_BASH_WINDOWS_PATH)";
+    
+    alias git-bash="$GIT_BASH_WSL_PATH"; 
+}
 
 ##------------------------------------------------------------------------------
 if [ "$(pw_os_get_simple_name)" == "$(PW_OS_WINDOWS)" ]; then
     __Windows_Hacks_Set_PATH;
 elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
-    __Windows_Hacks_Create_Exports;
+    __WSL_Hacks_Create_Exports;
+    __WSL_Hacks_Create_Aliases;
 fi;
