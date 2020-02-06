@@ -29,6 +29,7 @@ PROJECT_ROOT_DIR="$HOME/.stdmatt/dots";
 ##----------------------------------------------------------------------------##
 ## Imports                                                                    ##
 ##----------------------------------------------------------------------------##
+source "$PROJECT_ROOT_DIR/datetime.sh"
 source "$PROJECT_ROOT_DIR/dosbox.sh"
 source "$PROJECT_ROOT_DIR/editor.sh"
 source "$PROJECT_ROOT_DIR/emscripten.sh"
