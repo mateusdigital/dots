@@ -54,6 +54,7 @@ __WSL_Hacks_Create_Aliases()
 if [ "$(pw_os_get_simple_name)" == "$(PW_OS_WINDOWS)" ]; then
     __Windows_Hacks_Set_PATH;
 elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
+    echo "Doing WSL hacks..";
     __WSL_Hacks_Create_Exports;
     __WSL_Hacks_Create_Aliases;
 fi;
