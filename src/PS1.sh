@@ -25,9 +25,10 @@ source /usr/local/src/stdmatt/shellscript_utils/main.sh
 ##----------------------------------------------------------------------------##
 ## Constants                                                                  ##
 ##----------------------------------------------------------------------------##
+_DOTS_COLOR_OS=172
 _DOTS_COLOR_PWD=64
-_DOTS_COLOR_GIT=241
-_DOTS_COLOR_PROMPT=247
+_DOTS_COLOR_GIT=245
+_DOTS_COLOR_PROMPT=252
 
 ##
 ## Prompt
@@ -61,12 +62,13 @@ _dots_parse_git_branch()
     else
        STR="";
     fi
-    echo $(_dots_color 245 $STR);
+
+    echo $(_dots_color $_DOTS_COLOR_GIT $STR);
 }
 
 _dots_get_pwd()
 {
-    echo $(_dots_color 202 $(basename $PWD));
+    echo $(_dots_color $_DOTS_COLOR_PWD $(basename $(pwd)));
 }
 
 ##------------------------------------------------------------------------------
@@ -83,13 +85,13 @@ _dots_random_prompt()
         PROMPT="$_DOTS_PROMPT_SMILE";
     fi;
 
-    echo "$(_dots_color 252 $PROMPT)";
+    echo "$(_dots_color $_DOTS_COLOR_PROMPT $PROMPT)";
 }
 
 ##------------------------------------------------------------------------------
 _dots_get_os_name()
 {
-    echo "$(_dots_color 75 $(pw_os_get_simple_name))";
+    echo "$(_dots_color $_DOTS_COLOR_OS $(pw_os_get_simple_name))";
 }
 
 ##----------------------------------------------------------------------------##
@@ -99,4 +101,5 @@ _DOTS_STR_PROMPT="$(_dots_random_prompt)";
 _DOTS_OS_NAME="$(_dots_get_os_name)"
 
 ##------------------------------------------------------------------------------
-export PS1="\n${_DOTS_OS_NAME}:`_dots_get_pwd`:`_dots_parse_git_branch`\n${_DOTS_STR_PROMPT} "
+export PS1="${_DOTS_OS_NAME}:\`_dots_get_pwd\`:\`_dots_parse_git_branch\`\n${_DOTS_STR_PROMPT} "
+
