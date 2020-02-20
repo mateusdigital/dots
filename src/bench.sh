@@ -7,7 +7,7 @@ source /usr/local/src/stdmatt/shellscript_utils/main.sh
 ##----------------------------------------------------------------------------##
 ## Functions                                                                  ##
 ##----------------------------------------------------------------------------##
-bench()
+_dots_bench()
 {
     local ITERATIONS="$1";
     local PROG="$2";
@@ -22,4 +22,9 @@ bench()
     for i in $(seq 1 $ITERATIONS); do
         $ARGS;
     done;
+}
+
+bench()
+{
+    time _dots_bench $@
 }
