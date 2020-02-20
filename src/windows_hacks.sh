@@ -46,8 +46,9 @@ __WSL_Hacks_Create_Aliases()
 {
     local GIT_BASH_WINDOWS_PATH="C:/Git/bin/bash.exe";
     local GIT_BASH_WSL_PATH="$(wslpath $GIT_BASH_WINDOWS_PATH)";
-    
-    alias git-bash="$GIT_BASH_WSL_PATH"; 
+
+    alias git-bash="$GIT_BASH_WSL_PATH "; 
+    alias powershell="powershell.exe ";
 }
 
 ##------------------------------------------------------------------------------
@@ -57,4 +58,13 @@ elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
     echo "Doing WSL hacks..";
     __WSL_Hacks_Create_Exports;
     __WSL_Hacks_Create_Aliases;
+
+
+## @XXX(stdmatt): VERY VERY NASTY WAY TO ACCESS DOCKER from WSL...
+docker() {
+
+    local DOCKER_WINDOWS_PATH="C:/Program Files/Docker/Docker/resources/bin/docker.exe";
+    local DOCKER_WSL_PATH="$(wslpath  "$DOCKER_WINDOWS_PATH")";
+    "$DOCKER_WSL_PATH" $@
+}
 fi;

@@ -49,7 +49,7 @@ _dots_color_256()
     local COLOR=$1;
     local MSG=$2;
 
-    echo -e "\033[38;5;${COLOR}m"$MSG"\033[0m";
+    echo -e "\033[38;5;${COLOR}m"$MSG"$(tput sgr0)"
 }
 
 _dots_color_8()
@@ -131,6 +131,8 @@ _dots_get_os_name()
 _DOTS_STR_PROMPT="$(_dots_random_prompt)";
 _DOTS_OS_NAME="$(_dots_get_os_name)"
 
+export PS1="\n\[\033[38;5;${_DOTS_COLOR_PWD}m\]\W\[$(tput sgr0)\]:\[\033[38;5;${_DOTS_COLOR_GIT}m\]\`_dots_parse_git_branch\`\[$(tput sgr0)\]\n\[$(tput bold)\033[38;5;${_DOTS_COLOR_PROMPT}m\]${_DOTS_STR_PROMPT}\[$(tput sgr0)\] "
+
 ##------------------------------------------------------------------------------
-export PS1="${_DOTS_OS_NAME}:\`_dots_get_pwd\`:\`_dots_parse_git_branch\`\n${_DOTS_STR_PROMPT} "
+## export PS1="${_DOTS_OS_NAME}:\`_dots_get_pwd\`:\`_dots_parse_git_branch\`\n${_DOTS_STR_PROMPT} "
 
