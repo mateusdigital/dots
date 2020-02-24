@@ -36,9 +36,10 @@ __Windows_Hacks_Create_Links()
 ##------------------------------------------------------------------------------
 __WSL_Hacks_Create_Exports()
 {
-    ## manpdf  
+    ## manpdf
     ## todo(stdmatt): Find a way to define this setting in a more general way
     export MANPDF_READER="/mnt/c/Program Files (x86)/Foxit Software/Foxit Reader/FoxitReader.exe"
+    export DISPLAY=:0
 }
 
 ##------------------------------------------------------------------------------
@@ -47,7 +48,7 @@ __WSL_Hacks_Create_Aliases()
     local GIT_BASH_WINDOWS_PATH="C:/Git/bin/bash.exe";
     local GIT_BASH_WSL_PATH="$(wslpath $GIT_BASH_WINDOWS_PATH)";
 
-    alias git-bash="$GIT_BASH_WSL_PATH "; 
+    alias git-bash="$GIT_BASH_WSL_PATH ";
     alias powershell="powershell.exe ";
 }
 
@@ -59,6 +60,12 @@ elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
     __WSL_Hacks_Create_Exports;
     __WSL_Hacks_Create_Aliases;
 
+
+## @(XXX) VSCode hangs when the debugger is stopped...
+kill_debugger()
+{
+    ps aex | grep python | cut -d " " -f1 | xargs kill -9
+}
 
 ## @XXX(stdmatt): VERY VERY NASTY WAY TO ACCESS DOCKER from WSL...
 docker() {
