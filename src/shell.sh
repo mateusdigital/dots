@@ -97,19 +97,19 @@ count-files()
 }
 
 ##------------------------------------------------------------------------------
-count-files()
+count-file-lines()
 {
     local ARGS_COUNT=${#@};
-    if [ $ARGS_COUNT == 0 ]; then 
+    if [ $ARGS_COUNT == 0 ]; then
         echo "[count-files] Missing filename.";
         return 1;
     fi;
-    
-    for FILENAME in $@; do 
+
+    for FILENAME in $@; do
         local LINES_COUNT=$(cat "$FILENAME" | wc -l);
-        if [ $ARGS_COUNT == 1 ]; then 
+        if [ $ARGS_COUNT == 1 ]; then
             echo $LINES_COUNT;
-        else 
+        else
             echo "$FILENAME: $LINES_COUNT";
         fi;
     done;
