@@ -144,3 +144,44 @@ reload-profile()
 
     echo "[reload-profile] Done...";
 }
+
+
+##----------------------------------------------------------------------------##
+## Utils                                                                      ##
+##----------------------------------------------------------------------------##
+##----------------------------------------------------------------------------##
+clipboard()
+{
+    ## @todo(stdmatt): Improvemnts planned for this function.
+    ##   1) Get the values from the command line.
+    ##      clipboard "test"l
+    ##      clipboard $(ls);
+    ##   2) Get the values form stdin.
+    ##      clipboard << file.txt
+    ##   3) Get values from the pipe.
+    ##      echo test | clipboard;
+    ##   4) Output to the stdout if no arguments are passed...
+
+    local ARGS_LEN=${#@};
+    local CLIPBOARD_DATA="";
+
+    ## Reading from arguments...
+    if [ $ARGS_LEN != 0 ]; then
+        CLIPBOARD_DATA="$@";
+    ## Reading from stdin...
+    elif [ ! -t 0 ]; then
+        echo "[clipboard] Reading from stdin is not implemented yet..."
+    ## Writing to stdout...
+    else
+        echo "[clipboard] Writing to stdout is not implemented yet..."
+    fi;
+
+    local OS_NAME=$(pw_os_get_simple_name);
+    if [ "$OS_NAME" == "$(PW_OS_OSX)" ]; then
+        echo "$CLIPBOARD_DATA" | pbcopy;
+    elif [ "$OS_NAME" == "$(PW_OS_WSL)" ]; then
+        echo "$CLIPBOARD_DATA" | xclip;
+    elif [ "$OS_NAME" == "$(PW_OS_GNU_LINUX)" ]; then
+        echo "$CLIPBOARD_DATA" | xclip;
+    fi;
+}
