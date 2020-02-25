@@ -90,10 +90,29 @@ files()
     cd "$OLD_CWD";
 }
 
-##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
 count-files()
 {
     ls -1 $1 | wc -l;
+}
+
+##------------------------------------------------------------------------------
+count-files()
+{
+    local ARGS_COUNT=${#@};
+    if [ $ARGS_COUNT == 0 ]; then 
+        echo "[count-files] Missing filename.";
+        return 1;
+    fi;
+    
+    for FILENAME in $@; do 
+        local LINES_COUNT=$(cat "$FILENAME" | wc -l);
+        if [ $ARGS_COUNT == 1 ]; then 
+            echo $LINES_COUNT;
+        else 
+            echo "$FILENAME: $LINES_COUNT";
+        fi;
+    done;
 }
 
 
