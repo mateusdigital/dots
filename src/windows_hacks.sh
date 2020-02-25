@@ -58,13 +58,32 @@ __WSL_Hacks_Create_Aliases()
 }
 
 ##------------------------------------------------------------------------------
+##
+## Hacks for Mingw.
 if [ "$(pw_os_get_simple_name)" == "$(PW_OS_WINDOWS)" ]; then
     __Windows_Hacks_Set_PATH;
+##
+## Hacks for WSL.
 elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
     echo "Doing WSL hacks..";
+
     __WSL_Hacks_Create_Exports;
     __WSL_Hacks_Create_Aliases;
 
+wsl_init_xserver()
+{
+    local XSERVER_WINDOWS_PATH="C:/Xming/Xming.exe";
+    local XSERVER_WSL_PATH="$(wslpath "$XSERVER_WINDOWS_PATH")";
+
+    local IS_RUNNING="$(tasklist.exe | grep Xming.exe)";
+    if [ -n "$IS_RUNNING" ]; then
+        pw_func_log "Already running...";
+        return 0;
+    fi;
+
+    "$XSERVER_WSL_PATH" ":0" -clipboard -multiwindow > /dev/null 2>1 &
+    pw_func_log "Done...";
+}
 
 ## @(XXX) VSCode hangs when the debugger is stopped...
 kill_debugger()
