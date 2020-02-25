@@ -38,7 +38,12 @@ __WSL_Hacks_Create_Exports()
 {
     ## manpdf
     ## todo(stdmatt): Find a way to define this setting in a more general way
-    export MANPDF_READER="/mnt/c/Program Files (x86)/Foxit Software/Foxit Reader/FoxitReader.exe"
+    local OKULAR_PATH=$(pw_get_program_path "okular");
+    if [ -n "$OKULAR_PATH" ]; then
+        export MANPDF_READER="$OKULAR_PATH";
+    else
+        export MANPDF_READER="/mnt/c/Program Files (x86)/Foxit Software/Foxit Reader/FoxitReader.exe";
+    fi;
     export DISPLAY=:0
 }
 
