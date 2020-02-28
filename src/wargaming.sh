@@ -20,3 +20,13 @@ connect-clickhouse-client()
 {
     docker run -it --rm --link clickhouse_storage_database:clickhouse_storage_database yandex/clickhouse-client --host clickhouse_storage_database
 }
+
+connect-postgres()
+{
+    docker run -it --rm                                             \
+        --name pg-docker                                            \
+        -e POSTGRES_PASSWORD=docker                                 \
+        -p 5432:5432                                                \
+        -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data   \
+        postgres
+}
