@@ -23,9 +23,15 @@ connect-clickhouse-client()
 
 connect-postgres()
 {
+    local NAME="pg-docker";
+    local PASSWD="docker";
+
+    docker kill "$NAME";
+    docker purge -f;
+
     docker run -it --rm                                             \
-        --name pg-docker                                            \
-        -e POSTGRES_PASSWORD=docker                                 \
+        --name "$NAME"                                              \
+        -e POSTGRES_PASSWORD="$PASSWD"                              \
         -p 5432:5432                                                \
         -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data   \
         postgres
