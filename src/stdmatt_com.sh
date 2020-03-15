@@ -30,10 +30,10 @@ mount_stdmatt_com()
     fi;
 
     mkdir -p "$STDMATT_COM_MOUNT_POINT";
-    sshfs "$STDMATT_COM_USER_AT_HOST:" "$STDMATT_COM_MOUNT_POINT"  \
+    sshfs "$STDMATT_COM_USER_AT_HOST:" "$STDMATT_COM_MOUNT_POINT"   \
         -ovolname="$STDMATT_COM_USER_AT_HOST"                       \
         -p 22                                                       \
-        -o follow_symlinks                                       \
+        -o follow_symlinks                                          \
         -o idmap=user                                               \
         -C
 }
