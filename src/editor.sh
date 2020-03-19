@@ -41,6 +41,11 @@ edit-project-list()
     local OWNCLOUD_PATH=$(gosh -p "owncloud");
     local PROJECT_LIST_FILENAME="$(find "$OWNCLOUD_PATH" -iname "projects_list.md")";
 
-    $VISUAL_GUI "$PROJECT_LIST_FILENAME";
+    if [ ! -f "${PROJECT_LIST_FILENAME}" ]; then
+        pw_func_log \
+           "Can't find the project list file at (${OWNCLOUD_PATH})";
+        return 1;
+    fi;
 
+    $VISUAL_GUI "$PROJECT_LIST_FILENAME";
 }
