@@ -65,6 +65,28 @@ if [ "$(pw_os_get_simple_name)" == "$(PW_OS_WINDOWS)" ]; then
 ##----------------------------------------------------------------------------##
 elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
     echo "Doing WSL hacks..";
+
+    ## @XXX(stdmatt): Really shit, but working....
+    __WSL_Hacks_Escape_Path()
+    {
+        local ARGS="$@";
+        local ESCAPED_PATH="";
+
+        for word in "$ARGS"; do
+            for (( i=0; i<${#word}; i++ )); do
+                c="${word:$i:1}";
+                case "$c" in
+                    " ") ESCAPED_PATH+="\ "; ;;
+                    ")") ESCAPED_PATH+="\)"; ;;
+                    "(") ESCAPED_PATH+="\("; ;;
+                     * ) ESCAPED_PATH+="$c"; ;;
+                esac;
+            done;
+        done;
+
+        echo "$ESCAPED_PATH"
+    }
+
     ##--------------------------------------------------------------------------
     __WSL_Hacks_Set_PATH()
     {
@@ -91,12 +113,24 @@ elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
     ##--------------------------------------------------------------------------
     __WSL_Hacks_Create_Aliases()
     {
+        ## Git Bash.
         local GIT_BASH_WINDOWS_PATH="C:/Git/bin/bash.exe";
         local GIT_BASH_WSL_PATH="$(wslpath $GIT_BASH_WINDOWS_PATH)";
 
         alias git-bash="$GIT_BASH_WSL_PATH ";
+
+        ## Powershell.
         alias powershell="powershell.exe ";
     }
+
+    __WSL_Hacks_Map_Root_To_Windows_Drive()
+    {
+        subst.exe "U:" "$(wslpath -aw /)";
+    }
+
+    ##
+    ## Public Functions
+    ##
 
     ##--------------------------------------------------------------------------
     wsl_init_xserver()
@@ -121,6 +155,32 @@ elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
         ps aex | grep python | cut -d " " -f1 | xargs kill -9
     }
 
+    devenv()
+    {
+        ## Get where visual studio is installed as a Windows path
+        ## and clean the path the most as possible.
+        local DEVENV_WINDOWS_PATH="$(vswhere.exe -latest | grep "productPath")";
+        DEVENV_WINDOWS_PATH="$(pw_string_replace "$DEVENV_WINDOWS_PATH" "productPath:" " ")";
+        DEVENV_WINDOWS_PATH="$(pw_trim_left      "$DEVENV_WINDOWS_PATH")";
+
+        ## Transform the windows path to a unix path.
+        local DEVENV_WSL_PATH="$(wslpath -u "$DEVENV_WINDOWS_PATH")";
+        DEVENV_WSL_PATH="$(dirname "$DEVENV_WSL_PATH")";
+
+        ## Now the hack... Visual Studio doesn't accept the "network" path
+        ## that windows sees the WSL filesystem, so since we have the root
+        ## of the WSL filesystem subst'ed at the U: we need to replace the
+        ## command line args paths with this drive letter.
+        ## This way we'll be able to fool visual studio to load the directory
+        ## thing for us ;D
+        local ROOT_NETWORK_PATH="$(wslpath -am /)";
+        local ARG_NETWORK_PATH="$(wslpath -am $1)";
+        local ARG_FAKE_PATH="U:/$(pw_substr "$ARG_NETWORK_PATH" $(pw_strlen "$ROOT_NETWORK_PATH"))";
+
+        "$DEVENV_WSL_PATH/devenv.exe" "$ARG_FAKE_PATH";
+    }
+
+
     ##--------------------------------------------------------------------------
     ## @XXX(stdmatt): VERY VERY NASTY WAY TO ACCESS DOCKER from WSL...
     docker()
@@ -130,13 +190,13 @@ elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
         "$DOCKER_WSL_PATH" $@
     }
 
-
     ##
     ## Run stuff that we need to make the WSL work
     ##
     __WSL_Hacks_Set_PATH;
     __WSL_Hacks_Create_Exports;
     __WSL_Hacks_Create_Aliases;
+    __WSL_Hacks_Map_Root_To_Windows_Drive;
 
     wsl_init_xserver;
 fi;
