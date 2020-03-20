@@ -21,6 +21,7 @@
 ##----------------------------------------------------------------------------##
 source /usr/local/src/stdmatt/shellscript_utils/main.sh
 
+
 ##----------------------------------------------------------------------------##
 ## Constants                                                                  ##
 ##----------------------------------------------------------------------------##
@@ -29,6 +30,9 @@ COLOR_PWD=64
 COLOR_GIT=241
 COLOR_PROMPT=247
 
+PROMPT_STR="λ";
+PROMPT_STR=":)";
+
 ##----------------------------------------------------------------------------##
 ## Functions                                                                  ##
 ##----------------------------------------------------------------------------##
@@ -36,10 +40,16 @@ parse_git_branch()
 {
        BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
        if [ ! "${BRANCH}" == "" ]; then
-            local USER_NAME="$(git config user.name)";
-            local USER_EMAIL=$(git config user.email);
+          local USER_NAME="$(git config user.name)";
+          local USER_EMAIL=$(git config user.email);
 
-            echo "(${BRANCH}) - $USER_NAME <$USER_EMAIL>";
+          local TAG=$(git describe --tags $(git rev-list --tags --max-count=1) 2> /dev/null);
+          if [ -n "$TAG" ]; then
+               STR="(${BRANCH}:${TAG})";
+          else
+               STR="(${BRANCH})";
+          fi;
+          echo "(${STR}) - $USER_NAME <$USER_EMAIL>";
        else
             echo ""
        fi
@@ -48,8 +58,12 @@ parse_git_branch()
 ##----------------------------------------------------------------------------##
 ## Exports                                                                    ##
 ##----------------------------------------------------------------------------##
-export PS1="\n\[\033[38;5;${COLOR_PWD}m\]\W\[$(tput sgr0)\]:\[\033[38;5;${COLOR_GIT}m\]\`parse_git_branch\`\[$(tput sgr0)\]\n\[$(tput bold)\033[38;5;${COLOR_PROMPT}m\]λ\[$(tput sgr0)\] "
+export PS1="\n\[\033[38;5;${COLOR_PWD}m\]\W\[$(tput sgr0)\]:\[\033[38;5;${COLOR_GIT}m\]\`parse_git_branch\`\[$(tput sgr0)\]\n\[$(tput bold)\033[38;5;${COLOR_PROMPT}m\]${PROMPT_STR}\[$(tput sgr0)\] "
 
+
+
+
+### @Notice(stdmatt): Old stuff that are making the shell prompt goes crazy!!
 # ##----------------------------------------------------------------------------##
 # ## Constants                                                                  ##
 # ##----------------------------------------------------------------------------##
