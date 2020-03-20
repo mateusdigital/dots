@@ -45,6 +45,7 @@ source "$PROJECT_ROOT_DIR/url_to_pdf.sh"
 source "$PROJECT_ROOT_DIR/youtube-dl.sh"
 source "$PROJECT_ROOT_DIR/stdmatt_com.sh"
 source "$PROJECT_ROOT_DIR/wargaming.sh"
+source "$PROJECT_ROOT_DIR/version.sh"
 
 ## Hacks for each platform...
 source "$PROJECT_ROOT_DIR/osx_hacks.sh"
