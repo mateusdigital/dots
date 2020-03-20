@@ -5,12 +5,12 @@
 ##                   \__ \ || (_| | | | | | | (_| | |_| |_                    ##
 ##                   |___/\__\__,_|_| |_| |_|\__,_|\__|\__|                   ##
 ##                                                                            ##
-##  File      : misc.sh                                                       ##
+##  File      : PS1.sh                                                        ##
 ##  Project   : dots                                                          ##
 ##  Date      : Jan 06, 2019                                                  ##
 ##  License   : GPLv3                                                         ##
 ##  Author    : stdmatt <stdmatt@pixelwizards.io>                             ##
-##  Copyright : stdmatt - 2019, 2020                                          ##
+##  Copyright : stdmatt 2019, 2020                                            ##
 ##                                                                            ##
 ##  Description :                                                             ##
 ##    My custom PS1.                                                          ##

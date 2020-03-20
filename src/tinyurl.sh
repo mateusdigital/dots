@@ -7,10 +7,10 @@
 ##                                                                            ##
 ##  File      : tinyurl.sh                                                    ##
 ##  Project   : dots                                                          ##
-##  Date      : Apr 22, 2019                                                  ##
+##  Date      : Apr 24, 2019                                                  ##
 ##  License   : GPLv3                                                         ##
 ##  Author    : stdmatt <stdmatt@pixelwizards.io>                             ##
-##  Copyright : stdmatt - 2018, 2019                                          ##
+##  Copyright : stdmatt 2019, 2020                                            ##
 ##                                                                            ##
 ##  Description :                                                             ##
 ##    Make the url short using the tinyurl.com.                               ##

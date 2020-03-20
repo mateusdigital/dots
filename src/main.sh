@@ -7,10 +7,10 @@
 ##                                                                            ##
 ##  File      : main.sh                                                       ##
 ##  Project   : dots                                                          ##
-##  Date      : Oct 08, 2017                                                  ##
+##  Date      : Oct 02, 2018                                                  ##
 ##  License   : GPLv3                                                         ##
 ##  Author    : stdmatt <stdmatt@pixelwizards.io>                             ##
-##  Copyright : stdmatt - 2018, 2019                                          ##
+##  Copyright : stdmatt 2018 - 2020                                           ##
 ##                                                                            ##
 ##  Description :                                                             ##
 ##    This is the only file that will be sourced in .bashrc (.bash_profile)   ##

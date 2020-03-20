@@ -7,10 +7,10 @@
 ##                                                                            ##
 ##  File      : emscripten.sh                                                 ##
 ##  Project   : dots                                                          ##
-##  Date      : Aug 7, 2019                                                   ##
+##  Date      : Aug 07, 2019                                                  ##
 ##  License   : GPLv3                                                         ##
 ##  Author    : stdmatt <stdmatt@pixelwizards.io>                             ##
-##  Copyright : stdmatt - 2019                                                ##
+##  Copyright : stdmatt 2019, 2020                                            ##
 ##                                                                            ##
 ##  Description :                                                             ##
 ##    Functions and aliases to make the emscripten usage nicer.               ##

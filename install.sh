@@ -8,10 +8,10 @@
 ##                                                                            ##
 ##  File      : install.sh                                                    ##
 ##  Project   : dots                                                          ##
-##  Date      : Oct 08, 2017                                                  ##
+##  Date      : Oct 02, 2018                                                  ##
 ##  License   : GPLv3                                                         ##
 ##  Author    : stdmatt <stdmatt@pixelwizards.io>                             ##
-##  Copyright : stdmatt - 2018, 2020                                          ##
+##  Copyright : stdmatt 2018 - 2020                                           ##
 ##                                                                            ##
 ##  Description :                                                             ##
 ##    Super, super simple (and inclomple) install script for dots.            ##

@@ -7,10 +7,10 @@
 ##                                                                            ##
 ##  File      : url_to_pdf.sh                                                 ##
 ##  Project   : dots                                                          ##
-##  Date      : Feb 19, 2019                                                  ##
+##  Date      : Feb 18, 2019                                                  ##
 ##  License   : GPLv3                                                         ##
 ##  Author    : stdmatt <stdmatt@pixelwizards.io>                             ##
-##  Copyright : stdmatt - 2019                                                ##
+##  Copyright : stdmatt 2019, 2020                                            ##
 ##                                                                            ##
 ##  Description :                                                             ##
 ##    Downloads the webpage to a pdf file.                                    ##
