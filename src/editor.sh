@@ -49,3 +49,10 @@ edit-project-list()
 
     $VISUAL_GUI "$PROJECT_LIST_FILENAME";
 }
+
+##------------------------------------------------------------------------------
+edit-profile()
+{
+    local PROFILE_PATH=$(pw_get_default_bashrc_or_profile);
+    $VISUAL_GUI "$PROFILE_PATH";
+}

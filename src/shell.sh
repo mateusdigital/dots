@@ -130,13 +130,6 @@ please()
 ## Profile                                                                    ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
-edit-profile()
-{
-    local PROFILE_PATH=$(pw_get_default_bashrc_or_profile);
-    ed "$PROFILE_PATH";
-}
-
-##------------------------------------------------------------------------------
 reload-profile()
 {
     local PROFILE_PATH=$(pw_get_default_bashrc_or_profile);
