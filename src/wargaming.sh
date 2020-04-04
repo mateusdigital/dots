@@ -16,8 +16,14 @@
 ##                                                                            ##
 ##---------------------------------------------------------------------------~##
 
+_WG_POSTGRES_IMG_NAME="pg-docker";
+
+_WG_POSTGRES_USERNAME="postgres";
+_WG_POSTGRES_PASSWORD="docker";
+_WG_POSTGRES_HOST="localhost";
+
 ##------------------------------------------------------------------------------
-connect-clickhouse-client()
+wg-connect-clickhouse-client()
 {
     docker run -it --rm --link                                   \
         clickhouse_storage_database:clickhouse_storage_database  \
@@ -26,18 +32,20 @@ connect-clickhouse-client()
 }
 
 ##------------------------------------------------------------------------------
-connect-postgres()
+wg-connect-postgres()
 {
-    local NAME="pg-docker";
-    local PASSWD="docker";
+    psql -U $_WG_POSTGRES_USERNAME -h $_WG_POSTGRES_HOST;
+}
 
-    docker kill "$NAME";
+##------------------------------------------------------------------------------
+wg-run-postgres()
+{
+    docker kill "$_WG_POSTGRES_IMG_NAME";
     docker purge -f;
 
-    docker run -it --rm                                             \
-        --name "$NAME"                                              \
-        -e POSTGRES_PASSWORD="$PASSWD"                              \
-        -p 5432:5432                                                \
-        -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data   \
+    docker run -it --rm                               \
+        --name "$_WG_POSTGRES_IMG_NAME"               \
+        -e POSTGRES_PASSWORD="$_WG_POSTGRES_PASSWORD" \
+        -p 5432:5432                                  \
         postgres
 }
