@@ -23,6 +23,20 @@ _WG_POSTGRES_PASSWORD="docker";
 _WG_POSTGRES_HOST="localhost";
 
 ##------------------------------------------------------------------------------
+wg-run-clickhouse-db()
+{
+    docker container kill clickhouse_storage_database
+    docker container kill clickhouse_storage_service
+    docker container prune --force
+
+    docker run --rm -d                      \
+        --publish 9000:9000                 \
+        --ulimit nofile=262144:262144       \
+        --name clickhouse_storage_database  \
+        yandex/clickhouse-server
+}
+
+##------------------------------------------------------------------------------
 wg-connect-clickhouse-client()
 {
     docker run -it --rm --link                                   \
