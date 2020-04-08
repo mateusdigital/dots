@@ -33,7 +33,8 @@ wg-run-clickhouse-db()
         --publish 9000:9000                 \
         --ulimit nofile=262144:262144       \
         --name clickhouse_storage_database  \
-        yandex/clickhouse-server
+        yandex/clickhouse-server:19.1.13
+       #3 yandex/clickhouse-server
 }
 
 ##------------------------------------------------------------------------------
