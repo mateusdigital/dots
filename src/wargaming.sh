@@ -64,3 +64,34 @@ wg-run-postgres()
         -p 5432:5432                                  \
         postgres
 }
+
+##----------------------------------------------------------------------------##
+## Kubernetes stuff...                                                        ##
+##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
+get-pods()
+{
+    kubectl -n junkyardio get pods
+}
+
+##------------------------------------------------------------------------------
+get-logs()
+{
+    local POD_NAME="$1"
+    local TAIL="$2";
+    kubectl -n junkyardio logs $(kubectl -n junkyardio get pods | grep "$POD_NAME"| cut -d" " -f1) -c "$POD_NAME";
+}
+
+##------------------------------------------------------------------------------
+delete-pod()
+{
+    local POD_NAME="$1";
+    kubectl -n junkyardio delete pod $(kubectl -n junkyardio get pods | grep "$POD_NAME" | cut -d" " -f1)
+}
+
+##------------------------------------------------------------------------------
+exec-pod()
+{
+    local POD_NAME="$1";
+    kubectl -n junkyardio exec -it  $(kubectl -n junkyardio get pods | grep "$POD_NAME" | cut -d" " -f1) /bin/sh
+}
