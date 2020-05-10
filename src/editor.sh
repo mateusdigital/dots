@@ -32,7 +32,7 @@ charm()
 {
     ## @todo(stdmatt): We try to find charm and not hardcode it...
     local CHARM_PATH="/usr/local/bin/charm";
-    $CHARM_PATH $@ &
+    $CHARM_PATH $@ > /dev/null 2>&1 &
 }
 
 
