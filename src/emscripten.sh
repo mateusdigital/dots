@@ -22,5 +22,6 @@
 ##------------------------------------------------------------------------------
 source_ems()
 {
+    ## TODO(stdmatt): Just works on OSX.
     source /Users/stdmatt/Documents/Projects/3rd_party/emsdk/emsdk_env.sh
 }
