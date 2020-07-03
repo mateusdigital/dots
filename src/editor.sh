@@ -27,12 +27,9 @@ export VISUAL_GUI="code";
 ##----------------------------------------------------------------------------##
 ## Editors                                                                    ##
 ##----------------------------------------------------------------------------##
-##------------------------------------------------------------------------------
-charm()
+wcode()
 {
-    ## @todo(stdmatt): We try to find charm and not hardcode it...
-    local CHARM_PATH="/usr/local/bin/charm";
-    $CHARM_PATH $@ > /dev/null 2>&1 &
+    powershell -Command "code .";
 }
 
 
@@ -67,16 +64,4 @@ edit-profile()
 edit-project-list()
 {
     _edit_file_in_owncloud "projects_list.md";
-}
-
-##------------------------------------------------------------------------------
-edit-wargaming-list()
-{
-    _edit_file_in_owncloud "wargaming_list.md";
-}
-
-##------------------------------------------------------------------------------
-edit-wargaming-tricks()
-{
-    _edit_file_in_owncloud "wargaming_tricks.md";
 }
