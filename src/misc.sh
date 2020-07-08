@@ -31,3 +31,10 @@ function weather()
     cat /var/tmp/weather.txt | head -1
     cat /var/tmp/weather.txt | head -37 | tail -30
 }
+
+
+##------------------------------------------------------------------------------
+function check-my-repos()
+{
+    repochecker --remote --auto-pull --show-all
+}
