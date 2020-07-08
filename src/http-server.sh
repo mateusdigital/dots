@@ -40,6 +40,7 @@ TEMP_DIRECTORY="/var/tmp";
 TEMP_FILENAME="http-server.temp";
 TEMP_FULLPATH="${TEMP_DIRECTORY}/${TEMP_FILENAME}"
 
+
 ##----------------------------------------------------------------------------##
 ## Private Functions                                                          ##
 ##----------------------------------------------------------------------------##
