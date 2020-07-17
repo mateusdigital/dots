@@ -46,6 +46,11 @@ _install_source_on()
     if [ -z "$result" ]; then
         echo "## stdmatt's dots ##"        >> "$PATH_TO_INSTALL";
         echo "source $INSTALL_DIR/main.sh" >> "$PATH_TO_INSTALL";
+
+        ## OSX has the zsh as default now, but I want to continue to use bash ;D
+        if [ -n "$(PW_OS_IS_OSX)" ]; then
+            echo "export BASH_SILENCE_DEPRECATION_WARNING=1" >> "$PATH_TO_INSTALL";
+        fi;
     fi;
 
     echo "Done...";
