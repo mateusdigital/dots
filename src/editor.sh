@@ -30,7 +30,7 @@ export VISUAL_GUI="code";
 ##------------------------------------------------------------------------------
 wcode()
 {
-    if [ $(PW_OS_IS_WSL) ]; then
+    if [ -n "$(PW_OS_IS_WSL)" ]; then
         powershell -Command "code .";
     else
         code .
