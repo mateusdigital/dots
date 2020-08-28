@@ -41,7 +41,6 @@ source "$PROJECT_ROOT_DIR/playground.sh"
 source "$PROJECT_ROOT_DIR/PS1.sh"
 source "$PROJECT_ROOT_DIR/shell.sh"
 source "$PROJECT_ROOT_DIR/youtube-dl.sh"
-source "$PROJECT_ROOT_DIR/wargaming.sh"
 source "$PROJECT_ROOT_DIR/version.sh"
 
 ## Hacks for each platform...
