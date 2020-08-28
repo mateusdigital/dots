@@ -16,7 +16,6 @@
 ##                                                                            ##
 ##---------------------------------------------------------------------------~##
 
-
 ##----------------------------------------------------------------------------##
 ## Hacks for Mingw                                                            ##
 ##----------------------------------------------------------------------------##
@@ -64,7 +63,7 @@ if [ "$(pw_os_get_simple_name)" == "$(PW_OS_WINDOWS)" ]; then
 ## Hacks for WSL                                                              ##
 ##----------------------------------------------------------------------------##
 elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
-    echo "Doing WSL hacks..";
+    echo "Doing WSL hacks...";
 
     ## @XXX(stdmatt): Really shit, but working....
     __WSL_Hacks_Escape_Path()
@@ -92,8 +91,10 @@ elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
     {
         local USER_HOME=$(pw_find_real_user_home);
         local USER_BIN_DIR="${USER_HOME}/.stdmatt_bin/wsl";
+
         PATH="${PATH}:${USER_BIN_DIR}";
     }
+
     ##--------------------------------------------------------------------------
     __WSL_Hacks_Create_Exports()
     {
@@ -103,6 +104,8 @@ elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
         if [ -n "$OKULAR_PATH" ]; then
             export MANPDF_READER="$OKULAR_PATH";
         else
+            ## @TODO(stdmatt): Probably we want to have this not hardcoded
+            ## or remove it at all...
             export MANPDF_READER="/mnt/c/Program Files (x86)/Foxit Software/Foxit Reader/FoxitReader.exe";
         fi;
 
@@ -113,16 +116,20 @@ elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
     ##--------------------------------------------------------------------------
     __WSL_Hacks_Create_Aliases()
     {
-        ## Git Bash.
-        local GIT_BASH_WINDOWS_PATH="C:/Git/bin/bash.exe";
-        local GIT_BASH_WSL_PATH="$(wslpath $GIT_BASH_WINDOWS_PATH)";
+        ## @TODO(stdmatt): Clean this if not needed anymore...
+        # ## Git Bash.
+        # local GIT_BASH_WINDOWS_PATH="C:/Git/bin/bash.exe";
+        # local GIT_BASH_WSL_PATH="$(wslpath $GIT_BASH_WINDOWS_PATH)";
 
-        alias git-bash="$GIT_BASH_WSL_PATH ";
+        # alias git-bash="$GIT_BASH_WSL_PATH ";
 
         ## Powershell.
         alias powershell="powershell.exe ";
     }
 
+    ##
+    ## @XXX Do we want this???
+    ##    -stdmatt, Aug 28, 2020.
     __WSL_Hacks_Map_Root_To_Windows_Drive()
     {
         subst.exe "U:" "$(wslpath -aw /)";
@@ -131,7 +138,6 @@ elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
     ##
     ## Public Functions
     ##
-
     ##--------------------------------------------------------------------------
     wsl_init_xserver()
     {
@@ -146,48 +152,6 @@ elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
 
         "$XSERVER_WSL_PATH" ":0" -clipboard -multiwindow 2>&1 1>/dev/null  &
         pw_func_log "Done...";
-    }
-
-    ##--------------------------------------------------------------------------
-    ## @(XXX) VSCode hangs when the debugger is stopped...
-    kill_debugger()
-    {
-        ps aex | grep python | cut -d " " -f1 | xargs kill -9
-    }
-
-    devenv()
-    {
-        ## Get where visual studio is installed as a Windows path
-        ## and clean the path the most as possible.
-        local DEVENV_WINDOWS_PATH="$(vswhere.exe -latest | grep "productPath")";
-        DEVENV_WINDOWS_PATH="$(pw_string_replace "$DEVENV_WINDOWS_PATH" "productPath:" " ")";
-        DEVENV_WINDOWS_PATH="$(pw_trim_left      "$DEVENV_WINDOWS_PATH")";
-
-        ## Transform the windows path to a unix path.
-        local DEVENV_WSL_PATH="$(wslpath -u "$DEVENV_WINDOWS_PATH")";
-        DEVENV_WSL_PATH="$(dirname "$DEVENV_WSL_PATH")";
-
-        ## Now the hack... Visual Studio doesn't accept the "network" path
-        ## that windows sees the WSL filesystem, so since we have the root
-        ## of the WSL filesystem subst'ed at the U: we need to replace the
-        ## command line args paths with this drive letter.
-        ## This way we'll be able to fool visual studio to load the directory
-        ## thing for us ;D
-        local ROOT_NETWORK_PATH="$(wslpath -am /)";
-        local ARG_NETWORK_PATH="$(wslpath -am $1)";
-        local ARG_FAKE_PATH="U:/$(pw_substr "$ARG_NETWORK_PATH" $(pw_strlen "$ROOT_NETWORK_PATH"))";
-
-        "$DEVENV_WSL_PATH/devenv.exe" "$ARG_FAKE_PATH";
-    }
-
-
-    ##--------------------------------------------------------------------------
-    ## @XXX(stdmatt): VERY VERY NASTY WAY TO ACCESS DOCKER from WSL...
-    docker()
-    {
-        local DOCKER_WINDOWS_PATH="C:/Program Files/Docker/Docker/resources/bin/docker.exe";
-        local DOCKER_WSL_PATH="$(wslpath  "$DOCKER_WINDOWS_PATH")";
-        "$DOCKER_WSL_PATH" $@
     }
 
     ##
