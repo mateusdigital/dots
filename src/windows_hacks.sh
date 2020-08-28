@@ -144,7 +144,7 @@ elif [ "$(pw_os_get_simple_name)" == "$(PW_OS_WSL)" ]; then
             return 0;
         fi;
 
-        "$XSERVER_WSL_PATH" ":0" -clipboard -multiwindow > /dev/null 2>1 &
+        "$XSERVER_WSL_PATH" ":0" -clipboard -multiwindow 2>&1 1>/dev/null  &
         pw_func_log "Done...";
     }
 
