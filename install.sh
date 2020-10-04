@@ -65,8 +65,8 @@ echo "[Installing dots]";
 ##
 ## Install the script files.
 ##   Clear the installation directory.
-rm -rf "$INSTALL_DIR";
-mkdir -p "$INSTALL_DIR";
+rm    -rf  "$INSTALL_DIR";
+mkdir -p   "$INSTALL_DIR";
 ##   Copy all scripts to it.
 cp -R $SCRIPT_DIR/src/* $INSTALL_DIR;
 
@@ -83,3 +83,11 @@ elif [ -n "$use_bash_profile" ]; then
 else
     _install_source_on $default_bash_rc;
 fi
+
+## @cleanup: If we start to install lots of things in different platfomrs
+## maybe is a good idea to refactor this into separated functions.
+##      stdmatt - Oct 04, 2020
+if [ -n "$(PW_OS_IS_OSX)" ]; then
+    ## Install the terminal profile...
+    open ${SCRIPT_DIR}/extras/stdmatt_homebrew.terminal
+fi;

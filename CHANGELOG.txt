@@ -1,0 +1,3 @@
+v1.0.1 - Oct 04, 2020
+    - Improve: Install the terminal profiles on the OSX.
+    - Cosmetic: Little cosmetic changes.
