@@ -26,7 +26,7 @@ youtube-dl-mp3()
         && echo "[youtube-dl-mp3] Empty url - Aborting..." \
         return 1;
 
-    youtube-dl --extract-audio --audio-format mp3 "$URL";
+    youtube-dl --no-playlist --extract-audio --audio-format mp3 "$URL";
 }
 
 ##------------------------------------------------------------------------------
@@ -38,6 +38,21 @@ youtube-dl-playlist()
         return 1;
 
     youtube-dl -o                                             \
+        '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' \
+        "$URL";
+}
+
+##------------------------------------------------------------------------------
+youtube-dl-music-playlist()
+{
+    local URL="$1";
+    test -z "$URL"                                              \
+        && echo "[youtube-dl-playlist] Empty url - Aborting..." \
+        return 1;
+
+    youtube-dl                                                \
+        --extract-audio --audio-format mp3                    \
+        -o                                                    \
         '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' \
         "$URL";
 }
