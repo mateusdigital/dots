@@ -29,6 +29,13 @@ function lty
     pwd
 }
 
+function clean-game-profile()
+{
+    rm C:\Users\mmesquita\Documents\ProjectLiberty -Recurse
+}
+
+
+
 ##------------------------------------------------------------------------------
 function ack
 {
