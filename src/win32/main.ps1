@@ -151,7 +151,7 @@ function journal()
 }
 
 ##------------------------------------------------------------------------------
-function to-make()
+function games-to-make()
 {
     code $GAMES_TO_MAKE_PATH;
 }
