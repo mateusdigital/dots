@@ -1,5 +1,23 @@
+##
+## Constants
+#3
 $POWERSHELL_TELEMETRY_OPTOUT = 0;
 $DOTS_PATH = "D:/stdmatt/dots"; ## @todo(stdmatt): Make the installation set this var.... Dec 22, 2020
+
+
+$DESKTOP_DIR = "C:/Users/mmesquita/Desktop";
+
+
+##
+## Helper Functions (Private)
+##
+##------------------------------------------------------------------------------
+function _string_is_null_or_whitespace()
+{
+    return [string]::IsNullOrWhiteSpace($args[0]);
+}
+
+
 
 ##
 ## Files
@@ -18,6 +36,30 @@ function files()
     }
 
     & $FILE_MANAGER $target_path;
+}
+
+##------------------------------------------------------------------------------
+function create-shortcut()
+{
+    $src_path = $args[0];
+    $dst_path = $args[1];
+
+    if ( _string_is_null_or_whitespace($src_path) ) {
+        echo "[$MyInvocation.MyCommand] Missing source path - Aborting...";
+        return;
+    }
+    if ( _string_is_null_or_whitespace($dst_path) ) {
+        echo "[$MyInvocation.MyCommand] Missing target path - Aborting...";
+        return;
+    }
+
+    $src_path = (Resolve-Path $src_path).ToString();
+
+    ## @todo(stdmatt): Check if the string ends with .lnk and if not add it - Dec 28, 2020
+    $WshShell            = New-Object -ComObject WScript.Shell
+    $Shortcut            = $WshShell.CreateShortcut($dst_path);
+    $Shortcut.TargetPath = $src_path;
+    $Shortcut.Save()
 }
 
 
