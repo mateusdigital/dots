@@ -1,0 +1,70 @@
+// Place your key bindings in this file to override the defaultsauto[]
+[
+    //
+    // Navigate
+    { "key": "ctrl+-",      "command": "workbench.action.navigateBack"    },
+    { "key": "ctrl+=",      "command": "workbench.action.navigateForward" },
+    { "key": "alt+shift+o", "command": "workbench.action.quickOpen"       },
+
+    //
+    // Panels
+    { "key": "alt+shift+\\", "command": "workbench.action.splitEditor"        },
+    { "key": "shift+alt+-",  "command": "workbench.action.splitEditorOrthogonal"},
+    { "key": "alt+shift+x", "command": "workbench.action.closeEditorsInGroup" },
+
+    { "key": "alt+h", "command": "workbench.action.focusLeftGroup"  },
+    { "key": "alt+l", "command": "workbench.action.focusRightGroup" },
+    { "key": "alt+k", "command": "workbench.action.focusAboveGroup" },
+    { "key": "alt+j", "command": "workbench.action.focusBelowGroup" },
+
+    { "key": "alt+shift+h", "command": "workbench.action.moveEditorToLeftGroup"  },
+    { "key": "alt+shift+l", "command": "workbench.action.moveEditorToRightGroup" },
+    { "key": "alt+shift+e", "command": "workbench.action.toggleSidebarVisibility" },
+
+
+    { "key": "ctrl+k ctrl+m", "command": "editor.fold" },
+    { "key": "ctrl+m ctrl+k", "command": "editor.unfold" },
+
+    //
+    // Find
+    { "key": "ctrl+f ctrl+f", "command": "actions.find" },
+    { "key": "ctrl+f ctrl+h", "command": "workbench.action.findInFiles" },
+
+    //
+    // Tabs
+    { "key": "ctrl+tab",       "command": "workbench.action.nextEditor"     },
+    { "key": "ctrl+alt+l",     "command": "workbench.action.nextEditor"     },
+    { "key": "ctrl+shift+tab", "command": "workbench.action.previousEditor" },
+    { "key": "ctrl+alt+h",     "command": "workbench.action.previousEditor" },
+
+    //
+    // Comments
+    { "key": "ctrl+/",        "command": "editor.action.commentLine"},
+
+    //
+    // MISC
+
+    {
+        "key": "ctrl+;",
+        "command": "extension.insertDateTime"
+    },
+
+    {
+        "key": "ctrl+e ctrl+n",
+        "command": "workbench.action.files.newUntitledFile"
+    },
+
+    { "key": "ctrl+shift+c",  "command": "editor.action.clipboardCopyAction", "when": "textInputFocus" },
+    { "key": "ctrl+shift+v",  "command": "editor.action.clipboardPasteAction", "when": "textInputFocus" },
+
+    { "key": "shift shift",          "command": "workbench.action.showCommands" },
+
+    {
+        "key": "F6",
+        "command": "workbench.action.tasks.build"
+    },
+    {
+        "key": "ctrl+e",
+        "command": "-workbench.action.quickOpen"
+    },
+]
