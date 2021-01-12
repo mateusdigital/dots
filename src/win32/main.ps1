@@ -130,19 +130,38 @@ function reload-profile()
     & $profile
 }
 
+##------------------------------------------------------------------------------
+function edit-profile()
+{
+    code $profile
+}
+
+
 ## Sync...
 ##------------------------------------------------------------------------------
+## @todo(stdamtt): Remove hardcoded paths - Dec 30, 2020
 $TERMINAL_SETTINGS_INSTALL_FULLPATH = "C:\Users\mmesquita\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json";
 $TERMINAL_SETTINGS_SOURCE_FULLPATH = "$DOTS_PATH" + "/extras/windows_terminal.json";
 
 $PROFILE_INSTALL_FULLPATH = "C:/Users/mmesquita/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
 $PROFILE_SOURCE_FULLPATH = "$DOTS_PATH" + "/src/win32/main.ps1";
 
+$VIMRC_INSTALL_DIRPATH = "C:/Users/mmesquita"
+$VIMRC_SOURCE_FULLPATH = "$DOTS_PATH" + "/extras/.vimrc";
+
+$VSCODE_KEYBINDINGS_INSTALL_FULLPATH = "C:\Users\mmesquita\AppData\Roaming\Code\User\keybindings.json";
+$VSCODE_KEYBINDINGS_SOURCE_FULLPATH  = "$DOTS_PATH" + "/extras/keybindings.json";
+
+
 ##------------------------------------------------------------------------------
+## @todo(stdmatt): Inline this function into sync-profile since
+## it's not meant to be used to anymore else - Dec 30, 2020
 function _copy_newer_file()
 {
+    ## @todo(stdmatt): Handle empty or invalid filenames... 1/12/2021, 11:59:06 AM
     $filename_1 = $args[0];
     $filename_2 = $args[1];
+
     $time_1 = (Get-Item $filename_1).LastWriteTime;
     $time_2 = (Get-Item $filename_2).LastWriteTime;
 
@@ -164,8 +183,19 @@ function _copy_newer_file()
 ##------------------------------------------------------------------------------
 function sync-profile()
 {
-    _copy_newer_file $TERMINAL_SETTINGS_INSTALL_FULLPATH $TERMINAL_SETTINGS_SOURCE_FULLPATH
-    _copy_newer_file $PROFILE_INSTALL_FULLPATH           $PROFILE_SOURCE_FULLPATH
+    ## Terminal / Profile
+    _copy_newer_file $TERMINAL_SETTINGS_INSTALL_FULLPATH $TERMINAL_SETTINGS_SOURCE_FULLPATH;
+    _copy_newer_file $PROFILE_INSTALL_FULLPATH           $PROFILE_SOURCE_FULLPATH;
+
+    ## .vimrc
+    $vimrc_fullpath     = Join-Path $VIMRC_INSTALL_DIRPATH  -ChildPath ".vimrc";
+    $ideavimrc_fullpath = Join-Path $VIMRC_INSTALL_DIRPATH  -ChildPath ".ideavimrc";
+
+    _copy_newer_file $vimrc_fullpath $VIMRC_SOURCE_FULLPATH;
+    Copy-Item $vimrc_fullpath $ideavimrc_fullpath -Force;
+
+    ## VSCode
+    _copy_newer_file $VSCODE_KEYBINDINGS_INSTALL_FULLPATH $VSCODE_KEYBINDINGS_SOURCE_FULLPATH;
 }
 
 
