@@ -156,14 +156,28 @@ $VSCODE_KEYBINDINGS_SOURCE_FULLPATH  = "$DOTS_PATH" + "/extras/keybindings.json"
 ##------------------------------------------------------------------------------
 ## @todo(stdmatt): Inline this function into sync-profile since
 ## it's not meant to be used to anymore else - Dec 30, 2020
+function _get_file_time_helper()
+{
+    if(Test-Path -Path $args[0] -PathType Leaf) {
+        return (Get-Item $args[0]).LastWriteTime.ToFileTimeUtc();
+    }
+
+    return 0;
+}
+
 function _copy_newer_file()
 {
     ## @todo(stdmatt): Handle empty or invalid filenames... 1/12/2021, 11:59:06 AM
     $filename_1 = $args[0];
     $filename_2 = $args[1];
 
-    $time_1 = (Get-Item $filename_1).LastWriteTime;
-    $time_2 = (Get-Item $filename_2).LastWriteTime;
+    $time_1 = (_get_file_Time_helper $filename_1);
+    $time_2 = (_get_file_Time_helper $filename_2);
+
+    if($time_1 -eq 0 -and $time_2 -eq 0) {
+        ## @todo(stdmatt): Better error msgs... 1/13/2021, 5:54:37 PM
+        return;
+    }
 
     $src_filename = $filename_1;
     $dst_filename = $filename_2;
