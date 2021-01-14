@@ -44,8 +44,10 @@ function _file_exists()
     return (Test-Path -Path $args[0] -PathType Leaf);
 }
 
+##------------------------------------------------------------------------------
 function _log_fatal_func()
 {
+    ## @todo(stdmatt): Make it print the caller function, and print [FATAL] - Jan 14, 21
     echo "$args";
 }
 
