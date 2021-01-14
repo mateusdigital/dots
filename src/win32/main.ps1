@@ -1,11 +1,32 @@
+## @todo(stdmatt): Make a function that join any numer of paths with a sane syntax...
 ##
 ## Constants
-#3
+##
 $POWERSHELL_TELEMETRY_OPTOUT = 0;
-$DOTS_PATH = "D:/stdmatt/dots"; ## @todo(stdmatt): Make the installation set this var.... Dec 22, 2020
 
+## General Paths...
+$HOME_DIR        = "$env:USERPROFILE";
+$DOWNLOADS_DIR   = "$HOME_DIR/Downloads";
+$DOCUMENTS_DIR   = "$HOME_DIR/Documents";
+$DESKTOP_DIR     = "$HOME_DIR/Desktop";
+$JOURNAL_DIR     = "$HOME_DIR/Desktop/Journal";
+$STDMATT_BIN_DIR = "$HOME_DIR/.stdmatt_bin"; ## My binaries that I don't wanna on system folder...
+## Sync Paths...
+$TERMINAL_SETTINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json";
+$TERMINAL_SETTINGS_SOURCE_FULLPATH  = "$DOTS_DIR/extras/windows_terminal.json";
 
-$DESKTOP_DIR = "C:/Users/mmesquita/Desktop";
+$PROFILE_INSTALL_FULLPATH = "$HOME_DIR/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
+$PROFILE_SOURCE_FULLPATH  = "$DOTS_DIR/src/win32/main.ps1";
+
+$VIMRC_INSTALL_DIRPATH = "$HOME_DIR"
+$VIMRC_SOURCE_FULLPATH = "$DOTS_DIR/extras/.vimrc";
+
+$VSCODE_KEYBINDINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Roaming/Code/User/keybindings.json";
+$VSCODE_KEYBINDINGS_SOURCE_FULLPATH  = "$DOTS_DIR/extras/keybindings.json";
+
+## Binary aliases...
+$FILE_MANAGER = "explorer.exe";
+$YOUTUBE_DL_EXE_PATH = Join-Path -Path $STDMATT_BIN_DIR -ChildPath "youtube-dl.exe";
 
 
 ##
@@ -17,7 +38,16 @@ function _string_is_null_or_whitespace()
     return [string]::IsNullOrWhiteSpace($args[0]);
 }
 
+##------------------------------------------------------------------------------
+function _file_exists()
+{
+    return (Test-Path -Path $args[0] -PathType Leaf);
+}
 
+function _log_fatal_func()
+{
+    echo "$args";
+}
 
 ##
 ## Files
@@ -25,17 +55,25 @@ function _string_is_null_or_whitespace()
 ##   If no path was given open the current dir.
 ##
 ##------------------------------------------------------------------------------
-$FILE_MANAGER = "explorer.exe";
-
 ##------------------------------------------------------------------------------
 function files()
 {
     $target_path = $args[0];
-    if ( $target_path -eq "" )  {
-        $target_path=".";
+
+    if($target_path -ne "."                           -or
+       $target_path -ne ".."                          -or
+       (_string_is_null_or_whitespace($target_path))  -or
+       (_file_exists                 ($target_path)))
+    {
+        if ( $target_path -eq "" )  {
+            $target_path=".";
+        }
+
+        & $FILE_MANAGER $target_path;
+        return;
     }
 
-    & $FILE_MANAGER $target_path;
+    _log_fatal_func("Path($target_path) doesn't not exists - Aborting...");
 }
 
 ##------------------------------------------------------------------------------
@@ -45,11 +83,11 @@ function create-shortcut()
     $dst_path = $args[1];
 
     if ( _string_is_null_or_whitespace($src_path) ) {
-        echo "[$MyInvocation.MyCommand] Missing source path - Aborting...";
+        _log_fatal_func("Missing source path - Aborting...");
         return;
     }
     if ( _string_is_null_or_whitespace($dst_path) ) {
-        echo "[$MyInvocation.MyCommand] Missing target path - Aborting...";
+        _log_fatal_func("Missing target path - Aborting...");
         return;
     }
 
@@ -59,7 +97,7 @@ function create-shortcut()
     $WshShell            = New-Object -ComObject WScript.Shell
     $Shortcut            = $WshShell.CreateShortcut($dst_path);
     $Shortcut.TargetPath = $src_path;
-    $Shortcut.Save()
+    $Shortcut.Save();
 }
 
 
@@ -76,7 +114,7 @@ function lty
 ##------------------------------------------------------------------------------
 function clean-game-profile()
 {
-    rm C:\Users\mmesquita\Documents\ProjectLiberty -Recurse
+    rm $HOME_DIR/Documents/ProjectLiberty -Recurse
 }
 
 ##------------------------------------------------------------------------------
@@ -97,20 +135,16 @@ function ack
 ## Paths
 ##
 ##------------------------------------------------------------------------------
-$STDMATT_BIN_FOLDER_NAME = ".stdmatt_bin";
-$STDMATT_BIN_PATH        = Join-Path -Path $env:USERPROFILE -ChildPath $STDMATT_BIN_FOLDER_NAME;
-
-##------------------------------------------------------------------------------
 function me
 {
-    cd  D:/stdmatt
+    cd $ME_PATH;
     pwd
 }
 
 ##------------------------------------------------------------------------------
 function me-bin()
 {
-    cd $STDMATT_BIN_PATH;
+    cd $STDMATT_BIN_DIR;
     pwd;
 }
 
@@ -127,7 +161,7 @@ function edit-profile()
 ##------------------------------------------------------------------------------
 function reload-profile()
 {
-    & $profile
+    . $profile
 }
 
 ##------------------------------------------------------------------------------
@@ -136,35 +170,10 @@ function edit-profile()
     code $profile
 }
 
-
+##
 ## Sync...
+##
 ##------------------------------------------------------------------------------
-## @todo(stdamtt): Remove hardcoded paths - Dec 30, 2020
-$TERMINAL_SETTINGS_INSTALL_FULLPATH = "C:\Users\mmesquita\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json";
-$TERMINAL_SETTINGS_SOURCE_FULLPATH = "$DOTS_PATH" + "/extras/windows_terminal.json";
-
-$PROFILE_INSTALL_FULLPATH = "C:/Users/mmesquita/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
-$PROFILE_SOURCE_FULLPATH = "$DOTS_PATH" + "/src/win32/main.ps1";
-
-$VIMRC_INSTALL_DIRPATH = "C:/Users/mmesquita"
-$VIMRC_SOURCE_FULLPATH = "$DOTS_PATH" + "/extras/.vimrc";
-
-$VSCODE_KEYBINDINGS_INSTALL_FULLPATH = "C:\Users\mmesquita\AppData\Roaming\Code\User\keybindings.json";
-$VSCODE_KEYBINDINGS_SOURCE_FULLPATH  = "$DOTS_PATH" + "/extras/keybindings.json";
-
-
-##------------------------------------------------------------------------------
-## @todo(stdmatt): Inline this function into sync-profile since
-## it's not meant to be used to anymore else - Dec 30, 2020
-function _get_file_time_helper()
-{
-    if(Test-Path -Path $args[0] -PathType Leaf) {
-        return (Get-Item $args[0]).LastWriteTime.ToFileTimeUtc();
-    }
-
-    return 0;
-}
-
 function _copy_newer_file()
 {
     ## @todo(stdmatt): Handle empty or invalid filenames... 1/12/2021, 11:59:06 AM
@@ -190,7 +199,7 @@ function _copy_newer_file()
         $dst_filename = $filename_2;
     }
 
-    echo "[sync-profile] Copying ($src_filename) to ($dst_filename)";
+    _log_fatal_func("[sync-profile] Copying ($src_filename) to ($dst_filename)");
     Copy-Item $src_filename $dst_filename -Force;
 }
 
@@ -202,8 +211,8 @@ function sync-profile()
     _copy_newer_file $PROFILE_INSTALL_FULLPATH           $PROFILE_SOURCE_FULLPATH;
 
     ## .vimrc
-    $vimrc_fullpath     = Join-Path $VIMRC_INSTALL_DIRPATH  -ChildPath ".vimrc";
-    $ideavimrc_fullpath = Join-Path $VIMRC_INSTALL_DIRPATH  -ChildPath ".ideavimrc";
+    $vimrc_fullpath     = _path_join($VIMRC_INSTALL_DIRPATH, ".vimrc");
+    $ideavimrc_fullpath = _path_join($VIMRC_INSTALL_DIRPATH, ".ideavimrc");
 
     _copy_newer_file $vimrc_fullpath $VIMRC_SOURCE_FULLPATH;
     Copy-Item $vimrc_fullpath $ideavimrc_fullpath -Force;
@@ -217,23 +226,22 @@ function sync-profile()
 ## Utils
 ##
 ##------------------------------------------------------------------------------
-$JOURNAL_PATH       = "C:/Users/mmesquita/Desktop/Journal";
-$GAMES_TO_MAKE_PATH = "D:/stdmatt/games_to_make";
-
-##------------------------------------------------------------------------------
 function journal()
 {
     ## This creates a new file with the date as filename if it doesn't exists...
     $curr_date_str    = Get-Date -Format "yy_MM_dd";
-    $journal_filename = "$JOURNAL_PATH" + "/" + $curr_date_str + ".txt";
-    $today_filename   = "$JOURNAL_PATH" + "/" + "_today.txt";
+    $journal_filename = "$JOURNAL_DIR" + "/" + $curr_date_str + ".txt";
+    $today_filename   = "$JOURNAL_DIR" + "/" + "_today.txt";
 
     try {
         New-Item -Path "$journal_filename" -ItemType File -ea stop
     } catch {
     }
 
-    code $JOURNAL_PATH;
+    ## @todo(stdmatt): Would be awesome to have the same-layout on vscode everytime.
+    ## Check if it's possible to save a setup or pass command line options with this.
+    ## Jan 14, 21
+    code $JOURNAL_DIR;
 }
 
 ##------------------------------------------------------------------------------
@@ -257,8 +265,6 @@ function global:prompt
 ## youtube-dl
 ##
 ##------------------------------------------------------------------------------
-$YOUTUBE_DL_EXE_PATH = Join-Path -Path $STDMATT_BIN_PATH -ChildPath "youtube-dl.exe";
-
 function _ensure_youtube_dl()
 {
     if( -not(Test-Path -Path $YOUTUBE_DL_EXE_PATH) ) {
@@ -289,12 +295,12 @@ function youtube-dl-mp3()
 # function youtube-dl-playlist()
 # {
 #     local URL="$1";
-#     test -z "$URL"                                              \
-#         && echo "[youtube-dl-playlist] Empty url - Aborting..." \
+#     test -z "$URL"                                              /
+#         && echo "[youtube-dl-playlist] Empty url - Aborting..." /
 #         return 1;
 
-#     youtube-dl -o                                             \
-#         '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' \
+#     youtube-dl -o                                             /
+#         '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' /
 #         "$URL";
 # }
 
@@ -302,13 +308,13 @@ function youtube-dl-mp3()
 # function youtube-dl-music-playlist()
 # {
 #     local URL="$1";
-#     test -z "$URL"                                              \
-#         && echo "[youtube-dl-playlist] Empty url - Aborting..." \
+#     test -z "$URL"                                              /
+#         && echo "[youtube-dl-playlist] Empty url - Aborting..." /
 #         return 1;
 
-#     youtube-dl                                                \
-#         --extract-audio --audio-format mp3                    \
-#         -o                                                    \
-#         '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' \
+#     youtube-dl                                                /
+#         --extract-audio --audio-format mp3                    /
+#         -o                                                    /
+#         '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' /
 #         "$URL";
 # }
