@@ -9,7 +9,6 @@ $HOME_DIR        = "$env:USERPROFILE";
 $DOWNLOADS_DIR   = "$HOME_DIR/Downloads";
 $DOCUMENTS_DIR   = "$HOME_DIR/Documents";
 $DESKTOP_DIR     = "$HOME_DIR/Desktop";
-$JOURNAL_DIR     = "$HOME_DIR/Desktop/Journal";
 $STDMATT_BIN_DIR = "$HOME_DIR/.stdmatt_bin"; ## My binaries that I don't wanna on system folder...
 $DOTS_DIR        = "$env:DOTS_DIR";
 
@@ -30,6 +29,9 @@ $VSCODE_KEYBINDINGS_SOURCE_FULLPATH  = "$DOTS_DIR/extras/keybindings.json";
 $FILE_MANAGER = "explorer.exe";
 $YOUTUBE_DL_EXE_PATH = Join-Path -Path $STDMATT_BIN_DIR -ChildPath "youtube-dl.exe";
 
+## Journal things...
+$JOURNAL_DIR       = "$HOME_DIR/Desktop/Journal";
+$JOURNAL_FILE_EXT = ".md";
 
 ##
 ## Helper Functions (Private)
@@ -252,8 +254,7 @@ function journal()
 {
     ## This creates a new file with the date as filename if it doesn't exists...
     $curr_date_str    = Get-Date -Format "yy_MM_dd";
-    $journal_filename = "$JOURNAL_DIR" + "/" + $curr_date_str + ".txt";
-    $today_filename   = "$JOURNAL_DIR" + "/" + "_today.txt";
+    $journal_filename = "$JOURNAL_DIR" + "/" + $curr_date_str + $JOURNAL_FILE_EXT;
 
     try {
         New-Item -Path "$journal_filename" -ItemType File -ea stop
