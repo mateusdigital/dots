@@ -1,4 +1,3 @@
-## @todo(stdmatt): Make a function that join any numer of paths with a sane syntax...
 ##
 ## Constants
 ##
@@ -11,6 +10,7 @@ $DOCUMENTS_DIR   = "$HOME_DIR/Documents";
 $DESKTOP_DIR     = "$HOME_DIR/Desktop";
 $STDMATT_BIN_DIR = "$HOME_DIR/.stdmatt_bin"; ## My binaries that I don't wanna on system folder...
 $DOTS_DIR        = "$env:DOTS_DIR";
+$PROJECTS_DIR    = "$DOCUMENTS_DIR/Projects/stdmatt";
 
 ## Sync Paths...
 $TERMINAL_SETTINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json";
@@ -41,6 +41,28 @@ function _string_is_null_or_whitespace()
 {
     return [string]::IsNullOrWhiteSpace($args[0]);
 }
+
+##------------------------------------------------------------------------------
+function _string_contains()
+{
+    $haystack = $args[0];
+    $needle   = $args[1];
+
+    if((_string_is_null_or_whitespace $haystack)) {
+        return $false;
+    }
+    if((_string_is_null_or_whitespace $needle)) {
+        rerturn $false;
+    }
+
+    $index = $haystack.IndexOf($needle);
+    if( $index -eq -1) {
+        return $false;
+    }
+
+    return $true;
+}
+
 
 ##------------------------------------------------------------------------------
 function _file_exists()
@@ -166,7 +188,19 @@ function ack
 ##------------------------------------------------------------------------------
 function me
 {
-    cd $ME_PATH;
+    ## @notice(stdmatt): All workstations at work use the same prefix.
+    ## @todo(stdmatt): Try to find a way to make this more automatic an reliable - 1/15/2021, 10:51:57 AM
+    $WORKSTATION_PREFIX = "KIV-WKS";
+    $WORK_ME_PATH       = "D:/stdmatt";
+    $HOME_ME_PATH       = "$PROJECTS_DIR";
+
+    $pc_name = hostname;
+    $dst_dir = $HOME_ME_PATH;
+    if((_string_contains $pc_name $WORKSTATION_PREFIX)) {
+        $dst_dir = $WORK_ME_PATH;
+    }
+
+    cd $dst_dir;
     pwd
 }
 
