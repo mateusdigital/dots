@@ -39,11 +39,10 @@
 
     //
     // Comments
-    { "key": "ctrl+/",        "command": "editor.action.commentLine"},
+    { "key": "ctrl+/", "command": "editor.action.commentLine"},
 
     //
     // MISC
-
     {
         "key": "ctrl+;",
         "command": "extension.insertDateTime"
