@@ -11,6 +11,8 @@ $DOCUMENTS_DIR   = "$HOME_DIR/Documents";
 $DESKTOP_DIR     = "$HOME_DIR/Desktop";
 $JOURNAL_DIR     = "$HOME_DIR/Desktop/Journal";
 $STDMATT_BIN_DIR = "$HOME_DIR/.stdmatt_bin"; ## My binaries that I don't wanna on system folder...
+$DOTS_DIR        = "$env:DOTS_DIR";
+
 ## Sync Paths...
 $TERMINAL_SETTINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json";
 $TERMINAL_SETTINGS_SOURCE_FULLPATH  = "$DOTS_DIR/extras/windows_terminal.json";
@@ -18,7 +20,7 @@ $TERMINAL_SETTINGS_SOURCE_FULLPATH  = "$DOTS_DIR/extras/windows_terminal.json";
 $PROFILE_INSTALL_FULLPATH = "$HOME_DIR/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
 $PROFILE_SOURCE_FULLPATH  = "$DOTS_DIR/src/win32/main.ps1";
 
-$VIMRC_INSTALL_DIRPATH = "$HOME_DIR"
+$VIMRC_INSTALL_DIR     = "$HOME_DIR"
 $VIMRC_SOURCE_FULLPATH = "$DOTS_DIR/extras/.vimrc";
 
 $VSCODE_KEYBINDINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Roaming/Code/User/keybindings.json";
@@ -49,6 +51,29 @@ function _log_fatal_func()
 {
     ## @todo(stdmatt): Make it print the caller function, and print [FATAL] - Jan 14, 21
     echo "$args";
+}
+
+##------------------------------------------------------------------------------
+$INVALID_FILE_TIME = -1;
+function _get_file_time()
+{
+    if((_file_exists($args[0]))) {
+        return (Get-Item $args[0]).LastWriteTimeUtc.Ticks;
+    }
+    return $INVALID_FILE_TIME;
+}
+
+##------------------------------------------------------------------------------
+function _path_join()
+{
+    $fullpath = "";
+    for ($i = 0; $i -lt $args.Length; $i++) {
+        $fullpath += $($args[$i]);
+        if($i -ne ($args.Length -1)) {
+            $fullpath = $fullpath + "/";
+        }
+    }
+    return $fullpath;
 }
 
 ##
@@ -178,31 +203,27 @@ function edit-profile()
 ##------------------------------------------------------------------------------
 function _copy_newer_file()
 {
-    ## @todo(stdmatt): Handle empty or invalid filenames... 1/12/2021, 11:59:06 AM
     $filename_1 = $args[0];
     $filename_2 = $args[1];
 
-    $time_1 = (_get_file_Time_helper $filename_1);
-    $time_2 = (_get_file_Time_helper $filename_2);
+    $time_1 = (_get_file_time $filename_1);
+    $time_2 = (_get_file_time $filename_2);
 
-    if($time_1 -eq 0 -and $time_2 -eq 0) {
-        ## @todo(stdmatt): Better error msgs... 1/13/2021, 5:54:37 PM
+    if($time_1 -eq $INVALID_FILE_TIME -and $time_2 -eq $INVALID_FILE_TIME) {
+        _log_fatal_func("Both paths are invalid...`n    Path 1: ($filename_1)`n    Path 2: ($filename_2)");
         return;
     }
 
-    $src_filename = $filename_1;
-    $dst_filename = $filename_2;
+    $old_filename = $filename_1;
+    $new_filename = $filename_2;
 
     if ($time_1 -lt $time_2) {
-        $src_filename = $filename_2;
-        $dst_filename = $filename_1;
-    } else {
-        $src_filename = $filename_1;
-        $dst_filename = $filename_2;
+        $old_filename = $filename_2;
+        $new_filename = $filename_1;
     }
 
-    _log_fatal_func("[sync-profile] Copying ($src_filename) to ($dst_filename)");
-    Copy-Item $src_filename $dst_filename -Force;
+    _log_fatal_func("[sync-profile] Copying ($old_filename) to ($new_filename)");
+    Copy-Item $old_filename $new_filename -Force;
 }
 
 ##------------------------------------------------------------------------------
@@ -213,9 +234,8 @@ function sync-profile()
     _copy_newer_file $PROFILE_INSTALL_FULLPATH           $PROFILE_SOURCE_FULLPATH;
 
     ## .vimrc
-    $vimrc_fullpath     = _path_join($VIMRC_INSTALL_DIRPATH, ".vimrc");
-    $ideavimrc_fullpath = _path_join($VIMRC_INSTALL_DIRPATH, ".ideavimrc");
-
+    $vimrc_fullpath     = (_path_join $VIMRC_INSTALL_DIR  ".vimrc");
+    $ideavimrc_fullpath = (_path_join $VIMRC_INSTALL_DIR ".ideavimrc");
     _copy_newer_file $vimrc_fullpath $VIMRC_SOURCE_FULLPATH;
     Copy-Item $vimrc_fullpath $ideavimrc_fullpath -Force;
 
