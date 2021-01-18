@@ -6,19 +6,6 @@
 $POWERSHELL_TELEMETRY_OPTOUT = 0;
 
 
-# search processing cpp
-# quadtree
-#     static alloc
-#     heap alloc
-#     custom buffer
-#     allocator?
-
-# noise editor
-#     tw botk
-# msdks demk na vjbe dk ljxd, zfga
-# img ed don flake
-
-
 ## General Paths...
 $HOME_DIR        = "$env:USERPROFILE";
 $DOWNLOADS_DIR   = "$HOME_DIR/Downloads";
@@ -128,7 +115,6 @@ function _path_join()
 ##   Open the Filesystem Manager into a given path.
 ##   If no path was given open the current dir.
 ##
-##------------------------------------------------------------------------------
 ##------------------------------------------------------------------------------
 function files()
 {
@@ -325,9 +311,20 @@ function journal()
 }
 
 ##------------------------------------------------------------------------------
-function games-to-make()
+function sync-journal()
 {
-    code $GAMES_TO_MAKE_PATH;
+    cd $JOURNAL_DIR;
+    git add .
+
+    $current_pc_name = hostname;
+    $current_date    = date;
+    $commit_msg      = "[sync-journal] ($current_pc_name) - ($current_date)";
+
+    echo $commit_msg;
+    git commit -m "$commit_msg";
+
+    git pull
+    git push
 }
 
 ##
@@ -371,7 +368,7 @@ function youtube-dl-mp3()
     & $YOUTUBE_DL_EXE_PATH --no-playlist --extract-audio --audio-format mp3 $URL;
 }
 
-
+##------------------------------------------------------------------------------
 function cmake-build()
 {
     $CMAKE_SCRIPT_FILENAME="CMakeLists.txt";
