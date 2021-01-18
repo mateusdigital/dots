@@ -337,6 +337,13 @@ function global:prompt
     return "$curr_path `n:) "
 }
 
+##------------------------------------------------------------------------------
+function sync-all()
+{
+    sync-profile;
+    sync-journal;
+}
+
 
 ##
 ## youtube-dl
