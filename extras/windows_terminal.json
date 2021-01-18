@@ -1,7 +1,13 @@
 {
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}", // - Powershell
-    // "defaultProfile": "{c6eaf9f4-32a7-5fdc-b5cf-066e8a4b1e42}", // - Git Bash
+
+    // @todo(stdmatt): Try to find a way to automatically decide the profile
+    // to each computer... Today I'm using it just because of the font size
+    // but with the possibility of installing different profiles can
+    // make more interesting things... 1/18/2021, 10:59:27 AM
+
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}", // Powershell 10pt
+    // "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44b2}", // Powershell 12pt
 
     //
     // Profiles
@@ -10,7 +16,16 @@
         // Powershell
         {
             "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-            "name": "Windows PowerShell",
+            "name": "PowerShell 10pt",
+            "commandline": "powershell.exe",
+            "fontFace": "Jetbrains Mono",
+            "fontSize": 10,
+            "colorScheme":  "Dracula"
+        },
+        // Powershell
+        {
+            "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44b2}",
+            "name": "PowerShell 12pt",
             "commandline": "powershell.exe",
             "fontFace": "Jetbrains Mono",
             "fontSize": 12,
