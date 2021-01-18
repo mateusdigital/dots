@@ -1,8 +1,23 @@
 ## @todo(stdmatt): Make a function that join any numer of paths with a sane syntax...
+## @todo(stdmatt): Make a way to install fotnts automatically.
 ##
 ## Constants
 ##
 $POWERSHELL_TELEMETRY_OPTOUT = 0;
+
+
+# search processing cpp
+# quadtree
+#     static alloc
+#     heap alloc
+#     custom buffer
+#     allocator?
+
+# noise editor
+#     tw botk
+# msdks demk na vjbe dk ljxd, zfga
+# img ed don flake
+
 
 ## General Paths...
 $HOME_DIR        = "$env:USERPROFILE";
@@ -44,6 +59,13 @@ function _string_is_null_or_whitespace()
 function _file_exists()
 {
     return (Test-Path -Path $args[0] -PathType Leaf);
+}
+
+##------------------------------------------------------------------------------
+function _dir_exists()
+{
+    ## @todo(stdmatt): How to chack only for dirs???
+    return (Test-Path -Path $args[0]);
 }
 
 ##------------------------------------------------------------------------------
@@ -296,6 +318,7 @@ function _ensure_youtube_dl()
     return 1;
 }
 
+##------------------------------------------------------------------------------
 function youtube-dl-mp3()
 {
     if(-not(_ensure_youtube_dl)) {
@@ -312,6 +335,34 @@ function youtube-dl-mp3()
     & $YOUTUBE_DL_EXE_PATH --no-playlist --extract-audio --audio-format mp3 $URL;
 }
 
+
+function cmake-build()
+{
+    $CMAKE_SCRIPT_FILENAME="CMakeLists.txt";
+    $curr_dir = pwd;
+
+    if(!(_file_exists $CMAKE_SCRIPT_FILENAME)) {
+        _log_fatal_func "Current directory doesn't have a ($CMAKE_SCRIPT_FILENAME)";
+        return;
+    }
+
+    ## @todo(stdmatt): Accept options:
+    ##     - Path to cmake lists...
+    ##     - Path to target dir....
+    ##     - Build options...
+    ## Jan 16, 21
+
+
+    $BUILD_DIR = "build.win32";
+    if(!(_dir_exists $BUILD_DIR)) {
+        mkdir $BUILD_DIR;
+    }
+
+    # $CMAKE_BIN="$curr_dir/external/win32/cmake/bin/cmake.exe";
+    cd $BUILD_DIR;
+        cmake ..
+    cd $curr_dir;
+}
 
 # ##------------------------------------------------------------------------------
 # function youtube-dl-playlist()
