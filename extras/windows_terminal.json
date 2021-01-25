@@ -6,8 +6,8 @@
     // but with the possibility of installing different profiles can
     // make more interesting things... 1/18/2021, 10:59:27 AM
 
-    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}", // Powershell 10pt
-    // "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44b2}", // Powershell 12pt
+    // "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}", // Powershell 10pt
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44b2}", // Powershell 12pt
 
     //
     // Profiles
@@ -20,7 +20,8 @@
             "commandline": "powershell.exe",
             "fontFace": "Jetbrains Mono",
             "fontSize": 10,
-            "colorScheme":  "Dracula"
+            "colorScheme":  "Dracula",
+            "startingDirectory": "%USERPROFILE%/"
         },
         // Powershell
         {
@@ -29,8 +30,8 @@
             "commandline": "powershell.exe",
             "fontFace": "Jetbrains Mono",
             "fontSize": 12,
-            "colorScheme":  "Dracula"
-
+            "colorScheme":  "Dracula",
+            "startingDirectory": "%USERPROFILE%/"
         },
         // Git Bash
         {
