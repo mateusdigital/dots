@@ -5,6 +5,14 @@
     // to each computer... Today I'm using it just because of the font size
     // but with the possibility of installing different profiles can
     // make more interesting things... 1/18/2021, 10:59:27 AM
+    //
+    // Research:
+    //   A easy way to do that is just to create a shortcut of the terminal
+    //   with the command line specifiying the profile name.
+    //
+    //   In the dots main.ps1 we have a function that create shortcuts...
+    //   Try to extend it to create a way to pass command line arguments,
+    //   and research how we can set the icon as well. 1/24/2021, 1:47:34 PM
 
     // "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}", // Powershell 10pt
     "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44b2}", // Powershell 12pt
