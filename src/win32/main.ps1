@@ -34,6 +34,8 @@ $YOUTUBE_DL_EXE_PATH = Join-Path -Path $STDMATT_BIN_DIR -ChildPath "youtube-dl.e
 
 ## Journal things...
 $JOURNAL_DIR       = "$HOME_DIR/Desktop/Journal";
+$JOURNAL_GIT_URL   = "https://gitlab.com/stdmatt-private/journal";
+
 $JOURNAL_FILE_EXT = ".md";
 
 ##
@@ -313,6 +315,10 @@ function journal()
 ##------------------------------------------------------------------------------
 function sync-journal()
 {
+    if(!(_dir_exists $JOURNAL_DIR)) {
+        git clone $JOURNAL_GIT_URL $JOURNAL_DIR;
+    }
+    
     cd $JOURNAL_DIR;
     git add .
 
