@@ -146,7 +146,7 @@ function create-shortcut()
         _log_fatal_func("Missing source path - Aborting...");
         return;
     }
-    if ( _string_is_null_or_whitespace($dst_path) ) {
+    if ( _string/cm/_is_null_or_whitespace($dst_path) ) {
         _log_fatal_func("Missing target path - Aborting...");
         return;
     }
@@ -288,6 +288,48 @@ function sync-profile()
     _copy_newer_file $VSCODE_KEYBINDINGS_INSTALL_FULLPATH $VSCODE_KEYBINDINGS_SOURCE_FULLPATH;
 }
 
+##------------------------------------------------------------------------------
+function sync-journal()
+{
+    cd $JOURNAL_DIR;
+    git add .
+
+    $current_pc_name = hostname;
+    $current_date    = date;
+    $commit_msg      = "[sync-journal] ($current_pc_name) - ($current_date)";
+
+    echo $commit_msg;
+    git commit -m "$commit_msg";
+
+    git pull
+    git push
+}
+
+##------------------------------------------------------------------------------
+function sync-dots()
+{
+    cd $DOTS_DIR;
+    git add .
+
+    $current_pc_name = hostname;
+    $current_date    = date;
+    $commit_msg      = "[sync-dots] ($current_pc_name) - ($current_date)";
+
+    echo $commit_msg;
+    git commit -m "$commit_msg";
+
+    git pull
+    git push
+}
+
+##------------------------------------------------------------------------------
+function sync-all()
+{
+    sync-profile;
+    sync-journal;
+    sync-dots;
+}
+
 
 ##
 ## Utils
@@ -310,22 +352,6 @@ function journal()
     code $JOURNAL_DIR;
 }
 
-##------------------------------------------------------------------------------
-function sync-journal()
-{
-    cd $JOURNAL_DIR;
-    git add .
-
-    $current_pc_name = hostname;
-    $current_date    = date;
-    $commit_msg      = "[sync-journal] ($current_pc_name) - ($current_date)";
-
-    echo $commit_msg;
-    git commit -m "$commit_msg";
-
-    git pull
-    git push
-}
 
 ##
 ## Shell
@@ -335,13 +361,6 @@ function global:prompt
 {
     $curr_path = pwd;
     return "$curr_path `n:) "
-}
-
-##------------------------------------------------------------------------------
-function sync-all()
-{
-    sync-profile;
-    sync-journal;
 }
 
 
