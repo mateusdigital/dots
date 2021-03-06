@@ -14,8 +14,8 @@
     //   Try to extend it to create a way to pass command line arguments,
     //   and research how we can set the icon as well. 1/24/2021, 1:47:34 PM
 
-    // "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}", // Powershell 10pt
-    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44b2}", // Powershell 12pt
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}", // Powershell 10pt
+    // "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44b2}", // Powershell 12pt
 
     //
     // Profiles
@@ -26,7 +26,7 @@
             "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
             "name": "PowerShell 10pt",
             "commandline": "powershell.exe",
-            "fontFace": "Jetbrains Mono",
+            "fontFace": "JetBrains Mono",
             "fontSize": 10,
             "colorScheme":  "Dracula",
             "startingDirectory": "%USERPROFILE%/"
@@ -36,7 +36,7 @@
             "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44b2}",
             "name": "PowerShell 12pt",
             "commandline": "powershell.exe",
-            "fontFace": "Jetbrains Mono",
+            "fontFace": "JetBrains Mono",
             "fontSize": 12,
             "colorScheme":  "Dracula",
             "startingDirectory": "%USERPROFILE%/"
@@ -48,7 +48,7 @@
             "commandline": "C:/Git/bin/bash.exe",
             "icon": "C:/Program Files/Git/mingw64/share/git/git-for-windows.ico",
             "startingDirectory": "%USERPROFILE%/Documents/Projects/wargaming/juyd_new",
-            "fontFace": "Jetbrains Mono",
+            "fontFace": "JetBrains Mono",
             "fontSize": 10
         },
         // WSL
@@ -57,7 +57,7 @@
             "hidden": false,
             "name": "Ubuntu-18.04",
             "source": "Windows.Terminal.Wsl",
-            "fontFace": "Jetbrains Mono",
+            "fontFace": "JetBrains Mono",
             "fontSize": 10
         },
         // Hidden Profiles
