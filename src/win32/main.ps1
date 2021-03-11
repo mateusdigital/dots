@@ -15,6 +15,14 @@ $STDMATT_BIN_DIR = "$HOME_DIR/.stdmatt_bin"; ## My binaries that I don't wanna o
 $DOTS_DIR        = "$env:DOTS_DIR";
 $PROJECTS_DIR    = "$DOCUMENTS_DIR/Projects/stdmatt";
 
+## @todo(stdmatt): Find a better way to specify those paths... Feb 15, 2021
+$LTY_DIR = "D:/LTY";
+$ACK_DIR = "D:/ACK";
+
+$WORKSTATION_PREFIX = "KIV-WKS";
+$WORK_ME_PATH       = "E:/stdmatt";
+$HOME_ME_PATH       = "$PROJECTS_DIR";
+
 ## Sync Paths...
 $TERMINAL_SETTINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json";
 $TERMINAL_SETTINGS_SOURCE_FULLPATH  = "$DOTS_DIR/extras/windows_terminal.json";
@@ -169,7 +177,14 @@ function create-shortcut()
 ##------------------------------------------------------------------------------
 function lty
 {
-    cd  E:/mmesquita_KIV-WKS-PR536_9193
+    cd $LTY_DIR;
+    pwd
+}
+
+##------------------------------------------------------------------------------
+function ack
+{
+    cd $ACK_DIR;
     pwd
 }
 
@@ -182,15 +197,9 @@ function clean-game-profile()
 ##------------------------------------------------------------------------------
 function edit-game-ini()
 {
-    code --new-window E:/mmesquita_KIV-WKS-PR536_9193/bin/scimitar.ini
+    code --new-window $LTY_DIR/bin/scimitar.ini
 }
 
-##------------------------------------------------------------------------------
-function ack
-{
-    cd  E:/mmesquita_ack
-    pwd
-}
 
 
 ##
@@ -199,12 +208,6 @@ function ack
 ##------------------------------------------------------------------------------
 function me
 {
-    ## @notice(stdmatt): All workstations at work use the same prefix.
-    ## @todo(stdmatt): Try to find a way to make this more automatic an reliable - 1/15/2021, 10:51:57 AM
-    $WORKSTATION_PREFIX = "KIV-WKS";
-    $WORK_ME_PATH       = "D:/stdmatt";
-    $HOME_ME_PATH       = "$PROJECTS_DIR";
-
     $pc_name = hostname;
     $dst_dir = $HOME_ME_PATH;
     if((_string_contains $pc_name $WORKSTATION_PREFIX)) {
@@ -318,7 +321,7 @@ function sync-journal()
     if(!(_dir_exists $JOURNAL_DIR)) {
         git clone $JOURNAL_GIT_URL $JOURNAL_DIR;
     }
-    
+
     cd $JOURNAL_DIR;
     git add .
 
