@@ -37,7 +37,7 @@ $VSCODE_KEYBINDINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Roaming/Code/User/keyb
 $VSCODE_KEYBINDINGS_SOURCE_FULLPATH  = "$DOTS_DIR/extras/keybindings.json";
 
 ## Binary aliases...
-$FILE_MANAGER = "explorer.exe";
+$FILE_MANAGER        = "explorer.exe";
 $YOUTUBE_DL_EXE_PATH = Join-Path -Path $STDMATT_BIN_DIR -ChildPath "youtube-dl.exe";
 
 ## Journal things...
@@ -65,7 +65,7 @@ function _string_contains()
         return $false;
     }
     if((_string_is_null_or_whitespace $needle)) {
-        rerturn $false;
+        return $false;
     }
 
     $index = $haystack.IndexOf($needle);
@@ -75,7 +75,6 @@ function _string_contains()
 
     return $true;
 }
-
 
 ##------------------------------------------------------------------------------
 function _file_exists()
@@ -156,7 +155,7 @@ function create-shortcut()
         _log_fatal_func("Missing source path - Aborting...");
         return;
     }
-    if ( _string_is_null_or_whitespace($dst_path) ) {
+    if ( _string/cm/_is_null_or_whitespace($dst_path) ) {
         _log_fatal_func("Missing target path - Aborting...");
         return;
     }
@@ -293,6 +292,49 @@ function sync-profile()
     _copy_newer_file $VSCODE_KEYBINDINGS_INSTALL_FULLPATH $VSCODE_KEYBINDINGS_SOURCE_FULLPATH;
 }
 
+##------------------------------------------------------------------------------
+function sync-journal()
+{
+    cd $JOURNAL_DIR;
+    git add .
+
+    $current_pc_name = hostname;
+    $current_date    = date;
+    $commit_msg      = "[sync-journal] ($current_pc_name) - ($current_date)";
+
+    echo $commit_msg;
+    git commit -m "$commit_msg";
+
+    git pull
+    git push
+}
+
+##------------------------------------------------------------------------------
+function sync-dots()
+{
+    cd $DOTS_DIR;
+    git add .
+
+    $current_pc_name = hostname;
+    $current_date    = date;
+    $commit_msg      = "[sync-dots] ($current_pc_name) - ($current_date)";
+
+    echo $commit_msg;
+    git commit -m "$commit_msg";
+
+    git pull
+    git push
+}
+
+##------------------------------------------------------------------------------
+function sync-all()
+{
+    sync-profile;
+    sync-journal;
+    sync-dots;
+}
+
+
 ##
 ## Utils
 ##
@@ -323,27 +365,6 @@ function journal()
     code $JOURNAL_DIR;
 }
 
-##------------------------------------------------------------------------------
-function sync-journal()
-{
-    if(!(_dir_exists $JOURNAL_DIR)) {
-        git clone $JOURNAL_GIT_URL $JOURNAL_DIR;
-    }
-
-    cd $JOURNAL_DIR;
-    git add .
-
-    $current_pc_name = hostname;
-    $current_date    = date;
-    $commit_msg      = "[sync-journal] ($current_pc_name) - ($current_date)";
-
-    echo $commit_msg;
-    git commit -m "$commit_msg";
-
-    git pull
-    git push
-}
-
 ##
 ## Shell
 ##
@@ -354,13 +375,32 @@ function global:prompt
     return "$curr_path `n:) "
 }
 
-##------------------------------------------------------------------------------
-function sync-all()
+## @notice(stdmatt): This is pretty cool - It makes the cd to behave like
+## the bash one that i can cd - and it goes to the OLDPWD.
+## I mean, this thing is neat, probably PS has some sort of this like that
+## but honestly, not in the kinda mood to start to look to all the crap
+## microsoft documentation. But had quite fun time doing this silly thing!
+## Kinda the first thing that I write in my standing desk here in kyiv.
+## I mean, this is pretty cool, just could imagine when I get my new keychron!
+## March 12, 2021!!
+$global:OLDPWD="";
+function _stdmatt_cd()
 {
-    sync-profile;
-    sync-journal;
+    $target_path = $args[0];
+
+    if($target_path -eq "") {
+        $target_path = "$HOME_DIR";
+    }
+    if($target_path -eq "-") {
+        $target_path=$global:OLDPWD;
+    }
+
+    $global:OLDPWD =  [string](Get-Location);
+    Set-Location $target_path; ## Needs to be the Powershell builtin or infinity recursion
 }
 
+Remove-Item -Path Alias:cd
+Set-Alias -Name cd -Value _stdmatt_cd -Option AllScope
 
 ##
 ## youtube-dl
