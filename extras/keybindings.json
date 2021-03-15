@@ -66,4 +66,8 @@
         "key": "ctrl+e",
         "command": "-workbench.action.quickOpen"
     },
+    {
+        "key": "ctrl+alt+s",
+        "command": "workbench.action.files.saveFiles"
+    },
 ]

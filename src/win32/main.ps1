@@ -15,6 +15,14 @@ $STDMATT_BIN_DIR = "$HOME_DIR/.stdmatt_bin"; ## My binaries that I don't wanna o
 $DOTS_DIR        = "$env:DOTS_DIR";
 $PROJECTS_DIR    = "$DOCUMENTS_DIR/Projects/stdmatt";
 
+## @todo(stdmatt): Find a better way to specify those paths... Feb 15, 2021
+$LTY_DIR = "D:/LTY";
+$ACK_DIR = "D:/ACK";
+
+$WORKSTATION_PREFIX = "KIV-WKS";
+$WORK_ME_PATH       = "E:/stdmatt";
+$HOME_ME_PATH       = "$PROJECTS_DIR";
+
 ## Sync Paths...
 $TERMINAL_SETTINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json";
 $TERMINAL_SETTINGS_SOURCE_FULLPATH  = "$DOTS_DIR/extras/windows_terminal.json";
@@ -168,7 +176,14 @@ function create-shortcut()
 ##------------------------------------------------------------------------------
 function lty
 {
-    cd  E:/mmesquita_KIV-WKS-PR536_9193
+    cd $LTY_DIR;
+    pwd
+}
+
+##------------------------------------------------------------------------------
+function ack
+{
+    cd $ACK_DIR;
     pwd
 }
 
@@ -181,15 +196,9 @@ function clean-game-profile()
 ##------------------------------------------------------------------------------
 function edit-game-ini()
 {
-    code --new-window E:/mmesquita_KIV-WKS-PR536_9193/bin/scimitar.ini
+    code --new-window $LTY_DIR/bin/scimitar.ini
 }
 
-##------------------------------------------------------------------------------
-function ack
-{
-    cd  E:/mmesquita_ack
-    pwd
-}
 
 
 ##
@@ -198,12 +207,6 @@ function ack
 ##------------------------------------------------------------------------------
 function me
 {
-    ## @notice(stdmatt): All workstations at work use the same prefix.
-    ## @todo(stdmatt): Try to find a way to make this more automatic an reliable - 1/15/2021, 10:51:57 AM
-    $WORKSTATION_PREFIX = "KIV-WKS";
-    $WORK_ME_PATH       = "D:/stdmatt";
-    $HOME_ME_PATH       = "$PROJECTS_DIR";
-
     $pc_name = hostname;
     $dst_dir = $HOME_ME_PATH;
     if((_string_contains $pc_name $WORKSTATION_PREFIX)) {
@@ -338,8 +341,17 @@ function sync-all()
 ##------------------------------------------------------------------------------
 function journal()
 {
+    ## @todo(stdmatt): Would be nice to actually make the function to write
+    ## the header automatically with the start and end dates of the week - 3/15/2021, 10:27:14 AM
+    $cultureInfo = [System.Globalization.CultureInfo]::CurrentCulture;
+    $week_day    = $cultureInfo.Calendar.GetWeekOfYear(
+        (Get-Date),
+        $cultureInfo.DateTimeFormat.CalendarWeekRule,
+        $cultureInfo.DateTimeFormat.FirstDayOfWeek
+    )
+
     ## This creates a new file with the date as filename if it doesn't exists...
-    $curr_date_str    = Get-Date -Format "yy_MM_dd";
+    $curr_date_str    = "week_" + $week_day;
     $journal_filename = "$JOURNAL_DIR" + "/" + $curr_date_str + $JOURNAL_FILE_EXT;
 
     try {
@@ -352,7 +364,6 @@ function journal()
     ## Jan 14, 21
     code $JOURNAL_DIR;
 }
-
 
 ##
 ## Shell
