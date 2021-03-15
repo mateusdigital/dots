@@ -32,10 +32,11 @@
       <option name="presentableId" value="Default" />
       <updated>1615576451922</updated>
       <workItem from="1615576464131" duration="3603000" />
+      <workItem from="1615581303538" duration="4415000" />
     </task>
     <servers />
   </component>
-  <component name="UnityProjectConfiguration" hasMinimizedUI="null" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
