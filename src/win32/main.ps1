@@ -293,15 +293,23 @@ function sync-profile()
     _copy_newer_file $VSCODE_KEYBINDINGS_INSTALL_FULLPATH $VSCODE_KEYBINDINGS_SOURCE_FULLPATH;
 }
 
-
 ##
 ## Utils
 ##
 ##------------------------------------------------------------------------------
 function journal()
 {
+    ## @todo(stdmatt): Would be nice to actually make the function to write
+    ## the header automatically with the start and end dates of the week - 3/15/2021, 10:27:14 AM
+    $cultureInfo = [System.Globalization.CultureInfo]::CurrentCulture;
+    $week_day    = $cultureInfo.Calendar.GetWeekOfYear(
+        (Get-Date),
+        $cultureInfo.DateTimeFormat.CalendarWeekRule,
+        $cultureInfo.DateTimeFormat.FirstDayOfWeek
+    )
+
     ## This creates a new file with the date as filename if it doesn't exists...
-    $curr_date_str    = Get-Date -Format "yy_MM_dd";
+    $curr_date_str    = "week_" + $week_day;
     $journal_filename = "$JOURNAL_DIR" + "/" + $curr_date_str + $JOURNAL_FILE_EXT;
 
     try {
