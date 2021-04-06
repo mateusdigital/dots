@@ -10,9 +10,10 @@
     // Panels
     { "key": "alt+shift+\\", "command": "workbench.action.splitEditor"        },
     { "key": "shift+alt+-",  "command": "workbench.action.splitEditorOrthogonal"},
-    { "key": "alt+shift+x", "command": "workbench.action.closeEditorsInGroup" },
-
-    { "key": "alt+h", "command": "workbench.action.focusLeftGroup"  },
+    {
+        "key": "alt+h",
+        "command": "workbench.action.focusLeftGroup"
+    },
     { "key": "alt+l", "command": "workbench.action.focusRightGroup" },
     { "key": "alt+k", "command": "workbench.action.focusAboveGroup" },
     { "key": "alt+j", "command": "workbench.action.focusBelowGroup" },
@@ -69,5 +70,15 @@
     {
         "key": "ctrl+alt+s",
         "command": "workbench.action.files.saveFiles"
+    },
+    {
+        "key": "shift+alt+x",
+        "command": "workbench.action.closeWindow",
+        "when": "!editorIsOpen && !multipleEditorGroups"
+    },
+    {
+        "key": "ctrl+w",
+        "command": "-workbench.action.closeWindow",
+        "when": "!editorIsOpen && !multipleEditorGroups"
     },
 ]
