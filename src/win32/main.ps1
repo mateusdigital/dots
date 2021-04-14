@@ -5,6 +5,8 @@
 ##
 $POWERSHELL_TELEMETRY_OPTOUT = 0;
 
+## @TODO(stdmatt): Check if we want vi keybindings...
+Set-PSReadLineOption -EditMode Vi
 
 ## General Paths...
 $HOME_DIR        = "$env:USERPROFILE";
@@ -433,7 +435,7 @@ function youtube-dl-mp3()
 }
 
 ##------------------------------------------------------------------------------
-function cmake-build()
+function cmake-gen()
 {
     $CMAKE_SCRIPT_FILENAME="CMakeLists.txt";
     $curr_dir = pwd;
@@ -449,7 +451,6 @@ function cmake-build()
     ##     - Build options...
     ## Jan 16, 21
 
-
     $BUILD_DIR = "build.win32";
     if(!(_dir_exists $BUILD_DIR)) {
         mkdir $BUILD_DIR;
@@ -458,6 +459,24 @@ function cmake-build()
     # $CMAKE_BIN="$curr_dir/external/win32/cmake/bin/cmake.exe";
     cd $BUILD_DIR;
         cmake ..
+    cd $curr_dir;
+}
+
+##------------------------------------------------------------------------------
+function cmake-build()
+{
+    cmake-gen;
+
+    $build_dir = "build.win32";
+    $curr_dir  = pwd;
+
+    if(!(_dir_exists $build_dir)) {
+        _log_fatal_func "Build dir is not found: ($build_dir)";
+        return;
+    }
+
+    cd $build_dir;
+        cmake --build . --target ALL_BUILD $args
     cd $curr_dir;
 }
 

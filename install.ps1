@@ -29,14 +29,14 @@ echo "";
 ## thanks to: https://codingbee.net/powershell/powershell-make-a-permanent-change-to-the-path-environment-variable
 # $old_path = (Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).path;
 # if( $old_path.IndexOf("DOTS_DIR") -eq -1 ) {
-    echo "Setting DOTS_DIR path variable...";
-    $DOTS_DIR = "$SCRIPT_DIR";
-    $new_path = "$old_path;$DOTS_DIR";
-    echo "   New path: $new_path";
-    [System.Environment]::SetEnvironmentVariable("DOTS_DIR", $DOTS_DIR, [System.EnvironmentVariableTarget]::User);
+    # echo "Setting DOTS_DIR path variable...";
+    # $DOTS_DIR = "$SCRIPT_DIR";
+    # $new_path = "$old_path;$DOTS_DIR";
+    # echo "   New path: $new_path";
+    # [System.Environment]::SetEnvironmentVariable("DOTS_DIR", $DOTS_DIR, [System.EnvironmentVariableTarget]::User);
 
-    ## Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH -Value $new_path;
-    echo "";
+    # ## Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH -Value $new_path;
+    # echo "";
 # }
 
 echo "Done... ;D";
