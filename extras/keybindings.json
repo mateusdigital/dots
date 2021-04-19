@@ -72,13 +72,17 @@
         "command": "workbench.action.files.saveFiles"
     },
     {
-        "key": "shift+alt+x",
-        "command": "workbench.action.closeWindow",
+        "key": "ctrl+w",
+        "command": "-workbench.action.closeWindow",
         "when": "!editorIsOpen && !multipleEditorGroups"
     },
     {
         "key": "ctrl+w",
-        "command": "-workbench.action.closeWindow",
-        "when": "!editorIsOpen && !multipleEditorGroups"
+        "command": "-extension.vim_ctrl+w",
+        "when": "editorTextFocus && vim.active && vim.use<C-w> && !inDebugRepl"
+    },
+    {
+        "key": "shift+alt+x",
+        "command": "workbench.action.closeActiveEditor"
     },
 ]
