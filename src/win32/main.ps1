@@ -404,6 +404,10 @@ function _stdmatt_cd()
 Remove-Item -Path Alias:cd
 Set-Alias -Name cd -Value _stdmatt_cd -Option AllScope
 
+
+Set-Alias -name rm -Value C:\Users\stdmatt\.stdmatt_bin\ark_rm.exe -Force -Option AllScope
+
+
 ##
 ## youtube-dl
 ##
