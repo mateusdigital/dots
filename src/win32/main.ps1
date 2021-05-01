@@ -462,7 +462,7 @@ function cmake-gen()
 
     # $CMAKE_BIN="$curr_dir/external/win32/cmake/bin/cmake.exe";
     cd $BUILD_DIR;
-        cmake ..
+        cmake .. $args
     cd $curr_dir;
 }
 
