@@ -91,6 +91,6 @@ function cmake-build()
 
     _cmake_ensure_dir $BUILD_DIR;
     cd $BUILD_DIR;
-        cmake $BUILD_ARGS $@ --build .
+        make
     cd -;
 }
