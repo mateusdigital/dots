@@ -407,6 +407,15 @@ Set-Alias -Name cd    -Value _stdmatt_cd                                 -Force 
 Set-Alias -name rm    -Value C:\Users\stdmatt\.stdmatt_bin\ark_rm.exe    -Force -Option AllScope
 Set-Alias -name touch -Value C:\Users\stdmatt\.stdmatt_bin\ark_touch.exe -Force -Option AllScope
 
+##
+## http server
+##
+##------------------------------------------------------------------------------
+function http-server()
+{
+    python3 -m http.server $args[1];
+}
+
 
 ##
 ## youtube-dl
