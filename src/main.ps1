@@ -30,7 +30,7 @@ $TERMINAL_SETTINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Packages/Microsof
 $TERMINAL_SETTINGS_SOURCE_FULLPATH  = "$DOTS_DIR/extras/windows_terminal.json";
 
 $PROFILE_INSTALL_FULLPATH = "$HOME_DIR/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
-$PROFILE_SOURCE_FULLPATH  = "$DOTS_DIR/src/win32/main.ps1";
+$PROFILE_SOURCE_FULLPATH  = "$DOTS_DIR/src/main.ps1";
 
 $VIMRC_INSTALL_DIR     = "$HOME_DIR"
 $VIMRC_SOURCE_FULLPATH = "$DOTS_DIR/extras/.vimrc";
@@ -81,6 +81,9 @@ function _string_contains()
 ##------------------------------------------------------------------------------
 function _file_exists()
 {
+    if(_string_is_null_or_whitespace($args[0])) {
+        return $false;
+    }
     return (Test-Path -Path $args[0] -PathType Leaf);
 }
 
@@ -88,6 +91,10 @@ function _file_exists()
 function _dir_exists()
 {
     ## @todo(stdmatt): How to chack only for dirs???
+    if(_string_is_null_or_whitespace($args[0])) {
+        return $false;
+    }
+
     return (Test-Path -Path $args[0]);
 }
 
@@ -242,11 +249,6 @@ function reload-profile()
     . $profile
 }
 
-##------------------------------------------------------------------------------
-function edit-profile()
-{
-    code $profile
-}
 
 ##
 ## Sync...
@@ -297,6 +299,11 @@ function sync-profile()
 ##------------------------------------------------------------------------------
 function sync-journal()
 {
+    if(!(_dir_exists $JOURNAL_DIR)) {
+        "JOURNAL_DIR doesn't exits...";
+        return;
+    }
+
     cd $JOURNAL_DIR;
     git add .
 
@@ -314,6 +321,11 @@ function sync-journal()
 ##------------------------------------------------------------------------------
 function sync-dots()
 {
+    if(!(_dir_exists $DOTS_DIR)) {
+        "JOURNAL_DIR doesn't exits...";
+        return;
+    }
+
     cd $DOTS_DIR;
     git add .
 
@@ -492,31 +504,3 @@ function cmake-build()
         cmake --build . --target ALL_BUILD $args
     cd $curr_dir;
 }
-
-# ##------------------------------------------------------------------------------
-# function youtube-dl-playlist()
-# {
-#     local URL="$1";
-#     test -z "$URL"                                              /
-#         && echo "[youtube-dl-playlist] Empty url - Aborting..." /
-#         return 1;
-
-#     youtube-dl -o                                             /
-#         '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' /
-#         "$URL";
-# }
-
-# ##------------------------------------------------------------------------------
-# function youtube-dl-music-playlist()
-# {
-#     local URL="$1";
-#     test -z "$URL"                                              /
-#         && echo "[youtube-dl-playlist] Empty url - Aborting..." /
-#         return 1;
-
-#     youtube-dl                                                /
-#         --extract-audio --audio-format mp3                    /
-#         -o                                                    /
-#         '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' /
-#         "$URL";
-# }
