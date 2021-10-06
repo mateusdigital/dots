@@ -166,8 +166,9 @@ edit-profile()
 ##------------------------------------------------------------------------------
 sync-profile()
 {
-    echo "..."
+    echo "... Need to implement it ...";
 }
+
 
 ##----------------------------------------------------------------------------##
 ## sudo                                                                       ##
@@ -178,68 +179,92 @@ please()
     sudo $@;
 }
 
+
+##----------------------------------------------------------------------------##
+## Server                                                                     ##
+##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
+_HTTP_SERVER_CMD="python3 -m http.server 8000 --bind localhost";
+_HTTP_TEMP_DIR="/var/tmp";
+_HTTP_TEMP_FILENAME="http-server.temp";
+_HTTP_TEMP_FULLPATH="${_HTTP_TEMP_DIR}/${_HTTP_TEMP_FILENAME}";
+
+
+##----------------------------------------------------------------------------##
+## Private Functions                                                          ##
+##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
+_http_ensure_directories()
+{
+    ## notice(stdmatt): On Windows MINGW64_NT-10.0-18362 bash shell
+    ## we don't have the /var/tmp directory. So we need to create it.
+    if [ ! -d "$_HTTP_TEMP_DIR" ]; then
+        pw_log_warning                                             \
+            "Temporary directory ($_HTTP_TEMP_DIR) doesn't exists" \
+            "Creating it now...";
+
+        pw_as_super_user \
+            mkdir -pv "$_HTTP_TEMP_DIR";
+    fi;
+}
+
+##----------------------------------------------------------------------------##
+## Functions                                                                  ##
+##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
+http-kill()
+{
+    _http_ensure_directories;
+
+    local HTTP_SERVER_PID=$(cat "$_HTTP_TEMP_FULLPATH");
+    if [ -n "$HTTP_SERVER_PID" ]; then
+        echo "[http-kill] (PID: $HTTP_SERVER_PID) - Killing it...";
+        kill -9 "$HTTP_SERVER_PID";
+    else
+        echo "[http-kill] No running server...";
+    fi;
+
+    echo "" > "$_HTTP_TEMP_FULLPATH";
+}
+
+##------------------------------------------------------------------------------
+http-server()
+{
+    ## Let's user specify the port.
+    if [ -n "$1" ]; then
+        HTTP_SERVER_PORT="$1";
+    fi;
+
+    http-kill;
+    echo "[http-server] Start to serve at ($PWD)...";
+
+    ## Double fork trick:
+    ##    https://stackoverflow.com/a/3430969
+    ##    https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap11.html#tag_11_01_03
+    local FULL_CMD="$_HTTP_SERVER_CMD";
+    ($FULL_CMD  >/dev/null 2>&1 & echo "$!" > $_HTTP_TEMP_FULLPATH ) &
+    echo "[http-sever] PID for http-serve is: $(cat $_HTTP_TEMP_FULLPATH)"
+}
+
+
+
+##----------------------------------------------------------------------------##
+## System                                                                     ##
+##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
+system-update()
+{
+    sudo apt-get update && sudo apt-get upgrade;
+}
+
+
 ##----------------------------------------------------------------------------##
 ## VERSION                                                                    ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
 DOTS_VERSION="1.0.1";
 ##------------------------------------------------------------------------------
-dots_version()
+dots-version()
 {
     echo "$DOTS_VERSION";
-}
-
-
-##----------------------------------------------------------------------------##
-## Youtube-dl                                                                 ##
-##----------------------------------------------------------------------------##
-youtube-dl-mp3()
-{
-    local URL="$1";
-    test -z "$URL"                                         \
-        && echo "[youtube-dl-mp3] Empty url - Aborting..." \
-        return 1;
-
-    youtube-dl --no-playlist --extract-audio --audio-format mp3 "$URL";
-}
-
-##------------------------------------------------------------------------------
-youtube-dl-playlist()
-{
-    local URL="$1";
-    test -z "$URL"                                              \
-        && echo "[youtube-dl-playlist] Empty url - Aborting..." \
-        return 1;
-
-    youtube-dl -o                                             \
-        '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' \
-        "$URL";
-}
-
-##------------------------------------------------------------------------------
-youtube-dl-music-playlist()
-{
-    local URL="$1";
-    test -z "$URL"                                              \
-        && echo "[youtube-dl-playlist] Empty url - Aborting..." \
-        return 1;
-
-    youtube-dl                                                \
-        --extract-audio --audio-format mp3                    \
-        -o                                                    \
-        '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' \
-        "$URL";
-}
-
-##------------------------------------------------------------------------------
-youtube-dl-channel()
-{
-    local URL="$1";
-    test -z "$URL"                                             \
-        && echo "[youtube-dl-channel] Empty url - Aborting..." \
-        return 1;
-
-    youtube-dl -o                                                          \
-        '%(uploader)s/%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' \
-        "$URL"
 }
