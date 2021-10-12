@@ -300,7 +300,7 @@ function sync-profile()
 function sync-journal()
 {
     if(!(_dir_exists $JOURNAL_DIR)) {
-        "JOURNAL_DIR doesn't exits...";
+        git clone "https://gitlab.com/stdmatt-private/journal" "$JOURNAL_DIR";
         return;
     }
 
@@ -355,6 +355,8 @@ function sync-all()
 ##------------------------------------------------------------------------------
 function journal()
 {
+    sync-journal;
+
     ## @todo(stdmatt): Would be nice to actually make the function to write
     ## the header automatically with the start and end dates of the week - 3/15/2021, 10:27:14 AM
     $cultureInfo = [System.Globalization.CultureInfo]::CurrentCulture;
@@ -369,6 +371,7 @@ function journal()
     $journal_filename = "$JOURNAL_DIR" + "/" + $curr_date_str + $JOURNAL_FILE_EXT;
 
     try {
+        mkdir -Force $JOURNAL_DIR;
         New-Item -Path "$journal_filename" -ItemType File -ea stop
     } catch {
     }
