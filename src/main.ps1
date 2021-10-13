@@ -14,7 +14,7 @@ $DOWNLOADS_DIR   = "$HOME_DIR/Downloads";
 $DOCUMENTS_DIR   = "$HOME_DIR/Documents";
 $DESKTOP_DIR     = "$HOME_DIR/Desktop";
 $STDMATT_BIN_DIR = "$HOME_DIR/.stdmatt_bin"; ## My binaries that I don't wanna on system folder...
-$DOTS_DIR        = "$env:DOTS_DIR";
+$DOTS_DIR        = "__DOTS_DIR_TO_REPLACE_IN_AN_UGLY_HACK__";
 $PROJECTS_DIR    = "$DOCUMENTS_DIR/Projects/stdmatt";
 
 ## @todo(stdmatt): Find a better way to specify those paths... Feb 15, 2021
@@ -282,13 +282,15 @@ function _copy_newer_file()
 ##------------------------------------------------------------------------------
 function sync-profile()
 {
+
     ## Terminal / Profile
     _copy_newer_file $TERMINAL_SETTINGS_INSTALL_FULLPATH $TERMINAL_SETTINGS_SOURCE_FULLPATH;
     _copy_newer_file $PROFILE_INSTALL_FULLPATH           $PROFILE_SOURCE_FULLPATH;
 
     ## .vimrc
     $vimrc_fullpath     = (_path_join $VIMRC_INSTALL_DIR  ".vimrc");
-    $ideavimrc_fullpath = (_path_join $VIMRC_INSTALL_DIR ".ideavimrc");
+    $ideavimrc_fullpath = (_path_join $VIMRC_INSTALL_DIR "_ideavimrc");
+
     _copy_newer_file $vimrc_fullpath $VIMRC_SOURCE_FULLPATH;
     Copy-Item $vimrc_fullpath $ideavimrc_fullpath -Force;
 
