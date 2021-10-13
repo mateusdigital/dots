@@ -1,5 +1,8 @@
 // Place your key bindings in this file to override the defaultsauto[]
 [
+
+    { "key": "ctrl+k ctrl+p", "command": "workbench.action.pinEditor", "when": "!activeEditorIsPinned" },
+
     //
     // Navigate
     { "key": "ctrl+-",      "command": "workbench.action.navigateBack"    },
@@ -56,8 +59,6 @@
 
     { "key": "ctrl+shift+c",  "command": "editor.action.clipboardCopyAction", "when": "textInputFocus" },
     { "key": "ctrl+shift+v",  "command": "editor.action.clipboardPasteAction", "when": "textInputFocus" },
-
-    { "key": "shift shift",          "command": "workbench.action.showCommands" },
 
     {
         "key": "F6",
