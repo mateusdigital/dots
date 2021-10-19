@@ -70,3 +70,7 @@ cp    -fv  "$SCRIPT_DIR/src/main.sh"  "$INSTALL_DIR";
 cp    -fv  "$SCRIPT_DIR/extras/.vimrc" "$HOME";
 
 _install_source_on "$HOME/.bashrc";
+
+##
+## @todo(stdmatt): Install the gitignore
+## git config --global core.excludesfile ~/.gitignore_global
