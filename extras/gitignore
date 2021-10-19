@@ -93,6 +93,8 @@ tags
 .idea/**/dictionaries
 .idea/**/shelf
 
+.idea/inspectionProfiles/*
+
 # AWS User-specific
 .idea/**/aws.xml
 
@@ -157,4 +159,14 @@ fabric.properties
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
+
+
+# Rider
+# Rider auto-generates .iml files, and contentModel.xml
+**/.idea/**/*.iml
+**/.idea/**/contentModel.xml
+**/.idea/**/modules.xml
+
+**/.idea/vcs.xml
+
 ##------------------------------------------------------------------------------
