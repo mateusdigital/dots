@@ -2,7 +2,6 @@
 gauthors-top()
 {
     git shortlog -s -n;
-    _analytics_record;
 }
 
 ##------------------------------------------------------------------------------
@@ -11,8 +10,6 @@ gwhoami()
     local USER_NAME="$(git config user.name)";
     local USER_EMAIL=$(git config user.email);
     echo "$USER_NAME <$USER_EMAIL>"
-
-    _analytics_record "$USER_NAME $USER_EMAIL";
 }
 
 ##------------------------------------------------------------------------------
@@ -60,8 +57,6 @@ gbranch-delete()
     ## Here we have a valid branch that we can delete...
     ##   Passing '-d' instead of '-D' prevents us to making silly things.
     git branch -d "$TARGET_BRANCH";
-
-    _analytics_record "$TARGET_BRANCH";
 }
 
 ##------------------------------------------------------------------------------
@@ -95,7 +90,6 @@ gpush-curr()
     git push --tags origin "$CURRENT_BRANCH";
     local RET=$?;
 
-    _analytics_record "$CURRENT_BRANCH";
     return $RET;
 }
 
@@ -106,7 +100,6 @@ gpull-curr()
     git pull origin "$CURRENT_BRANCH";
     local RET=$?;
 
-    _analytics_record "$CURRENT_BRANCH";
     return $RET;
 }
 
@@ -114,14 +107,12 @@ gpull-curr()
 gfetch()
 {
     git fetch --tags;
-    _analytics_record;
 }
 
 ##------------------------------------------------------------------------------
 gstatus()
 {
    git status;
-   _analytics_record;
 }
 
 
@@ -132,22 +123,18 @@ gstatus()
 greset()
 {
     git reset --hard;
-    _analytics_record;
 }
 
 ##------------------------------------------------------------------------------
 grepo-root()
 {
     git rev-parse --show-toplevel
-    _analytics_record;
 }
 
 ##------------------------------------------------------------------------------
 grepo-url()
 {
     git remote -v | head -1 | expand -t1 | cut -d" " -f2;
-
-    _analytics_record;
 }
 
 ##------------------------------------------------------------------------------
@@ -156,8 +143,6 @@ grepo-add-origin()
     local URL="$1";
     if [ -z "$URL" ]; then
         echo "[grepo-add-origin] URL can't be empty.";
-
-        _analytics_record "[empty url]";
         return 1;
     fi;
 
