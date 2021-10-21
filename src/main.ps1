@@ -39,7 +39,7 @@ $VSCODE_KEYBINDINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Roaming/Code/User/keyb
 $VSCODE_KEYBINDINGS_SOURCE_FULLPATH  = "$DOTS_DIR/extras/keybindings.json";
 
 $GIT_IGNORE_INSTALL_PATH    = "$HOME_DIR/.gitignore";
-$GIT_IGNORE_SOURCE_FULLPATH = "$DOTS_DIR/extras/gitignore";
+$GIT_IGNORE_SOURCE_FULLPATH = "$DOTS_DIR/extras/.gitignore";
 
 ## Binary aliases...
 $FILE_MANAGER        = "explorer.exe";

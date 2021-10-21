@@ -20,6 +20,7 @@
 ##----------------------------------------------------------------------------##
 ## Imports                                                                    ##
 ##----------------------------------------------------------------------------##
+test ! -f "$HOME/.ark/ark_shlib/main.sh" && echo "Please install ark_shlib (https://gitlab.com/arkadia_games/libs/ark_shlib)" && exit 1;
 source "$HOME/.ark/ark_shlib/main.sh"
 
 ##----------------------------------------------------------------------------##
@@ -66,11 +67,20 @@ echo "[Installing dots]";
 ##   Clear the installation directory.
 rm    -rf  "$INSTALL_DIR";
 mkdir -pv  "$INSTALL_DIR";
-cp    -fv  "$SCRIPT_DIR/src/main.sh"  "$INSTALL_DIR";
-cp    -fv  "$SCRIPT_DIR/extras/.vimrc" "$HOME";
+cp    -fv  "$SCRIPT_DIR/src/main.sh"       "$INSTALL_DIR";
+cp    -fv  "$SCRIPT_DIR/extras/.vimrc"     "$HOME";
+cp    -fv  "$SCRIPT_DIR/extras/.gitignore" "$HOME";
 
+echo "Installing profile...";
 _install_source_on "$HOME/.bashrc";
 
+echo "Configuring git...";
+git config --global user.name         "stdmatt";
+git config --global user.email        "stdmatt@pixelwizards.io";
+git config --global core.excludesfile "$HOME/.gitignore";
+
+echo "Done... ;D";
+echo "";
 ##
 ## @todo(stdmatt): Install the gitignore
 ## git config --global core.excludesfile ~/.gitignore_global
