@@ -46,6 +46,12 @@ _install_source_on()
     if [ -z "$result" ]; then
         echo "## stdmatt's dots ##"        >> "$PATH_TO_INSTALL";
         echo "source $INSTALL_DIR/main.sh" >> "$PATH_TO_INSTALL";
+        echo "source $INSTALL_DIR/git.sh"  >> "$PATH_TO_INSTALL";
+        ## @todo(stdmatt): Probably we would like to check for each one of
+        ## those files separately and make sure to include just the thing
+        ## that we need..
+        ##
+        ## Right now don't care... ;D
 
         ## macOS has the zsh as default now, but I want to continue to use bash ;D
         if [ -n "$(ARK_OS_IS_MACOS)" ]; then
@@ -63,13 +69,16 @@ _install_source_on()
 echo "[Installing dots]";
 
 ##
-## Install the script files.
-##   Clear the installation directory.
+## Clear the installation directory.
 rm    -rf  "$INSTALL_DIR";
 mkdir -pv  "$INSTALL_DIR";
-cp    -fv  "$SCRIPT_DIR/src/main.sh"       "$INSTALL_DIR";
+## Install script files.
+cp    -fv  "$SCRIPT_DIR/src/main.sh" "$INSTALL_DIR";
+cp    -fv  "$SCRIPT_DIR/src/git.sh"  "$INSTALL_DIR";
+## Install other dot files.
 cp    -fv  "$SCRIPT_DIR/extras/.vimrc"     "$HOME";
 cp    -fv  "$SCRIPT_DIR/extras/.gitignore" "$HOME";
+
 
 echo "Installing profile...";
 _install_source_on "$HOME/.bashrc";
