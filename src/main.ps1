@@ -150,6 +150,8 @@ $_C_GREEN  = 32;
 $_C_YELLOW = 33;
 $_C_PURPLE = 35;
 $_C_CYAN   = 36;
+$_C_BLUE   = 36;
+
 
 ##------------------------------------------------------------------------------
 function _color($color)
@@ -311,47 +313,47 @@ function reload-profile()
 ##------------------------------------------------------------------------------
 function _copy_newer_file()
 {
-    $filename_1 = $args[0];
-    $filename_2 = $args[1];
+    $fs_file   = $args[0];
+    $repo_file = $args[1];
 
-    $time_1 = (_get_file_time $filename_1);
-    $time_2 = (_get_file_time $filename_2);
+    $fs_time   = (_get_file_time $fs_file);
+    $repo_time = (_get_file_time $repo_file);
 
     $INDENT="....";
     $NL="`n";
 
-    if($time_1 -eq $INVALID_FILE_TIME -and $time_2 -eq $INVALID_FILE_TIME) {
-        _log_fatal "Both paths are invalid..."     $NL `
-                   "$INDENT File 1: ($filename_1)" $NL `
-                   "$INDENT File 2: ($filename_2)" ;
+    if($fs_time -eq $INVALID_FILE_TIME -and $repo_time -eq $INVALID_FILE_TIME) {
+        _log_fatal "Both paths are invalid..." $NL `
+                   "$INDENT FS   : ($fs_file)" $NL `
+                   "$INDENT Repo : ($repo_file)" ;
         return;
     }
 
-    if($(Get-FileHash $filename_1).hash -eq $(Get-FileHash $filename_2).hash) {
-        _log "[sync-profile] Files are equal!"          $NL `
-             "$INDENT File 1: ($(_yellow $filename_1))" $NL `
-             "$INDENT File 2: ($(_yellow $filename_2))" ;
+    if($(Get-FileHash $fs_file).hash -eq $(Get-FileHash $repo_file).hash) {
+#        _log "[sync-profile] Files are equal!"      $NL `
+#             "$INDENT FS   : ($(_yellow $fs_file))" $NL `
+#             "$INDENT Repo : ($(_yellow $repo_file))" ;
         return;
     }
 
-    if($time_1 -gt $time_2) {
-        $old_filename = $filename_1;
-        $new_filename = $filename_2;
+    if($fs_time -gt $repo_time) {
+        $old_filename = $repo_file;
+        $new_filename = $fs_file;
 
-        _log "[sync-profile] Syncing repo -> fs:" $NL `
-             "$INDENT File 1: ($(_green $filename_1))" $NL `
-             "$INDENT File 2: ($(_blue  $filename_2))" ;
+        _log "[sync-profile] Syncing FS -> Repo"    $NL `
+             "$INDENT FS   : ($(_green $fs_file))" $NL `
+             "$INDENT REPO : ($(_blue  $repo_file))" ;
     }
-    if ($time_1 -lt $time_2) {
-        $old_filename = $filename_2;
-        $new_filename = $filename_1;
+    if ($fs_time -lt $repo_time) {
+        $old_filename = $fs_file;
+        $new_filename = $repo_file;
 
-        _log "[sync-profile] Syncing fs -> repo:" $NL `
-             "$INDENT File 1: ($(_blue  $filename_1))" $NL `
-             "$INDENT File 2: ($(_green $filename_2))" ;
+        _log "[sync-profile] Syncing Repo -> FS"     $NL `
+             "$INDENT Repo : ($(_green $repo_file))" $NL `
+             "$INDENT FS   : ($(_blue  $fs_file))"   ;
     }
 
-    Copy-Item $old_filename $new_filename -Force;
+   Copy-Item $old_filename $new_filename -Force;
 }
 
 
