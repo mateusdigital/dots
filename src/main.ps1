@@ -38,8 +38,8 @@ $VIMRC_SOURCE_FULLPATH = "$DOTS_DIR/extras/.vimrc";
 $VSCODE_KEYBINDINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Roaming/Code/User/keybindings.json";
 $VSCODE_KEYBINDINGS_SOURCE_FULLPATH  = "$DOTS_DIR/extras/keybindings.json";
 
-$GIT_IGNORE_INSTALL_PATH    = "$HOME_DIR/.gitignore";
-$GIT_IGNORE_SOURCE_FULLPATH = "$DOTS_DIR/extras/.gitignore";
+$GIT_IGNORE_INSTALL_FULLPATH = "$HOME_DIR/.gitignore";
+$GIT_IGNORE_SOURCE_FULLPATH  = "$DOTS_DIR/extras/.gitignore";
 
 ## Binary aliases...
 $FILE_MANAGER        = "explorer.exe";
@@ -336,24 +336,26 @@ function _copy_newer_file()
         return;
     }
 
+    $from_filename = "";
+    $to_filename   = "";
     if($fs_time -gt $repo_time) {
-        $old_filename = $repo_file;
-        $new_filename = $fs_file;
+        $from_filename = $fs_file;
+        $to_filename   = $repo_file;
 
         _log "[sync-profile] Syncing FS -> Repo"    $NL `
              "$INDENT FS   : ($(_green $fs_file))" $NL `
              "$INDENT REPO : ($(_blue  $repo_file))" ;
     }
-    if ($fs_time -lt $repo_time) {
-        $old_filename = $fs_file;
-        $new_filename = $repo_file;
+    elseif ($fs_time -lt $repo_time) {
+        $from_filename = $repo_file;
+        $to_filename   = $fs_file;
 
         _log "[sync-profile] Syncing Repo -> FS"     $NL `
              "$INDENT Repo : ($(_green $repo_file))" $NL `
              "$INDENT FS   : ($(_blue  $fs_file))"   ;
     }
 
-   Copy-Item $old_filename $new_filename -Force;
+   Copy-Item $from_filename $to_filename -Force;
 }
 
 
@@ -364,7 +366,7 @@ function sync-profile()
     ## Terminal / Profile
     _copy_newer_file $TERMINAL_SETTINGS_INSTALL_FULLPATH $TERMINAL_SETTINGS_SOURCE_FULLPATH;
     _copy_newer_file $PROFILE_INSTALL_FULLPATH           $PROFILE_SOURCE_FULLPATH;
-    _copy_newer_file $GIT_IGNORE_INSTALL_PATH            $GIT_IGNORE_SOURCE_FULLPATH;
+    _copy_newer_file $GIT_IGNORE_INSTALL_FULLPATH        $GIT_IGNORE_SOURCE_FULLPATH;
 
     ## .vimrc
     $vimrc_fullpath     = (_path_join $VIMRC_INSTALL_DIR  ".vimrc");
