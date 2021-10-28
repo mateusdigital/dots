@@ -30,10 +30,7 @@
         { "command": { "action": "splitPane", "split": "vertical" }, "keys": "alt+shift+\\"  },
         // Close
         { "command": "closePane", "keys": "alt+shift+x" }
-
-
     ],
-
 
     //
     // Profiles
