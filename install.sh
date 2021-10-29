@@ -87,9 +87,7 @@ echo "Configuring git...";
 git config --global user.name         "stdmatt";
 git config --global user.email        "stdmatt@pixelwizards.io";
 git config --global core.excludesfile "$HOME/.gitignore";
+git config --global credential.helper "cache --timeout=2628000"; ## Store the thing for a month, they said...
 
 echo "Done... ;D";
 echo "";
-##
-## @todo(stdmatt): Install the gitignore
-## git config --global core.excludesfile ~/.gitignore_global
