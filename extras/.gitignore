@@ -92,6 +92,7 @@ tags
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/**/encodings.xml
 
 .idea/inspectionProfiles/*
 

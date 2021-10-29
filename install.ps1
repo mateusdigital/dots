@@ -37,7 +37,9 @@ echo $file_data | Out-File $PROFILE_INSTALL_FULLPATH;
 echo "    Profile installed at: $PROFILE_INSTALL_FULLPATH";
 echo "";
 
-echo "Installling gitignore...";
+echo "Configuring git...";
+git config --global user.name         "stdmatt";
+git config --global user.email        "stdmatt@pixelwizards.io";
 git config --global core.excludesfile "$HOME_DIR/.gitignore";
 
 echo "Done... ;D";
