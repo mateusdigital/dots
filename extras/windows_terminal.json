@@ -8,6 +8,7 @@
     //
     // Keybindings...
     //
+    //--------------------------------------------------------------------------
     "actions":
     [
         { "command": { "action": "copy", "singleLine": false }, "keys": "ctrl+c" },
@@ -26,8 +27,8 @@
         { "command": { "action": "resizePane", "direction": "up"    }, "keys": "ctrl+shift+k" },
         { "command": { "action": "resizePane", "direction": "right" }, "keys": "ctrl+shift+l" },
         // Split
-        { "command": { "action": "splitPane", "split": "horizontal" }, "keys": "alt+shift+-" },
-        { "command": { "action": "splitPane", "split": "vertical" }, "keys": "alt+shift+\\"  },
+        { "command": { "action": "splitPane", "split": "horizontal" }, "keys": "ctrl+shift+-"  },
+        { "command": { "action": "splitPane", "split": "vertical"   }, "keys": "ctrl+shift+\\" },
         // Close
         { "command": "closePane", "keys": "alt+shift+x" }
     ],
@@ -35,6 +36,7 @@
     //
     // Profiles
     //
+    //--------------------------------------------------------------------------
     "profiles":
     {
         "defaults": {},
@@ -52,6 +54,7 @@
     //
     // Colors
     //
+    //--------------------------------------------------------------------------
     "schemes":
     [
         {
