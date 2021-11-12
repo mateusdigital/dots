@@ -161,12 +161,19 @@ function _color($color)
         $input = $input + $item;
     }
 
+
     $start = "$_C_ESC[" + $color    + "m" + $input;
     $end   = "$_C_ESC[" + $_C_RESET + "m";
 
     $value = $start + $end;
     return $value;
 }
+
+function rgb($r, $g, $b, $str)
+{
+    $esc = [char]27;
+    return "$esc[38;2;$r;$g;${b}m$str$esc[0m";
+};
 
 ##------------------------------------------------------------------------------
 function _blue  () { return (_color $_C_BLUE   $args); }
@@ -178,7 +185,6 @@ function _red   () { return (_color $_C_RED    $args); }
 ## Files
 ##   Open the Filesystem Manager into a given path.
 ##   If no path was given open the current dir.
-##
 ##------------------------------------------------------------------------------
 function files()
 {
@@ -463,14 +469,13 @@ function journal()
 ## Shell
 ##
 ##------------------------------------------------------------------------------
-function _random_prompt_color($arg)
+function _random_prompt_color($color, $arg)
 {
-    $value = Get-Random -Maximum 4;
-    if($value -eq 0) {
+    if($color-eq 0) {
         $arg = _yellow $arg;
-    } elseif($value -eq 1) {
+    } elseif($color -eq 1) {
         $arg = _green $arg;
-    } elseif($value -eq 2) {
+    } elseif($color -eq 2) {
         $arg = _blue $arg;
     } else {
         $arg = _red $arg;
@@ -484,18 +489,12 @@ function global:prompt
 {
     $curr_path = pwd;
     $prompt    = ":)";
-    $color_type = 2;
+    $color = Get-Random -Maximum 4;
 
-    if($color_type -eq 0) {       ## Just the path...
-        $curr_path = _random_prompt_color "$curr_path";
-    } elseif($color_type -eq 1) { ## Just the :)
-        $prompt= _random_prompt_color "$prompt";
-    } elseif($color_type -eq 2) { ## Both...
-        $curr_path = _random_prompt_color "$curr_path";
-        $prompt= _random_prompt_color "$prompt";
-    }
+    $prompt    = rgb 0x9E 0x9E 0x9E $prompt;
+    $curr_path =_random_prompt_color  $color "$curr_path";
 
-    return "[$curr_path] `n$prompt ";
+    return "$left_$curr_path$right_ `n$prompt ";
 }
 
 ## @notice(stdmatt): This is pretty cool - It makes the cd to behave like
