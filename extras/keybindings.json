@@ -60,7 +60,6 @@
     //--------------------------------------------------------------------------
     { "key": "alt+shift+o", "command": "workbench.action.quickOpen"    },
     { "key": "alt+shift+p", "command": "workbench.action.showCommands" },
-    /* remove */ { "key": "alt+k",          "command": "-keybindings.editor.recordSearchKeys", "when": "inKeybindings && inKeybindingsSearch" },
     /* remove */ { "key": "ctrl+e",         "command": "-workbench.action.quickOpen" },
     /* remove */ { "key": "ctrl+p",         "command": "-workbench.action.quickOpen" },
     /* remove */ { "key": "ctrl+shift+tab", "command": "-workbench.action.quickOpenLeastRecentlyUsedEditorInGroup" },
@@ -82,6 +81,7 @@
     // Focus
     { "key": "alt+h", "command": "workbench.action.focusLeftGroup" , "when": "!inQuickOpen"},
     { "key": "alt+l", "command": "workbench.action.focusRightGroup", "when": "!inQuickOpen"},
+    // @todo(stdmatt): Conflicts with comment...
     { "key": "alt+k", "command": "workbench.action.focusAboveGroup", "when": "!inQuickOpen"},
     { "key": "alt+j", "command": "workbench.action.focusBelowGroup", "when": "!inQuickOpen"},
     // Move
