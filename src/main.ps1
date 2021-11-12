@@ -169,20 +169,10 @@ function _color($color)
 }
 
 ##------------------------------------------------------------------------------
-function _blue() {
-    return (_color $_C_BLUE $args);
-}
-
-##------------------------------------------------------------------------------
-function _green() {
-    return (_color $_C_GREEN $args);
-}
-
-##------------------------------------------------------------------------------
-function _yellow() {
-    return (_color $_C_YELLOW $args);
-}
-
+function _blue  () { return (_color $_C_BLUE   $args); }
+function _green () { return (_color $_C_GREEN  $args); }
+function _yellow() { return (_color $_C_YELLOW $args); }
+function _red   () { return (_color $_C_RED    $args); }
 
 ##
 ## Files
@@ -473,10 +463,39 @@ function journal()
 ## Shell
 ##
 ##------------------------------------------------------------------------------
+function _random_prompt_color($arg)
+{
+    $value = Get-Random -Maximum 4;
+    if($value -eq 0) {
+        $arg = _yellow $arg;
+    } elseif($value -eq 1) {
+        $arg = _green $arg;
+    } elseif($value -eq 2) {
+        $arg = _blue $arg;
+    } else {
+        $arg = _red $arg;
+    }
+
+    return $arg;
+}
+
+##------------------------------------------------------------------------------
 function global:prompt
 {
     $curr_path = pwd;
-    return "$curr_path `n:) "
+    $prompt    = ":)";
+    $color_type = 2;
+
+    if($color_type -eq 0) {       ## Just the path...
+        $curr_path = _random_prompt_color "$curr_path";
+    } elseif($color_type -eq 1) { ## Just the :)
+        $prompt= _random_prompt_color "$prompt";
+    } elseif($color_type -eq 2) { ## Both...
+        $curr_path = _random_prompt_color "$curr_path";
+        $prompt= _random_prompt_color "$prompt";
+    }
+
+    return "[$curr_path] `n$prompt ";
 }
 
 ## @notice(stdmatt): This is pretty cool - It makes the cd to behave like
