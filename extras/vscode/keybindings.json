@@ -143,6 +143,16 @@
     /* remove */ {
         "key": "shift+f6",
         "command": "-workbench.action.focusPreviousPart"
+    },
+    {
+        "key": "ctrl+shift+alt+,",
+        "command": "editor.foldAll",
+        "when": "editorTextFocus && foldingEnabled"
+    },
+    {
+        "key": "ctrl+k ctrl+0",
+        "command": "-editor.foldAll",
+        "when": "editorTextFocus && foldingEnabled"
     }
 ]
 

@@ -1,0 +1,211 @@
+{
+    "debug.onTaskErrors": "abort",
+
+    //
+    // Editor
+    //
+    //--------------------------------------------------------------------------
+    "editor.renderWhitespace": "all",
+    "editor.rulers": [ 80, 120 ],
+    "editor.fontLigatures": true,
+    "editor.minimap.renderCharacters": false,
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    "editor.acceptSuggestionOnEnter": "smart",
+    "editor.fontFamily": "Jetbrains Mono Light",
+    "editor.fontSize": 15,
+
+    //
+    // Explorer
+    //
+    //--------------------------------------------------------------------------
+    "explorer.confirmDelete": false,
+    "explorer.openEditors.visible": 0,
+    "explorer.confirmDragAndDrop": false,
+    "explorer.compactFolders": false,
+
+    //
+    // Extensions
+    //
+    //--------------------------------------------------------------------------
+    "extensions.autoUpdate": false,
+    "extensions.autoCheckUpdates": true,
+
+    //
+    // Files
+    //
+    //--------------------------------------------------------------------------
+    "files.eol": "\n",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.fla": true,
+        "**/*.swf": true
+    },
+
+    //
+    //
+    // MISC
+    //
+    //--------------------------------------------------------------------------
+    "cSpell.userWords": [
+        "Adeel",
+        "CFCX",
+        "CFCXUI",
+        "coord",
+        "FCXUI",
+        "FCXUITTTS",
+        "Gameplay",
+        "GBDK",
+        "pingo",
+        "repochecker",
+        "Ruslan",
+        "stdmatt",
+        "yoyo"
+    ],
+
+    //
+    // SCM
+    //
+    //--------------------------------------------------------------------------
+    "scm.autoReveal": false,
+    "scm.countBadge": "off",
+
+    //
+    // Search
+    //
+    //--------------------------------------------------------------------------
+    "search.useReplacePreview": false,
+
+    //
+    // Telemetry
+    //
+    //--------------------------------------------------------------------------
+    // @TODO(stdmatt): Check that this is getting deprecated... 11/11/2021, 1:28:53 PM
+    "telemetry.enableCrashReporter": false,
+    "telemetry.enableTelemetry": false,
+
+    //
+    // Update
+    //
+    //--------------------------------------------------------------------------
+    "update.enableWindowsBackgroundUpdates": false,
+    "update.mode": "manual",
+
+    //
+    // VIM
+    //
+    //--------------------------------------------------------------------------
+    "vim.leader":                "<Space>",
+    "vim.startofline":           true,
+    "vim.overrideCopy":          false,
+    "vim.useSystemClipboard":    true,
+    "vim.statusBarColorControl": true,
+    "vim.statusBarColors.normal":                ["#A0A1A8", "#000"],
+    "vim.statusBarColors.insert":                ["#d65656", "#000"],
+    "vim.statusBarColors.visual":                ["#569CD6", "#000"],
+    "vim.statusBarColors.visualline":            ["#2C884A", "#000"],
+    "vim.statusBarColors.visualblock":           ["#FFD700", "#000"],
+    "vim.statusBarColors.replace":               "#D08770",
+    "vim.statusBarColors.commandlineinprogress": "#007ACC",
+    "vim.statusBarColors.searchinprogressmode":  "#007ACC",
+    "vim.statusBarColors.surroundinputmode":     "#007ACC",
+
+    // Normal
+    "vim.normalModeKeyBindingsNonRecursive": [
+        // Go to both line start / end
+        { "before": ["L"], "after": ["$"] },
+        { "before": ["H"], "after": ["^"] },
+        // Indentation...
+        { "before": [">"], "commands": ["editor.action.indentLines"]  },
+        { "before": ["<"], "commands": ["editor.action.outdentLines"] },
+        // Join lines....
+        { "before": ["<Leader>", "j"], "after": ["J"] },
+        // Paste in the end of line...
+        { "before": ["P"], "after": ["$", "p"] },
+    ],
+
+    // Visual
+    "vim.visualModeKeyBindingsNonRecursive": [
+        // Go to both line start / end
+        { "before": ["L"], "after": ["$"] },
+        { "before": ["H"], "after": ["^"] },
+
+        // Indentation...
+        { "before": [">"], "commands": ["editor.action.indentLines"]  },
+        { "before": ["<"], "commands": ["editor.action.outdentLines"] },
+
+        { "before": ["$"], "after": [ "$", "h" ] }, // @NOTICE(stdmatt): Fix that annoying bug that the cursor goes past the end of the line -11/12/2021, 6:23:04 AM
+        // Paste without copying the thing bellow.
+        {
+          "before": ["p"],
+          "after": ["p", "g", "v", "y"]
+        },
+    ],
+
+
+    //
+    // Workbench
+    //
+    //--------------------------------------------------------------------------
+    "workbench.settings.enableNaturalLanguageSearch": false,
+    "workbench.settings.openDefaultKeybindings": true,
+    "workbench.tree.renderIndentGuides": "always",
+    "workbench.editor.enablePreviewFromQuickOpen": false,
+    "workbench.colorTheme": "Visual Assist Dark Theme",
+    "workbench.editor.enablePreview": false,
+    "workbench.colorCustomizations": {
+        "statusBar.background": "#A0A1A8",
+        "statusBar.noFolderBackground": "#A0A1A8",
+        "statusBar.debuggingBackground": "#A0A1A8",
+        "statusBar.foreground": "#000",
+        "statusBar.debuggingForeground": "#000"
+    },
+
+    //
+    // Window
+    //
+    //--------------------------------------------------------------------------
+    "window.title": "${dirty}${activeEditorShort} -- ${activeEditorMedium} -- ${rootName}",
+    "window.customMenuBarAltFocus": false,
+
+    //
+    // Languages...
+    //
+    //--------------------------------------------------------------------------
+    "html.autoClosingTags": false,
+    "python.linting.pylintEnabled": false,
+    "csharp.suppressDotnetInstallWarning": true,
+    "python.showStartPage": false,
+    "csharp.testsCodeLens.enabled": false,
+    "csharp.referencesCodeLens.enabled": false,
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
+    },
+
+    //
+    // Security
+    //
+    //--------------------------------------------------------------------------
+    "security.workspace.trust.untrustedFiles": "open",
+    "security.workspace.trust.enabled": false,
+    "window.zoomLevel": 1,
+    "debug.toolBarLocation": "docked",
+    "telemetry.telemetryLevel": "off",
+    "editor.codeLens": false,
+    "powershell.buttons.showRunButtons": false,
+    "powershell.codeFolding.showLastLine": false,
+    "powershell.codeFormatting.addWhitespaceAroundPipe": false,
+    "powershell.codeFormatting.alignPropertyValuePairs": false,
+    "powershell.codeFormatting.newLineAfterCloseBrace": false,
+    "powershell.codeFormatting.newLineAfterOpenBrace": false,
+    "powershell.codeFormatting.openBraceOnSameLine": false,
+    "powershell.codeFormatting.pipelineIndentationStyle": "None",
+    "powershell.codeFormatting.whitespaceAfterSeparator": false,
+    "powershell.codeFormatting.whitespaceAroundOperator": false,
+    "powershell.codeFormatting.whitespaceAroundPipe": false,
+    "powershell.codeFormatting.whitespaceBeforeOpenBrace": false,
+    "powershell.codeFormatting.whitespaceBeforeOpenParen": false,
+}
