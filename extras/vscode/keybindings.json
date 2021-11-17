@@ -48,8 +48,8 @@
     { "key": "ctrl+shift+\\", "command": "workbench.action.splitEditor"          },
     { "key": "ctrl+shift+-",  "command": "workbench.action.splitEditorOrthogonal"},
     //    Pin Editor tab
-    { "key": "ctrl+e ctrl+p", "command": "workbench.action.pinEditor",   "when": "!activeEditorIsPinned" },
-    { "key": "ctrl+e ctrl+p", "command": "workbench.action.unpinEditor", "when": "activeEditorIsPinned" },
+    { "key": "alt+e alt+p", "command": "workbench.action.pinEditor",   "when": "!activeEditorIsPinned" },
+    { "key": "alt+e alt+p", "command": "workbench.action.unpinEditor", "when": "activeEditorIsPinned" },
     //    Close
     { "key": "shift+alt+x", "command": "workbench.action.closeActiveEditor", "when": "editorTextFocus" },
 
@@ -70,10 +70,9 @@
     //    Comments
     { "key": "alt+/",       "command": "editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
     { "key": "alt+k alt+c", "command": "editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
-    {
-        "key": "ctrl+numpad1",
-        "command": "macros.addTodo"
-    },
+    //   Explorer - New File/Folder
+    { "key": "ctrl+n",       "command": "explorer.newFile",   "when": " sideBarVisible && activeViewlet == 'workbench.view.explorer'" },
+    { "key": "ctrl+shift+n", "command": "explorer.newFolder", "when": " sideBarVisible && activeViewlet == 'workbench.view.explorer'" },
 
     //
     // Remove stuff...
