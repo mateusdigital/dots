@@ -29,6 +29,8 @@
     { "key": "ctrl+-", "command": "workbench.action.navigateBack"    },
     { "key": "ctrl+=", "command": "workbench.action.navigateForward" },
     // @todo(stdmatt): Add navigation to the quick fix....
+    //    Switch Source
+    { "key": "alt+e alt+o", "command": "C_Cpp.SwitchHeaderSource", "when": "editorTextFocus && editorLangId == 'c' || editorTextFocus && editorLangId == 'cpp' || editorTextFocus && editorLangId == 'cuda-cpp'" },
 
     //--------------------------------------------------------------------------
     // Toggle Pannels
@@ -52,7 +54,10 @@
     { "key": "alt+e alt+p", "command": "workbench.action.unpinEditor", "when": "activeEditorIsPinned" },
     //    Close
     { "key": "shift+alt+x", "command": "workbench.action.closeActiveEditor", "when": "editorTextFocus" },
-
+    //    Minimap
+    { "key": "alt+o alt+m", "command": "editor.action.toggleMinimap" },
+    //    Maximize Group
+    { "key": "alt+e alt+m", "command": "workbench.action.minimizeOtherEditors" },
 
     //--------------------------------------------------------------------------
     // Actions
@@ -71,8 +76,8 @@
     { "key": "alt+/",       "command": "editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
     { "key": "alt+k alt+c", "command": "editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
     //   Explorer - New File/Folder
-    { "key": "ctrl+n",       "command": "explorer.newFile",   "when": " sideBarVisible && activeViewlet == 'workbench.view.explorer'" },
-    { "key": "ctrl+shift+n", "command": "explorer.newFolder", "when": " sideBarVisible && activeViewlet == 'workbench.view.explorer'" },
+    { "key": "ctrl+n",       "command": "explorer.newFile",   "when": " sideBarVisible && activeViewlet == 'workbench.view.explorer' && !inQuickOpen" },
+    { "key": "ctrl+shift+n", "command": "explorer.newFolder", "when": " sideBarVisible && activeViewlet == 'workbench.view.explorer' && !inQuickOpen" },
 
     //
     // Remove stuff...
@@ -119,5 +124,14 @@
     {
         "key": "ctrl+numpad_subtract",
         "command": "-workbench.action.zoomOut"
+    },
+    {
+        "key": "ctrl+shift+h",
+        "command": "-workbench.action.replaceInFiles"
+    },
+    {
+        "key": "alt+o",
+        "command": "-C_Cpp.SwitchHeaderSource",
+        "when": "editorTextFocus && editorLangId == 'c' || editorTextFocus && editorLangId == 'cpp' || editorTextFocus && editorLangId == 'cuda-cpp'"
     },
 ]

@@ -211,6 +211,5 @@
     "powershell.codeFormatting.whitespaceAroundPipe": false,
     "powershell.codeFormatting.whitespaceBeforeOpenBrace": false,
     "powershell.codeFormatting.whitespaceBeforeOpenParen": false,
-    "editor.minimap.enabled": false,
     "window.zoomLevel": 1,
 }
