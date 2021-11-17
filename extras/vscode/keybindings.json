@@ -1,163 +1,124 @@
 [
-    //
-    // Editing...
-    //
-    // Refactoring
-    { "key": "alt+r alt+r", "command": "editor.action.changeAll", "when": "editorTextFocus && !editorReadonly" },
-    /* remove */ { "key": "ctrl+f2", "command": "-editor.action.changeAll", "when": "editorTextFocus && !editorReadonly" },
-    // Navigate
-    //   @TODO(stdmatt): The navigation with vscode and vim are totally broken
-    //   it is actually getting all the keystrokes related with navigation
-    //   like up, down, etc.. and using it to get back...
-    { "key": "ctrl+-", "command": "workbench.action.navigateBack"    },
-    { "key": "ctrl+=", "command": "workbench.action.navigateForward" },
-    // Fold
-    { "key": "ctrl+,", "command": "editor.fold" },
-    { "key": "ctrl+.", "command": "editor.unfold" },
-    /* remove */ { "key": "ctrl+shift+[", "command": "-editor.fold", "when": "editorTextFocus && foldingEnabled" },
-    /* remove */ { "key": "ctrl+shift+]", "command": "-editor.unfold", "when": "editorTextFocus && foldingEnabled" },
-    // Comments
-    { "key": "alt+/",       "command": "editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
-    { "key": "alt+k alt+c", "command": "editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
-    /* remove */ { "key": "ctrl+/", "command": "-editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
-    /* remove */ { "key": "ctrl+k ctrl+c", "command": "-editor.action.addCommentLine", "when": "editorTextFocus && !editorReadonly" },
-    // Duplicate line
-    { "key": "alt+j alt+j", "command": "editor.action.copyLinesDownAction", "when": "editorTextFocus && !editorReadonly" },
-    { "key": "alt+k alt+k", "command": "editor.action.copyLinesUpAction",   "when": "editorTextFocus && !editorReadonly" },
-    /* remove */ { "key": "shift+alt+down", "command": "-editor.action.copyLinesDownAction", "when": "editorTextFocus && !editorReadonly" },
-    /* remove */ { "key": "shift+alt+up",   "command": "-editor.action.copyLinesUpAction",   "when": "editorTextFocus && !editorReadonly" },
-    // Clipboard
-    { "key": "ctrl+shift+c",  "command": "editor.action.clipboardCopyAction",  "when": "textInputFocus" },
-    { "key": "ctrl+shift+v",  "command": "editor.action.clipboardPasteAction", "when": "textInputFocus" },
-    // Suggestions
-    { "key": "ctrl+j", "command": "selectNextSuggestion", "when": "suggestWidgetVisible" },
-    { "key": "ctrl+k", "command": "selectPrevSuggestion", "when": "suggestWidgetVisible" },
-    // Find
-    { "key": "ctrl+f ctrl+f", "command": "actions.find" },
-    { "key": "ctrl+f ctrl+h", "command": "workbench.action.findInFiles" },
-    // Insert date time...
-    { "key": "alt+;", "command": "extension.insertDateTime" },
+    // I really like how the command + option + control works
+    // os Apple keyboards, so I'm trying to put the shortcuts
+    // as if I was typing in those keyboards.
 
-    //
-    // Editor
-    //--------------------------------------------------------------------------
-    // Maximize / Minimize Others
-    //   @todo(stdmatt): This is very similar to the behaviour of the panes
-    //   should we keep it here or move to the panes section???
-    { "key": "ctrl+e ctrl+m",             "command": "workbench.action.maximizeEditor"       },
-    { "key": "shift+ctrl+e shift+ctrl+m", "command": "workbench.action.minimizeOtherEditors" },
-    // Toggle the surrounding panels...
-    { "key": "shift+alt+t", "command": "workbench.action.togglePanel" },
-    { "key": "shift+alt+m", "command": "editor.action.toggleMinimap" },
-    { "key": "alt+shift+e", "command": "workbench.action.toggleSidebarVisibility" },
-    { "key": "ctrl+shift+e",     "command": "workbench.action.focusSideBar" },
-    { "key": "ctrl+shift+alt+l", "command": "workbench.action.focusNextPart" },
-    { "key": "ctrl+shift+alt+h", "command": "workbench.action.focusPreviousPart" },
+    // alt  - command
+    // win  - options
+    // ctrl - control
 
-    //
-    // Quick Open
-    //
     //--------------------------------------------------------------------------
-    { "key": "alt+shift+o", "command": "workbench.action.quickOpen"    },
-    { "key": "alt+shift+p", "command": "workbench.action.showCommands" },
-    /* remove */ { "key": "ctrl+e",         "command": "-workbench.action.quickOpen" },
-    /* remove */ { "key": "ctrl+p",         "command": "-workbench.action.quickOpen" },
-    /* remove */ { "key": "ctrl+shift+tab", "command": "-workbench.action.quickOpenLeastRecentlyUsedEditorInGroup" },
-    /* remove */ { "key": "ctrl+tab",       "command": "-workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup" },
-    /* remove */ { "key": "ctrl+q",         "command": "-workbench.action.quickOpenView" },
-    { "key": "ctrl+n", "command": "workbench.action.quickOpenSelectNext",     "when": "inQuickOpen" },
-    { "key": "ctrl+p", "command": "workbench.action.quickOpenSelectPrevious", "when": "inQuickOpen" },
+    // Navigation
+    //    Editor Panels
+    { "key": "alt+h", "command": "workbench.action.navigateLeft"  },
+    { "key": "alt+l", "command": "workbench.action.navigateRight" },
+    { "key": "alt+k", "command": "workbench.action.navigateUp"    },
+    { "key": "alt+j", "command": "workbench.action.navigateDown"  },
+    //    Tabs
+    { "key": "alt+ctrl+h", "command": "workbench.action.previousEditor" },
+    { "key": "alt+ctrl+l", "command": "workbench.action.nextEditor" },
+    //    Quick Open
     { "key": "ctrl+j", "command": "workbench.action.quickOpenSelectNext",     "when": "inQuickOpen" },
     { "key": "ctrl+k", "command": "workbench.action.quickOpenSelectPrevious", "when": "inQuickOpen" },
+    { "key": "ctrl+n", "command": "workbench.action.quickOpenSelectNext",     "when": "inQuickOpen" },
+    { "key": "ctrl+p", "command": "workbench.action.quickOpenSelectPrevious", "when": "inQuickOpen" },
+    //    Suggestions
+    { "key": "ctrl+j", "command": "selectNextSuggestion", "when": "suggestWidgetVisible" },
+    { "key": "ctrl+k", "command": "selectPrevSuggestion", "when": "suggestWidgetVisible" },
+    //    Go Back / Forward
+    { "key": "ctrl+-", "command": "workbench.action.navigateBack"    },
+    { "key": "ctrl+=", "command": "workbench.action.navigateForward" },
+    // @todo(stdmatt): Add navigation to the quick fix....
 
-
-    //
-    // Panes
-    //
     //--------------------------------------------------------------------------
-    // Split
+    // Toggle Pannels
+    //    Explorer
+    { "key": "alt+o alt+p", "command": "workbench.view.explorer",                  "when": "!sideBarVisible || activeViewlet != 'workbench.view.explorer'" },
+    { "key": "alt+o alt+p", "command": "workbench.action.toggleSidebarVisibility", "when": " sideBarVisible && activeViewlet == 'workbench.view.explorer'" },
+    //    Outline
+    { "key": "alt+o alt+o", "command": "outline.focus" },
+    // @todo(stdmatt): Toggle the outline view...
+    //    Terminal
+    { "key": "alt+o alt+[", "command": "workbench.action.terminal.toggleTerminal" },
+    //    Quick Open
+    { "key": "space space", "command": "workbench.action.quickOpen", "when": "editorTextFocus && vim.active && vim.mode != 'Insert'" },
+    { "key": "alt+shift+o", "command": "workbench.action.quickOpen"    },
+    { "key": "alt+shift+p", "command": "workbench.action.showCommands" },
+    //    Split Editor
     { "key": "ctrl+shift+\\", "command": "workbench.action.splitEditor"          },
     { "key": "ctrl+shift+-",  "command": "workbench.action.splitEditorOrthogonal"},
-    // Focus
-    { "key": "alt+h", "command": "workbench.action.focusLeftGroup" , "when": "!inQuickOpen"},
-    { "key": "alt+l", "command": "workbench.action.focusRightGroup", "when": "!inQuickOpen"},
-    // @todo(stdmatt): Conflicts with comment...
-    { "key": "alt+k", "command": "workbench.action.focusAboveGroup", "when": "!inQuickOpen"},
-    { "key": "alt+j", "command": "workbench.action.focusBelowGroup", "when": "!inQuickOpen"},
-    // Move
-    { "key": "alt+shift+h", "command": "workbench.action.moveEditorToLeftGroup"  },
-    { "key": "alt+shift+l", "command": "workbench.action.moveEditorToRightGroup" },
-    // Size
-    { "key": "ctrl+shift+h", "command": "workbench.action.increaseViewWidth" },
-    { "key": "ctrl+shift+l", "command": "workbench.action.decreaseViewWidth" },
-    { "key": "ctrl+shift+j", "command": "workbench.action.increaseViewHeight" },
-    { "key": "ctrl+shift+k", "command": "workbench.action.decreaseViewHeight" },
-    // Close
-    { "key": "shift+alt+x", "command": "workbench.action.closePanel" },
-    { "key": "shift+alt+x", "command": "workbench.action.closeActiveEditor" },
-    // Panel
-    { "key": "alt+t alt+l", "command": "workbench.action.nextPanelView" },
-    { "key": "alt+t alt+h", "command": "workbench.action.previousPanelView" },
-    { "key": "alt+t alt+t", "command": "workbench.action.togglePanel" },
-    // List
-    { "key": "ctrl+h", "command": "list.collapse",  "when": "listFocus && !inputFocus" },
-    { "key": "ctrl+l", "command": "list.expand",    "when": "listFocus && !inputFocus" },
-    { "key": "ctrl+k", "command": "list.focusUp",   "when": "listFocus && !inputFocus" },
-    { "key": "ctrl+j", "command": "list.focusDown", "when": "listFocus && !inputFocus" },
-
-    //
-    // Tabs
-    //
-    //--------------------------------------------------------------------------
-    // Move
-    { "key": "ctrl+tab",       "command": "workbench.action.nextEditor"     },
-    { "key": "ctrl+shift+tab", "command": "workbench.action.previousEditor" },
-    { "key": "ctrl+alt+l",     "command": "workbench.action.nextEditor"     },
-    { "key": "ctrl+alt+h",     "command": "workbench.action.previousEditor" },
-    // Pin.
+    //    Pin Editor tab
     { "key": "ctrl+e ctrl+p", "command": "workbench.action.pinEditor",   "when": "!activeEditorIsPinned" },
     { "key": "ctrl+e ctrl+p", "command": "workbench.action.unpinEditor", "when": "activeEditorIsPinned" },
+    //    Close
+    { "key": "shift+alt+x", "command": "workbench.action.closeActiveEditor", "when": "editorTextFocus" },
 
-    //
-    //
-    // Sync
+
     //--------------------------------------------------------------------------
-    { "key": "ctrl+shift+f11 ctrl+shift+f12", "command": "workbench.userDataSync.actions.syncNow" },
-
+    // Actions
+    //    Clipboard
+    { "key": "ctrl+shift+c",  "command": "editor.action.clipboardCopyAction",  "when": "textInputFocus" },
+    { "key": "ctrl+shift+v",  "command": "editor.action.clipboardPasteAction", "when": "textInputFocus" },
+    //    Find
+    { "key": "alt+f", "command": "actions.find" },
+    { "key": "alt+r", "command": "editor.action.startFindReplaceAction" },
+    //    Insert date time...
+    { "key": "alt+;", "command": "extension.insertDateTime" },
+    //    Fold
+    { "key": "ctrl+,", "command": "editor.fold"   },
+    { "key": "ctrl+.", "command": "editor.unfold" },
+    //    Comments
+    { "key": "alt+/",       "command": "editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
+    { "key": "alt+k alt+c", "command": "editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
+    {
+        "key": "ctrl+numpad1",
+        "command": "macros.addTodo"
+    },
 
     //
-    // Disable stuff...
+    // Remove stuff...
     //
-    //--------------------------------------------------------------------------
-    /* remove */ { "key": "alt+c", "command": "-toggleFindCaseSensitive",   "when": "editorFocus" },
-    /* remove */ { "key": "alt+c", "command": "-toggleSearchCaseSensitive", "when": "searchViewletFocus" },
-    /* remove */ { "key": "alt+c", "command": "-toggleSearchEditorCaseSensitive", "when": "inSearchEditor && searchInputBoxFocus" },
-    /* remove */ { "key": "alt+c", "command": "-workbench.action.terminal.toggleFindCaseSensitive", "when": "terminalFindFocused && terminalProcessSupported || terminalFocus && terminalProcessSupported" },
-    /* remove */ { "key": "ctrl+j", "command": "-workbench.action.togglePanel" },
-    /* remove */ { "key": "ctrl+f4", "command": "-workbench.action.terminal.killEditor", "when": "terminalEditorFocus && terminalFocus && terminalProcessSupported && resourceScheme == 'vscode-terminal'" },
-    /* remove */ { "key": "ctrl+shift+t", "command": "-workbench.action.reopenClosedEditor" },
-    /* remove */ { "key": "ctrl+shift+e", "command": "-workbench.action.quickOpenNavigatePreviousInFilePicker", "when": "inFilesPicker && inQuickOpen" },
-    /* remove */ { "key": "ctrl+shift+e", "command": "-workbench.view.explorer", "when": "viewContainer.workbench.view.explorer.enabled" },
-    /* remove */ { "key": "ctrl+0", "command": "-workbench.action.focusSideBar" },
-    /* remove */ { "key": "f6", "command": "-workbench.action.focusNextPart" },
-    /* remove */ {
-        "key": "shift+f6",
-        "command": "-workbench.action.focusPreviousPart"
+    {
+        "key": "ctrl+n",
+        "command": "-workbench.action.files.newUntitledFile"
     },
     {
-        "key": "ctrl+shift+alt+,",
-        "command": "editor.foldAll",
-        "when": "editorTextFocus && foldingEnabled"
+        "key": "ctrl+p",
+        "command": "-workbench.action.quickOpen"
     },
     {
-        "key": "ctrl+k ctrl+0",
-        "command": "-editor.foldAll",
-        "when": "editorTextFocus && foldingEnabled"
-    }
+        "key": "ctrl+h",
+        "command": "-editor.action.startFindReplaceAction",
+        "when": "editorFocus || editorIsOpen"
+    },
+    {
+        "key": "ctrl+h",
+        "command": "-testing.toggleTestingPeekHistory",
+        "when": "testing.isPeekVisible"
+    },
+    {
+        "key": "ctrl+shift+c",
+        "command": "-workbench.action.terminal.openNativeConsole",
+        "when": "!terminalFocus"
+    },
+    {
+        "key": "ctrl+-",
+        "command": "-workbench.action.zoomOut"
+    },
+    {
+        "key": "ctrl+shift+alt+up ctrl+shift+alt+up",
+        "command": "workbench.action.zoomIn"
+    },
+    {
+        "key": "ctrl+shift+=",
+        "command": "-workbench.action.zoomIn"
+    },
+    {
+        "key": "ctrl+shift+alt+down ctrl+shift+alt+down",
+        "command": "workbench.action.zoomOut"
+    },
+    {
+        "key": "ctrl+numpad_subtract",
+        "command": "-workbench.action.zoomOut"
+    },
 ]
-
-//
-// Change times:
-//    11/11/2021, 1:01:41 PM
-//    11/11/2021, 11:29:07 PM
-//    11/12/2021, 1:17:34 AM
