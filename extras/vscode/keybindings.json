@@ -53,7 +53,10 @@
     { "key": "alt+e alt+p", "command": "workbench.action.pinEditor",   "when": "!activeEditorIsPinned" },
     { "key": "alt+e alt+p", "command": "workbench.action.unpinEditor", "when": "activeEditorIsPinned" },
     //    Close
-    { "key": "shift+alt+x", "command": "workbench.action.closeActiveEditor", "when": "editorTextFocus" },
+    { "key": "shift+alt+x", "command": "workbench.action.closeActiveEditor",
+        // "when": "editorTextFocus"
+    },
+
     //    Minimap
     { "key": "alt+o alt+m", "command": "editor.action.toggleMinimap" },
     //    Maximize Group

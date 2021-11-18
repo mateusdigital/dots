@@ -212,4 +212,6 @@
     "powershell.codeFormatting.whitespaceBeforeOpenBrace": false,
     "powershell.codeFormatting.whitespaceBeforeOpenParen": false,
     "window.zoomLevel": 1,
+    "clangd.path": "c:\\Users\\mmesquita\\AppData\\Roaming\\Code\\User\\globalStorage\\llvm-vs-code-extensions.vscode-clangd\\install\\13.0.0\\clangd_13.0.0\\bin\\clangd.exe",
+    "C_Cpp.intelliSenseEngine": "Disabled",
 }
