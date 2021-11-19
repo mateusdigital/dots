@@ -77,7 +77,6 @@
     { "key": "ctrl+.", "command": "editor.unfold" },
     //    Comments
     { "key": "alt+/",       "command": "editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
-    { "key": "alt+k alt+c", "command": "editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
     //   Explorer - New File/Folder
     { "key": "ctrl+n",       "command": "explorer.newFile",   "when": " sideBarFocus && sideBarVisible && activeViewlet == 'workbench.view.explorer' && !inQuickOpen" },
     { "key": "ctrl+shift+n", "command": "explorer.newFolder", "when": " sideBarFocus && sideBarVisible && activeViewlet == 'workbench.view.explorer' && !inQuickOpen" },

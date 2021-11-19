@@ -163,9 +163,9 @@
     "workbench.colorTheme": "Visual Assist Dark Theme",
     "workbench.editor.enablePreview": false,
     "workbench.colorCustomizations": {
-        "statusBar.background": "#A0A1A8",
-        "statusBar.noFolderBackground": "#A0A1A8",
-        "statusBar.debuggingBackground": "#A0A1A8",
+        "statusBar.background": "#d65656",
+        "statusBar.noFolderBackground": "#d65656",
+        "statusBar.debuggingBackground": "#d65656",
         "statusBar.foreground": "#000",
         "statusBar.debuggingForeground": "#000"
     },
