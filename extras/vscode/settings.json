@@ -24,8 +24,8 @@
     //    Bindings - Normal
     "vim.normalModeKeyBindingsNonRecursive": [
         // Go to both line start / end
-        { "before": ["L"], "after": ["$"] },
-        { "before": ["H"], "after": ["^"] },
+        { "before": ["L"], "after": ["$"]      },
+        { "before": ["H"], "after": ["^"]      },
         { "before": ["P"], "after": ["$", "p"] }, // Paste at line end...
         // Indentation...
         { "before": [">"], "commands": ["editor.action.indentLines"]  },
@@ -37,8 +37,8 @@
     "vim.visualModeKeyBindingsNonRecursive": [
         // Go to both line start / end
         { "before": ["$"], "after": ["$", "h" ] }, // @NOTICE(stdmatt): Fix that annoying bug that the cursor goes past the end of the line -11/12/2021, 6:23:04 AM
-        { "before": ["L"], "after": ["$", "h"] },
-        { "before": ["H"], "after": ["^"] },
+        { "before": ["L"], "after": ["$", "h"]  },
+        { "before": ["H"], "after": ["^"]       },
         // Indentation...
         { "before": [">"], "commands": ["editor.action.indentLines"]  },
         { "before": ["<"], "commands": ["editor.action.outdentLines"] },
@@ -84,8 +84,8 @@
     "extensions.autoUpdate": false,
     "extensions.autoCheckUpdates": true,
         // Bracket Pair Colorizer
-        "bracket-pair-colorizer-2.forceUniqueOpeningColor": true,
-        "bracket-pair-colorizer-2.colorMode":"Independent",
+        "bracket-pair-colorizer-2.forceUniqueOpeningColor": false,
+        "bracket-pair-colorizer-2.colorMode": "Consecutive",
         "bracket-pair-colorizer-2.showBracketsInGutter": true,
         "bracket-pair-colorizer-2.highlightActiveScope": true,
 
@@ -112,6 +112,7 @@
     //--------------------------------------------------------------------------
     "cSpell.userWords": [
         "Adeel",
+        "arkadia",
         "CFCX",
         "CFCXUI",
         "coord",
@@ -164,7 +165,7 @@
     "workbench.settings.enableNaturalLanguageSearch": false,
     "workbench.tree.renderIndentGuides": "always",
     "workbench.editor.enablePreviewFromQuickOpen": false,
-    "workbench.colorTheme": "Visual Assist Dark Theme",
+    "workbench.colorTheme": "Gruvbox Dark Hard",
     "workbench.editor.enablePreview": false,
     "workbench.startupEditor": "none",
     "workbench.editor.limit.value": 20,
@@ -222,4 +223,6 @@
     "security.workspace.trust.untrustedFiles": "open",
     "security.workspace.trust.enabled": false,
     "telemetry.telemetryLevel": "off",
+    "gitlens.views.commits.files.layout": "list",
+    "workbench.iconTheme": "Monokai Pro Icons",
 }
