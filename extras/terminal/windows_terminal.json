@@ -56,6 +56,31 @@
         {
             "name": "Matt",
 
+            "background": "#1E1E1E",
+            "black": "#0C0C0C",
+            "blue": "#5396CE",
+            "brightBlack": "#767676",
+            "brightBlue": "#5396CE",
+            "brightCyan": "#61D6D6",
+            "brightGreen": "#2C884A",
+            "brightPurple": "#B34778",
+            "brightRed": "#D65656",
+            "brightWhite": "#F2F2F2",
+            "brightYellow": "#FFD700",
+            "cursorColor": "#FFFFFF",
+            "cyan": "#54CFB0",
+            "foreground": "#AEAF6A",
+            "green": "#2C884A",
+            "purple": "#B34778",
+            "red": "#D65656",
+            "selectionBackground": "#FFFFFF",
+            "white": "#FFFFFF",
+            "yellow": "#FFD700"
+        },
+
+        {
+            "name": "GruvBox",
+
             "foreground":          "#EBDBB2",
             "background":          "#32302F",
             "black":               "#282828",
