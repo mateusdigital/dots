@@ -165,7 +165,7 @@
     "workbench.settings.enableNaturalLanguageSearch": false,
     "workbench.tree.renderIndentGuides": "always",
     "workbench.editor.enablePreviewFromQuickOpen": false,
-    "workbench.colorTheme": "Gruvbox Dark Hard",
+    "workbench.colorTheme": "Gruvbox Dark Medium",
     "workbench.editor.enablePreview": false,
     "workbench.startupEditor": "none",
     "workbench.editor.limit.value": 20,

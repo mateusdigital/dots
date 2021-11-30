@@ -7,20 +7,27 @@
 
     "actions":
     [
-        { "command": { "action": "resizePane", "direction": "up" }, "keys": "ctrl+shift+k" },
-        { "command": { "action": "copy", "singleLine": false }, "keys": "ctrl+c" },
-        { "command": { "action": "moveFocus", "direction": "right" }, "keys": "alt+l" },
-        { "command": { "action": "moveFocus", "direction": "left" }, "keys": "alt+h" },
+        // Misc actions
         { "command": "find", "keys": "ctrl+shift+f" },
-        { "command": { "action": "splitPane", "split": "horizontal" }, "keys": "ctrl+shift+minus" },
+        { "command": { "action": "copy", "singleLine": false }, "keys": "ctrl+c" },
         { "command": "paste", "keys": "ctrl+v" },
-        { "command": { "action": "moveFocus", "direction": "up" }, "keys": "alt+k" },
-        { "command": { "action": "moveFocus", "direction": "down" }, "keys": "alt+j" },
-        { "command": "closePane", "keys": "alt+shift+x" },
-        { "command": { "action": "resizePane", "direction": "left" }, "keys": "ctrl+shift+h" },
-        { "command": { "action": "resizePane", "direction": "down" }, "keys": "ctrl+shift+j" },
+
+        // Pane
+        //   Resize
+        { "command": { "action": "resizePane", "direction": "left"  }, "keys": "ctrl+shift+h" },
+        { "command": { "action": "resizePane", "direction": "down"  }, "keys": "ctrl+shift+j" },
         { "command": { "action": "resizePane", "direction": "right" }, "keys": "ctrl+shift+l" },
-        { "command": { "action": "splitPane", "split": "vertical" }, "keys": "ctrl+shift+\\" }
+        { "command": { "action": "resizePane", "direction": "up"    }, "keys": "ctrl+shift+k" },
+        //   Focus
+        { "command": { "action": "moveFocus", "direction": "right" }, "keys": "alt+l" },
+        { "command": { "action": "moveFocus", "direction": "left"  }, "keys": "alt+h" },
+        { "command": { "action": "moveFocus", "direction": "up"    }, "keys": "alt+k" },
+        { "command": { "action": "moveFocus", "direction": "down"  }, "keys": "alt+j" },
+        //   Split
+        { "command": { "action": "splitPane", "split": "horizontal" }, "keys": "ctrl+shift+minus" },
+        { "command": { "action": "splitPane", "split": "vertical"   }, "keys": "ctrl+shift+\\" },
+        //   Close
+        { "command": "closePane", "keys": "alt+shift+x" },
     ],
 
     "profiles":
@@ -59,7 +66,8 @@
             "cyan":                "#8EC07C",
             "purple":              "#D3869B",
             "yellow":              "#FABD2F",
-            "brightBlack":         "#282828",
+            "brightBlack":         "#EBDBB2", //@todo(stdmatt): Black on the theme background is super difficult to see..
+                                              //                So I'm copying the value of the foreground color.
             "brightWhite":         "#FBF1C7",
             "brightRed":           "#FB4934",
             "brightBlue":          "#83A598",
