@@ -28,7 +28,7 @@
     //    Go Back / Forward
     { "key": "ctrl+-", "command": "workbench.action.navigateBack"    },
     { "key": "ctrl+=", "command": "workbench.action.navigateForward" },
-    // @todo(stdmatt): Add navigation to the quick fix....
+    // @todo(stdmatt): Add navigation to the quick fix (that small light bulb)....
     //    Switch Source
     { "key": "alt+e alt+o", "command": "C_Cpp.SwitchHeaderSource", "when": "editorTextFocus && editorLangId == 'c' || editorTextFocus && editorLangId == 'cpp' || editorTextFocus && editorLangId == 'cuda-cpp'" },
 
@@ -71,7 +71,16 @@
     { "key": "alt+f", "command": "actions.find" },
     { "key": "alt+r", "command": "editor.action.startFindReplaceAction" },
     //    Insert date time...
-    { "key": "alt+;", "command": "extension.insertDateTime" },
+    // @todo(stdmatt): 30 Nov, 2021 at 05:58:07
+    // Check how we want to add the comment prefix on it...
+    {
+        "key": "alt+;",
+        "command": "editor.action.insertSnippet",
+        "args": {
+            "name": "add_current_time"
+        }
+     },
+
     //    Fold
     { "key": "ctrl+,", "command": "editor.fold"   },
     { "key": "ctrl+.", "command": "editor.unfold" },

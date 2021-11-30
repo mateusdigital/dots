@@ -1,0 +1,7 @@
+[
+        {
+            "name": "Main Version",
+            "file": "./bump_the_version/main.py",
+            "content": "PROGRAM_VERSION = \"_VERSION_\""
+        }
+    ]

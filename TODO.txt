@@ -1,2 +1,5 @@
+- Sync the vscode snippets - 30 Nov, 2021 at 06:04:11
+
+
 - Make the install.ps1 in sync with install.sh. - 10/11/2021, 11:31:19 AM
 - Add a project page for the website. - 10/11/2021, 11:31:47 AM

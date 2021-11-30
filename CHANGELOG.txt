@@ -1,3 +1,9 @@
-v1.0.1 - Oct 04, 2020
+//------------------------------------------------------------------------------
+2.0.0 - 30 Nov, 2021 at 06:09:26
+    - [NEW] Start to use bump_the_version.
+    - [NEW] Lots of small things... a new beginning of versioning...
+
+//------------------------------------------------------------------------------
+1.0.1 - Oct 04, 2020
     - Improve: Install the terminal profiles on the OSX.
     - Cosmetic: Little cosmetic changes.
