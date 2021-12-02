@@ -677,18 +677,25 @@ function _make_git_prompt()
         } else {
             $git_line = "${git_branch}";
         }
-        $git_line = " [${git_line}]";
+        $git_line = "[${git_line}]";
     }
 
-    $curr_path   = pwd;
+    $curr_path   = (Get-Location).Path;
     $prompt      = ":)";
     $color_index = (Get-Date -UFormat "%M") % 4;
+
+    $curr_path_len = $curr_path.Length;
+    $git_line_len  = $git_line.Length;
+    $term_cols     = $Host.UI.RawUI.WindowSize.Width
+    $spaces_len    = $term_cols - ($curr_path_len + $git_line_len);
+    $spaces        = (" " * $spaces_len);
 
     $prompt    = rgb 0x9E 0x9E 0x9E $prompt;
     $git_line  = rgb 0x62 0x62 0x62 $git_line;
     $curr_path =_random_prompt_color $color_index "$curr_path";
 
-    return "${curr_path}${git_line}`n${prompt} ";
+    $output = "${curr_path}${spaces}${git_line}`n${prompt} ";
+    return $output;
 }
 
 
@@ -697,7 +704,7 @@ function global:prompt
 {
     return _make_git_prompt;
 }
-
+_make_git_prompt
 ##----------------------------------------------------------------------------##
 ## Aliases                                                                    ##
 ##----------------------------------------------------------------------------##
