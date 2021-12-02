@@ -6,7 +6,6 @@ $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
 $env:DOTS_IS_VERSBOSE            = 0;
 Set-PSReadLineOption -EditMode Emacs;
 
-
 ##----------------------------------------------------------------------------##
 ## Constants                                                                  ##
 ##----------------------------------------------------------------------------##
@@ -60,7 +59,9 @@ $TERMINAL_SETTINGS_INSTALL_FULLPATH  = "$HOME_DIR/AppData/Local/Packages/Microso
 $VIMRC_INSTALL_FULLPATH              = "$HOME_DIR/.vimrc";
 $VSCODE_KEYBINDINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Roaming/Code/User/keybindings.json";
 $VSCODE_SETTINGS_INSTALL_FULLPATH    = "$HOME_DIR/AppData/Roaming/Code/User/settings.json";
+$VSCODE_SNIPPETS_INSTALL_FULLPATH    = "$HOME_DIR/AppData/Roaming/Code/User/snippets/stdmatt_snippets.code-snippets";
 $BINARIES_INSTALL_FULLPATH           = "$STDMATT_BIN_DIR";
+
 ##------------------------------------------------------------------------------
 ## Journal things...
 $JOURNAL_DIR       = "$HOME_DIR/Desktop/Journal";
@@ -341,7 +342,7 @@ function _copy_newer_file()
     }
 
     ## Check which file is newer...
-    if($(Get-FileHash $fs_file).hash -eq $(Get-FileHash $repo_file).hash) {
+    if($sync_to -eq $null -and $(Get-FileHash $fs_file).hash -eq $(Get-FileHash $repo_file).hash) {
         $sync_to = $null;
     } else {
         $fs_time   = (_get_file_time $fs_file  );
@@ -414,6 +415,11 @@ function sync-extras()
     _copy_newer_file                       `
         "$VSCODE_SOURCE_DIR/settings.json" `
         "$VSCODE_SETTINGS_INSTALL_FULLPATH";
+
+    ## VSCode - Keybindings
+    _copy_newer_file                       `
+        "$VSCODE_SOURCE_DIR/snippets.json" `
+        "$VSCODE_SNIPPETS_INSTALL_FULLPATH"
 }
 
 ##------------------------------------------------------------------------------
@@ -754,5 +760,3 @@ function http-server()
 {
     python3 -m http.server $args[1];
 }
-
-config-git
