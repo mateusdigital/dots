@@ -268,32 +268,27 @@ function reload-profile()
 ##------------------------------------------------------------------------------
 function _copy_newer_file()
 {
-    $INDENT="....";
+    $INDENT="   "
     $NL="`n";
 
-    $fs_file      = $args[0];
-    $repo_file    = $args[1];
-    $sync_to_fs   = $False;
-    $sync_to_repo = $False;
-
+    $repo_file    = $args[0];
+    $fs_file      = $args[1];
+    $sync_to      = $null;
 
     ## Check if there's any file missing, if so just copy it...
     $fs_exists   = _file_exists "$fs_file";
     $repo_exists = _file_exists "$repo_file";
     if($fs_exists -xor $repo_exists) {
         if($repo_exists) {
-            $sync_to_fs   = $True;
-            $sync_to_repo = $False;
+            $sync_to = "fs";
         } else {
-            $sync_to_fs   = $False;
-            $sync_to_repo = $True;
+            $sync_to = "repo";
         }
     }
 
     ## Check which file is newer...
     if($(Get-FileHash $fs_file).hash -eq $(Get-FileHash $repo_file).hash) {
-        $sync_to_fs   = $False;
-        $sync_to_repo = $False;
+        $sync_to = $null;
     } else {
         $fs_time   = (_get_file_time $fs_file  );
         $repo_time = (_get_file_time $repo_file);
@@ -304,30 +299,26 @@ function _copy_newer_file()
                     "$INDENT Repo : ($repo_file)" ;
             return;
         }
-
         if($fs_time -gt $repo_time) {
-            $sync_to_repo = $True;
-            $sync_to_fs   = $False;
+            $sync_to = "repo";
         } elseif($repo_time -gt $fs_time) {
-            $sync_to_repo = $False;
-            $sync_to_fs   = $True;
+            $sync_to = "fs";
         } else {
-            $sync_to_repo = $False;
-            $sync_to_fs   = $False;
+            $sync_to = $null;
         }
     }
-    ## @todo(stdmatt): Check the logic, cause I think that we are always copying in one direction.- 2021-11-17 07:53:55
+
     ## Copy if needed..
-    if($sync_to_fs) {
-        _log "[sync-profile] Syncing Repo -> FS"     $NL `
-             "$INDENT Repo : ($(_green $repo_file))" $NL `
-             "$INDENT FS   : ($(_yellow $fs_file))"      ;
+    if($sync_to -eq "fs") {
+        _log "[sync-profile] Syncing Repo -> FS"      $NL `
+             "$INDENT Repo : ($(_green  $repo_file))" $NL `
+             "$INDENT FS   : ($(_yellow $fs_file))"       ;
 
         Copy-Item $repo_file $fs_file -Force;
-    } elseif($sync_to_repo) {
-        _log "[sync-profile] Syncing FS -> Repo"     $NL `
-             "$INDENT FS   : ($(_green $fs_file))"   $NL `
-             "$INDENT Repo : ($(_yellow $repo_file))"    ;
+    } elseif($sync_to -eq "repo") {
+        _log "[sync-profile] Syncing FS -> Repo"      $NL `
+             "$INDENT FS   : ($(_green  $fs_file))"   $NL `
+             "$INDENT Repo : ($(_yellow $repo_file))"     ;
 
         Copy-Item $fs_file $repo_file -Force;
     } else {
@@ -346,7 +337,7 @@ function sync-extras()
         "$GIT_IGNORE_INSTALL_FULLPATH";
 
     ## Profile
-    _copy_newer_file                        `
+    _copy_newer_file                   `
         "$PROFILE_SOURCE_DIR/main.ps1" `
         "$PROFILE_INSTALL_FULLPATH";
 
