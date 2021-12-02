@@ -67,7 +67,68 @@ $JOURNAL_DIR       = "$HOME_DIR/Desktop/Journal";
 $JOURNAL_GIT_URL   = "https://gitlab.com/stdmatt-private/journal";
 $JOURNAL_FILE_EXT = ".md";
 
+##----------------------------------------------------------------------------##
+## Colors things...                                                           ##
+##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
+$_C_ESC     = [Char]27
+$_C_RESET   = [Char]0;
+## Normal
+$_C_BLACK   = 30;
+$_C_RED     = 31;
+$_C_GREEN   = 32;
+$_C_BLUE    = 34;
+$_C_MAGENTA = 35;
+$_C_CYAN    = 36;
+$_C_WHITE   = 37;
+## Bright
+$_C_BRIGHT_BLACK   = 90;
+$_C_BRIGHT_RED     = 91;
+$_C_BRIGHT_GREEN   = 92;
+$_C_BRIGHT_BLUE    = 94;
+$_C_BRIGHT_MAGENTA = 95;
+$_C_BRIGHT_CYAN    = 96;
+$_C_BRIGHT_WHITE   = 97;
 
+##------------------------------------------------------------------------------
+function _color($color)
+{
+    $input = "";
+    foreach($item in $args) {
+        $input = $input + $item;
+    }
+
+    $start = "$_C_ESC[" + $color    + "m" + $input;
+    $end   = "$_C_ESC[" + $_C_RESET + "m";
+
+    $value = $start + $end;
+    return $value;
+}
+
+##------------------------------------------------------------------------------
+function _debug_color_values()
+{
+    for($i = 0; $i -lt 300; $i += 1)
+    {
+        $output = _color $i "Value: $i"
+        echo $output;
+    }
+}
+
+
+##------------------------------------------------------------------------------
+function rgb($r, $g, $b, $str)
+{
+    $esc = [char]27;
+    return "$esc[38;2;$r;$g;${b}m$str$esc[0m";
+};
+
+##------------------------------------------------------------------------------
+function _blue  () { return (_color $_C_BLUE         $args); }
+function _green () { return (_color $_C_GREEN        $args); }
+function _yellow() { return (_color $_C_YELLOW       $args); }
+function _red   () { return (_color $_C_RED          $args); }
+function _gray  () { return (_color $_C_BRIGHT_BLACK $args); }
 
 ##----------------------------------------------------------------------------##
 ## Helper Functions                                                           ##
@@ -97,26 +158,52 @@ function _dir_exists()
     return (Test-Path -Path $args[0] -PathType Container);
 }
 
+    # Set-PSBreakpoint -Script $MyInvocation.PSCommandPath -Line 104
+
+##------------------------------------------------------------------------------
+function _log_get_call_function_name()
+{
+    $callstack = Get-PSCallStack;
+    foreach($command in $callstack) {
+        $function_name = $command.FunctionName;
+        if($function_name.StartsWith("_")) {
+            continue;
+        }
+        return $function_name;
+
+    }
+    return $function_name;
+}
+
 ##------------------------------------------------------------------------------
 function _log_fatal()
 {
-    ## @todo(stdmatt): Make it print the caller function, and print [FATAL] - Jan 14, 21
-    echo "$args";
+    $function_name = _log_get_call_function_name;
+
+    $output =  _red  "[FATAL]";
+    $output += _gray "[$function_name] ";
+    $output += $args;
+
+    echo $output;
 }
 
 ##------------------------------------------------------------------------------
 function _log_verbose()
 {
-    echo $env:DOTS_IS_VERSBOSE
     if($env:DOTS_IS_VERSBOSE -eq 1) {
-        echo "$args";
+        _log "$args";
     }
 }
 
 ##------------------------------------------------------------------------------
 function _log()
 {
-    echo "$args";
+    $function_name = _log_get_call_function_name;
+
+    $output  = _gray "[$function_name] ";
+    $output += $args;
+
+    echo $output;
 }
 
 ##------------------------------------------------------------------------------
@@ -159,47 +246,6 @@ Check http://stdmatt.com for more :)",
     );
     echo $value;
 }
-
-##----------------------------------------------------------------------------##
-## Colors things...                                                           ##
-##----------------------------------------------------------------------------##
-##------------------------------------------------------------------------------
-$_C_ESC   = [Char]27
-$_C_RESET = [Char]0;
-$_C_RED    = 31;
-$_C_GREEN  = 32;
-$_C_YELLOW = 33;
-$_C_PURPLE = 35;
-$_C_CYAN   = 36;
-$_C_BLUE   = 36;
-
-##------------------------------------------------------------------------------
-function _color($color)
-{
-    $input = "";
-    foreach($item in $args) {
-        $input = $input + $item;
-    }
-
-    $start = "$_C_ESC[" + $color    + "m" + $input;
-    $end   = "$_C_ESC[" + $_C_RESET + "m";
-
-    $value = $start + $end;
-    return $value;
-}
-
-##------------------------------------------------------------------------------
-function rgb($r, $g, $b, $str)
-{
-    $esc = [char]27;
-    return "$esc[38;2;$r;$g;${b}m$str$esc[0m";
-};
-
-##------------------------------------------------------------------------------
-function _blue  () { return (_color $_C_BLUE   $args); }
-function _green () { return (_color $_C_GREEN  $args); }
-function _yellow() { return (_color $_C_YELLOW $args); }
-function _red   () { return (_color $_C_RED    $args); }
 
 ##----------------------------------------------------------------------------##
 ## Files                                                                      ##
@@ -316,19 +362,19 @@ function _copy_newer_file()
 
     ## Copy if needed..
     if($sync_to -eq "fs") {
-        _log "[sync-profile] Syncing Repo -> FS"      $NL `
+        _log "Syncing Repo -> FS"      $NL `
              "$INDENT Repo : ($(_green  $repo_file))" $NL `
              "$INDENT FS   : ($(_yellow $fs_file))"       ;
 
         Copy-Item $repo_file $fs_file -Force;
     } elseif($sync_to -eq "repo") {
-        _log "[sync-profile] Syncing FS -> Repo"      $NL `
+        _log "Syncing FS -> Repo"      $NL `
              "$INDENT FS   : ($(_green  $fs_file))"   $NL `
              "$INDENT Repo : ($(_yellow $repo_file))"     ;
 
         Copy-Item $fs_file $repo_file -Force;
     } else {
-        _log "[sync-profile] Files are equal..."     $NL `
+        _log "Files are equal..."     $NL `
              "$INDENT FS   : ($(_green $fs_file))"   $NL `
              "$INDENT Repo : ($(_green $repo_file))"     ;
     }
@@ -706,3 +752,5 @@ function http-server()
 {
     python3 -m http.server $args[1];
 }
+
+config-git
