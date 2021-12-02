@@ -1,7 +1,7 @@
 [
         {
             "name": "Main Version",
-            "file": "./bump_the_version/main.py",
+            "file": "./src/main.ps1",
             "content": "PROGRAM_VERSION = \"_VERSION_\""
         }
     ]
