@@ -3,6 +3,7 @@
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
 $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
+$env:DOTS_IS_VERSBOSE            = 0;
 Set-PSReadLineOption -EditMode Emacs;
 
 
@@ -101,6 +102,15 @@ function _log_fatal()
 {
     ## @todo(stdmatt): Make it print the caller function, and print [FATAL] - Jan 14, 21
     echo "$args";
+}
+
+##------------------------------------------------------------------------------
+function _log_verbose()
+{
+    echo $env:DOTS_IS_VERSBOSE
+    if($env:DOTS_IS_VERSBOSE -eq 1) {
+        echo "$args";
+    }
 }
 
 ##------------------------------------------------------------------------------
@@ -461,16 +471,12 @@ function journal()
 ##------------------------------------------------------------------------------
 function config-git()
 {
-    ## @todo(stdmatt): Make it only in verbose....
-    echo "Configuring git...";
+    _log_verbose "Configuring git...";
     git config --global user.name         "stdmatt";
     git config --global user.email        "stdmatt@pixelwizards.io";
     git config --global core.excludesfile "$HOME_DIR/.gitignore"; ## Set the gitignore globaly...
     git config --global core.editor       "code --wait"           ## Set vscode as default editor...
-
-    ## @todo(stdmatt): Make it only in verbose....
-    echo "Done... ;D";
-    echo "";
+    _log_verbose "Done... ;D";
 }
 
 ##------------------------------------------------------------------------------
@@ -543,11 +549,9 @@ function install-binaries()
 {
     echo $BINARIES_SOURCE_DIR;
     foreach($filename in Get-ChildItem -Path $BINARIES_SOURCE_DIR -File) {
-        $src_path  = "$BINARIES_SOURCE_DIR/$filename";
+        $src_path = "$BINARIES_SOURCE_DIR/$filename";
         $dst_path = "$BINARIES_INSTALL_FULLPATH/$filename";
-        ## @todo(stdmatt): 02 Dec, 2021 at 03:19:56
-        ## Make it only in verbose
-        echo "Copying binary: ($filename) to ($dst_path)";
+        _log_verbose "Copying binary: ($filename) to ($dst_path)";
         cp $src_path $dst_path;
     }
 
@@ -572,11 +576,9 @@ function install-fonts()
     foreach($font in Get-ChildItem -Path $fonts_folder -File) {
         $dest = "$where_the_fonts_are_installed/$font";
         if(Test-Path -Path $dest) {
-            ## @todo(stdmatt): Make it log only in verbose...
-            echo "Font ($font) already installed";
+            _log_verbose "Font ($font) already installed";
         } else {
-            ## @todo(stdmatt): Change to log...
-            echo "Installing ($font)";
+            _log_verbose "Installing ($font)";
 
             $copy_flag = [String]::Format("{0:x}", $COPYOPTIONS);
             $obj_folder.CopyHere($font.fullname, $copy_flag);
