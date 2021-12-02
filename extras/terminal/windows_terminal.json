@@ -40,7 +40,7 @@
                 "name": "Windows PowerShell",
 
                 "colorScheme": "VA",
-                "commandline": "powershell.exe",
+                "commandline": "powershell.exe -nologo",
                 "font":
                 {
                     "face": "JetBrains Mono",

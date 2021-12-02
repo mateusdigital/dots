@@ -149,15 +149,12 @@
     "telemetry.enableTelemetry":     false,
     "telemetry.telemetryLevel":      "off",
 
-
     //
     // Update
     //
     //--------------------------------------------------------------------------
     "update.enableWindowsBackgroundUpdates": false,
     "update.mode": "manual",
-
-
 
     //
     // Workbench
