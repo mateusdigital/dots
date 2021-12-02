@@ -46,9 +46,10 @@
     { "key": "space space", "command": "workbench.action.quickOpen", "when": "editorTextFocus && vim.active && vim.mode != 'Insert'" },
     { "key": "alt+shift+o", "command": "workbench.action.quickOpen"    },
     { "key": "alt+shift+p", "command": "workbench.action.showCommands" },
+
     //    Split Editor
-    { "key": "ctrl+shift+\\", "command": "workbench.action.splitEditor"          },
-    { "key": "ctrl+shift+-",  "command": "workbench.action.splitEditorOrthogonal"},
+    { "key": "alt+shift+\\", "command": "workbench.action.splitEditor"          },
+    { "key": "alt+shift+-",  "command": "workbench.action.splitEditorOrthogonal"},
     //    Pin Editor tab
     { "key": "alt+e alt+p", "command": "workbench.action.pinEditor",   "when": "!activeEditorIsPinned" },
     { "key": "alt+e alt+p", "command": "workbench.action.unpinEditor", "when": "activeEditorIsPinned" },
