@@ -39,6 +39,6 @@ $file_data = $file_data.Replace(
 echo "Installing profile...";
 New-Item -ItemType File -Path $profile -Force | out-null;
 # Copy-Item $PROFILE_SOURCE_FULLPATH $PROFILE_INSTALL_FULLPATH -Force
-echo $file_data | Out-File $PROFILE_INSTALL_FULLPATH;
+echo $file_data | Out-File -Encoding utf8 $PROFILE_INSTALL_FULLPATH;
 echo "    Profile installed at: $PROFILE_INSTALL_FULLPATH";
 echo "";
