@@ -1,7 +1,4 @@
-## @todo(stdmatt): Make a function that join any numer of paths with a sane syntax...
-## @todo(stdmatt): Make a way to install fotnts automatically.
-
-##----------------------------------------------------------------------------##
+﻿##----------------------------------------------------------------------------##
 ## Configure powershell stuff...                                              ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
@@ -92,12 +89,11 @@ function _file_exists()
 ##------------------------------------------------------------------------------
 function _dir_exists()
 {
-    ## @todo(stdmatt): How to chack only for dirs???
     if(_string_is_null_or_whitespace($args[0])) {
         return $false;
     }
 
-    return (Test-Path -Path $args[0]  -PathType Container);
+    return (Test-Path -Path $args[0] -PathType Container);
 }
 
 ##------------------------------------------------------------------------------
