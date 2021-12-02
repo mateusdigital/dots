@@ -2,7 +2,7 @@
 ## Configure powershell stuff...                                              ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
-$POWERSHELL_TELEMETRY_OPTOUT = 0;
+$env:POWERSHELL_TELEMETRY_OPTOUT = 1;
 Set-PSReadLineOption -EditMode Emacs;
 
 
