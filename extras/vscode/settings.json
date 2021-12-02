@@ -145,9 +145,10 @@
     // Telemetry
     //
     //--------------------------------------------------------------------------
-    // @TODO(stdmatt): Check that this is getting deprecated... 11/11/2021, 1:28:53 PM
     "telemetry.enableCrashReporter": false,
-    "telemetry.enableTelemetry": false,
+    "telemetry.enableTelemetry":     false,
+    "telemetry.telemetryLevel":      "off",
+
 
     //
     // Update
@@ -171,9 +172,9 @@
     "workbench.editor.limit.value": 20,
     "workbench.editor.tabSizing": "shrink",
     "workbench.colorCustomizations": {
-        "statusBar.background": "#d65656",
-        "statusBar.noFolderBackground": "#d65656",
-        "statusBar.debuggingBackground": "#d65656",
+        "statusBar.background": "#A0A1A8",
+        "statusBar.noFolderBackground": "#A0A1A8",
+        "statusBar.debuggingBackground": "#A0A1A8",
         "statusBar.foreground": "#000",
         "statusBar.debuggingForeground": "#000"
     },
@@ -222,7 +223,4 @@
     //--------------------------------------------------------------------------
     "security.workspace.trust.untrustedFiles": "open",
     "security.workspace.trust.enabled": false,
-    "telemetry.telemetryLevel": "off",
-    "gitlens.views.commits.files.layout": "list",
-    "workbench.iconTheme": "Monokai Pro Icons",
 }
