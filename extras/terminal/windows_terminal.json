@@ -1,9 +1,30 @@
 {
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "copyFormatting": "none",
-    "copyOnSelect": false,
+
     "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-    "theme": "dark",
+
+    "alwaysOnTop":                false,
+    "alwaysShowNotificationIcon": false,
+    "alwaysShowTabs":             false,
+    "confirmCloseAllTabs":        true,
+    "copyFormatting":             false,
+    "copyOnSelect":               false,
+    "disableAnimations":          true,
+    "focusFollowMouse":           true,
+    "initialCols":                120,
+    "initialRows":                30,
+    "launchMode":                 "default",
+    "minimizeToNotificationArea": false,
+    "showTabsInTitlebar":         true,
+    "showTerminalTitleInTitlebar":true,
+    "snapToGridOnResize":         true,
+    "startOnUserLogin":           false,
+    "startupActions":             null,
+    "tabSwitcherMode":           "inOrder",
+    "tabWidthMode":              "equal",
+    "theme":                     "dark",
+    "trimBlockSelection":        false,
+    "wordDelimiters":            " /\\()\"'-.,:;<>~!@#$%^&*|+=[]{}~?\u2502",
 
     "actions":
     [
@@ -36,24 +57,55 @@
         "list":
         [
             {
-                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-                "name": "Windows PowerShell",
 
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+
+                "name": "HACK THE PLANET!!",
+                "icon":        "ms-appx:///ProfileIcons/{61c54bbd-c2c6-5271-96e7-009a87ff44bf}.png",
                 "colorScheme": "VA",
-                "source": "Windows.Terminal.PowershellCore",
+                "commandline": "C:/Program Files/PowerShell/7/pwsh.exe",
                 "font":
                 {
                     "face": "JetBrains Mono",
                     "weight": "light"
                 },
 
-                "hidden": false,
-                "useAcrylic": false,
-                "experimental.retroTerminalEffect": false,
-                "bellStyle": "none",
+                "altGrAliasing":     true,
+                "antialiasingMode": "grayscale",
+                "closeOnExit":      "graceful",
+                "cursorShape":      "bar",
+                "hidden":            false,
+                "historySize":       9001,
+                "padding":           "8, 8, 8, 8",
+                "snapOnInput":       true,
+                "startingDirectory": "%USERPROFILE%",
+                "useAcrylic":        false
             },
+            {
+                "altGrAliasing": true,
+                "antialiasingMode": "grayscale",
+                "closeOnExit": "graceful",
+                "colorScheme": "Campbell",
+                "commandline": "%SystemRoot%\\System32\\cmd.exe",
+                "cursorShape": "bar",
+                "font":
+                {
+                    "face": "Cascadia Mono",
+                    "size": 12
+                },
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "hidden": false,
+                "historySize": 9001,
+                "icon": "ms-appx:///ProfileIcons/{0caa0dad-35be-5f56-a8ff-afceeeaa6101}.png",
+                "name": "Command Prompt",
+                "padding": "8, 8, 8, 8",
+                "snapOnInput": true,
+                "startingDirectory": "%USERPROFILE%",
+                "useAcrylic": false
+            }
         ]
     },
+
     "schemes":
     [
         {
