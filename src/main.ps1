@@ -4,7 +4,27 @@
 ##------------------------------------------------------------------------------
 $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
 $env:DOTS_IS_VERSBOSE            = 0;
-Set-PSReadLineOption -EditMode Emacs;
+
+##----------------------------------------------------------------------------##
+## PSReadLine                                                                 ##
+##----------------------------------------------------------------------------##
+function _on_vi_mode_change
+{
+    if ($args[0] -eq 'Command') {
+        Write-Host -NoNewLine "`e[1 q"
+    } else {
+        Write-Host -NoNewLine "`e[5 q"
+    }
+}
+
+if($PSVersionTable.PSVersion.Major -ge 7) {
+
+    Set-PSReadLineOption            `
+        -ViModeIndicator     Script `
+        -ViModeChangeHandler $Function:_on_vi_mode_change;
+}
+Set-PSReadLineOption -EditMode Vi;
+
 
 ##----------------------------------------------------------------------------##
 ## Constants                                                                  ##
@@ -55,6 +75,7 @@ $BINARIES_SOURCE_DIR = "$DOTS_DIR/extras/bin/win32";
 $FONTS_INSTALL_FULLPATH              = "$HOME_DIR/AppData/Local/Microsoft/Windows/Fonts";## @XXX(stdmatt): Just a hack to check if thing will work... but if it will I'll not change it today 11/11/2021, 2:03:40 PM
 $GIT_IGNORE_INSTALL_FULLPATH         = "$HOME_DIR/.gitignore";
 $PROFILE_INSTALL_FULLPATH            = "$HOME_DIR/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1";
+$PWSH_PROFILE_INSTALL_FULLPATH       = "$HOME_DIR/Documents/PowerShell/Microsoft.PowerShell_profile.ps1";
 $TERMINAL_SETTINGS_INSTALL_FULLPATH  = "$HOME_DIR/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json";
 $VIMRC_INSTALL_FULLPATH              = "$HOME_DIR/.vimrc";
 $VSCODE_KEYBINDINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Roaming/Code/User/keybindings.json";
@@ -394,7 +415,13 @@ function sync-extras()
     ## Profile
     _copy_newer_file                   `
         "$PROFILE_SOURCE_DIR/main.ps1" `
-        "$PROFILE_INSTALL_FULLPATH";
+        "$PWSH_PROFILE_INSTALL_FULLPATH";
+
+    New-Item -ItemType HardLink                  `
+        -Path   "$PROFILE_INSTALL_FULLPATH"      `
+        -Target "$PWSH_PROFILE_INSTALL_FULLPATH" `
+        -Force;
+
 
     ## Terminal
     _copy_newer_file                                 `

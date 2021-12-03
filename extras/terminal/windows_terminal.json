@@ -40,7 +40,7 @@
                 "name": "Windows PowerShell",
 
                 "colorScheme": "VA",
-                "commandline": "powershell.exe -nologo",
+                "source": "Windows.Terminal.PowershellCore",
                 "font":
                 {
                     "face": "JetBrains Mono",
@@ -51,7 +51,7 @@
                 "useAcrylic": false,
                 "experimental.retroTerminalEffect": false,
                 "bellStyle": "none",
-            }
+            },
         ]
     },
     "schemes":
