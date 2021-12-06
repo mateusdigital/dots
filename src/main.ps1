@@ -1,4 +1,4 @@
-﻿##----------------------------------------------------------------------------##
+##----------------------------------------------------------------------------##
 ## Configure powershell stuff...                                              ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
@@ -8,6 +8,7 @@ $env:DOTS_IS_VERSBOSE            = 0;
 ##----------------------------------------------------------------------------##
 ## PSReadLine                                                                 ##
 ##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
 function _on_vi_mode_change
 {
     if ($args[0] -eq 'Command') {
@@ -17,14 +18,31 @@ function _on_vi_mode_change
     }
 }
 
+##------------------------------------------------------------------------------
+## Settings just for the pwsh.
 if($PSVersionTable.PSVersion.Major -ge 7) {
 
     Set-PSReadLineOption            `
         -ViModeIndicator     Script `
         -ViModeChangeHandler $Function:_on_vi_mode_change;
 }
+echo "asdfsda";
+##------------------------------------------------------------------------------
 Set-PSReadLineOption -EditMode Vi;
+Set-PSReadLineOption -Colors @{
+    Command            = "#FF8000"
+    Number             = "#B5CE9B"
+    Member             = "#AEB76B"
+    Operator           = "#DCDCDC"
+    Type               = "#AEB76B"
+    Parameter          = "#AEB76B"
+    Default            = "#AEB76B"
+    String             = "#D69D85"
 
+    ## @todo(stdmatt): Put correct color - 06 Dec, 2021 at 03:53:40
+    Variable           = "#FF00FF"
+    ContinuationPrompt = "#FF00FF"
+}
 
 ##----------------------------------------------------------------------------##
 ## Constants                                                                  ##
@@ -153,6 +171,7 @@ function _green () { return (_color $_C_GREEN        $args); }
 function _yellow() { return (_color $_C_YELLOW       $args); }
 function _red   () { return (_color $_C_RED          $args); }
 function _gray  () { return (_color $_C_BRIGHT_BLACK $args); }
+
 
 ##----------------------------------------------------------------------------##
 ## Helper Functions                                                           ##
