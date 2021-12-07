@@ -26,7 +26,7 @@ if($PSVersionTable.PSVersion.Major -ge 7) {
         -ViModeIndicator     Script `
         -ViModeChangeHandler $Function:_on_vi_mode_change;
 }
-echo "asdfsda";
+
 ##------------------------------------------------------------------------------
 Set-PSReadLineOption -EditMode Vi;
 Set-PSReadLineOption -Colors @{
@@ -524,7 +524,6 @@ function sync-all()
     sync-journal;
 
     config-git;
-
     install-fonts;
     install-binaries;
 
@@ -654,8 +653,8 @@ function install-binaries()
         _log_verbose "Copying binary: ($filename) to ($dst_path)";
         cp $src_path $dst_path;
     }
-
 }
+
 
 ##----------------------------------------------------------------------------##
 ## Fonts                                                                      ##
@@ -723,34 +722,40 @@ function _make_git_prompt()
         } else {
             $git_line = "${git_branch}";
         }
+
         $git_line = "[${git_line}]";
     }
 
     $curr_path   = (Get-Location).Path;
     $prompt      = ":)";
-    $color_index = (Get-Date -UFormat "%M") % 4;
+    $color_index = (Get-Date -UFormat "%M") % 4; ## Makes the color cycle withing minutes
 
-    $curr_path_len = $curr_path.Length;
-    $git_line_len  = $git_line.Length;
-    $term_cols     = $Host.UI.RawUI.WindowSize.Width
-    $spaces_len    = $term_cols - ($curr_path_len + $git_line_len);
-    $spaces        = (" " * $spaces_len);
+    ## @notice(stdmatt): 07 Dec, 2021 at 10:05:12
+    ## Makes the git info right aligned.
+    $spaces = " ";
+    # if(0) {
+    #     $curr_path_len = $curr_path.Length;
+    #     $git_line_len  = $git_line.Length;
+    #     $term_cols     = $Host.UI.RawUI.WindowSize.Width
+    #     $spaces_len    = $term_cols - ($curr_path_len + $git_line_len);
+    #     $spaces        = (" " * $spaces_len);
+    # }
 
-    $prompt    = rgb 0x9E 0x9E 0x9E $prompt;
-    $git_line  = rgb 0x62 0x62 0x62 $git_line;
+    $prompt    = rgb 0x9E 0x9E 0x9E $prompt;   ## Light gray
+    $git_line  = rgb 0x62 0x62 0x62 $git_line; ## Dark gray
     $curr_path =_random_prompt_color $color_index "$curr_path";
 
     $output = "${curr_path}${spaces}${git_line}`n${prompt} ";
     return $output;
 }
 
-
 ##------------------------------------------------------------------------------
 function global:prompt
 {
     return _make_git_prompt;
 }
-_make_git_prompt
+
+
 ##----------------------------------------------------------------------------##
 ## Aliases                                                                    ##
 ##----------------------------------------------------------------------------##
@@ -813,3 +818,10 @@ function http-server()
 {
     python3 -m http.server $args[1];
 }
+
+
+##----------------------------------------------------------------------------##
+## Greeting                                                                   ##
+##----------------------------------------------------------------------------##
+cls
+Get-Date
