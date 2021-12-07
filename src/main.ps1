@@ -5,6 +5,7 @@
 $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
 $env:DOTS_IS_VERSBOSE            = 0;
 
+
 ##----------------------------------------------------------------------------##
 ## PSReadLine                                                                 ##
 ##----------------------------------------------------------------------------##
@@ -47,8 +48,6 @@ Set-PSReadLineOption -Colors @{
 ##----------------------------------------------------------------------------##
 ## Constants                                                                  ##
 ##----------------------------------------------------------------------------##
-##------------------------------------------------------------------------------
-## Info
 ##----------------------------------------------------------------------------##
 ## Info                                                                       ##
 ##----------------------------------------------------------------------------##
@@ -73,13 +72,15 @@ $DOWNLOADS_DIR   = "$HOME_DIR/Downloads";
 $DOCUMENTS_DIR   = "$HOME_DIR/Documents";
 $DESKTOP_DIR     = "$HOME_DIR/Desktop";
 $STDMATT_BIN_DIR = "$HOME_DIR/.stdmatt_bin";    ## My binaries that I don't wanna on system folder...
-$DOTS_DIR        = "E:/Projects/personal/dots"; ## @todo(stdmatt): Find a way to remove hardcode...
 $PROJECTS_DIR    = "$DOCUMENTS_DIR/Projects/stdmatt";
 
 ## Dealing with workstation, needs to ajudst some paths...
 if((hostname).Contains($WORKSTATION_PREFIX)) {
     $PROJECTS_DIR = "E:/Projects";
 }
+
+$DOTS_DIR = "$PROJECT_DIR/personal/dots";
+
 ##------------------------------------------------------------------------------
 ## Sync Paths...
 $FONTS_SOURCE_DIR    = "$DOTS_DIR/extras/fonts";
