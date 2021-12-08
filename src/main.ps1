@@ -72,14 +72,14 @@ $DOWNLOADS_DIR   = "$HOME_DIR/Downloads";
 $DOCUMENTS_DIR   = "$HOME_DIR/Documents";
 $DESKTOP_DIR     = "$HOME_DIR/Desktop";
 $STDMATT_BIN_DIR = "$HOME_DIR/.stdmatt_bin";    ## My binaries that I don't wanna on system folder...
-$PROJECTS_DIR    = "$DOCUMENTS_DIR/Projects/stdmatt";
+$PROJECTS_DIR    = "$DOCUMENTS_DIR/Projects";
 
 ## Dealing with workstation, needs to ajudst some paths...
 if((hostname).Contains($WORKSTATION_PREFIX)) {
     $PROJECTS_DIR = "E:/Projects";
 }
 
-$DOTS_DIR = "$PROJECT_DIR/personal/dots";
+$DOTS_DIR = "$PROJECTS_DIR/stdmatt/personal/dots";
 
 ##------------------------------------------------------------------------------
 ## Sync Paths...
