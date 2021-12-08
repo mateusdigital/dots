@@ -108,6 +108,54 @@ $JOURNAL_DIR       = "$HOME_DIR/Desktop/Journal";
 $JOURNAL_GIT_URL   = "https://gitlab.com/stdmatt-private/journal";
 $JOURNAL_FILE_EXT = ".md";
 
+
+##------------------------------------------------------------------------------
+function _debug_check_path()
+{
+    $target_path = $args[0];
+    if (Test-Path $target_path) {
+        echo (_green $target_path);
+    } else {
+        echo (_red $target_path);
+    }
+}
+##------------------------------------------------------------------------------
+function _debug_check_paths()
+{
+    ## General Paths
+    _debug_check_path $HOME_DIR
+    _debug_check_path $DOWNLOADS_DIR
+    _debug_check_path $DOCUMENTS_DIR
+    _debug_check_path $DESKTOP_DIR
+    _debug_check_path $STDMATT_BIN_DIR
+    _debug_check_path $PROJECTS_DIR
+    _debug_check_path $DOTS_DIR
+
+    ## Sync Paths...
+    _debug_check_path $FONTS_SOURCE_DIR
+    _debug_check_path $GIT_SOURCE_DIR
+    _debug_check_path $TERMINAL_SOURCE_DIR
+    _debug_check_path $PROFILE_SOURCE_DIR
+    _debug_check_path $VIM_SOURCE_DIR
+    _debug_check_path $VSCODE_SOURCE_DIR
+    _debug_check_path $BINARIES_SOURCE_DIR
+
+    _debug_check_path $FONTS_INSTALL_FULLPATH
+    _debug_check_path $GIT_IGNORE_INSTALL_FULLPATH
+    _debug_check_path $PROFILE_INSTALL_FULLPATH
+    _debug_check_path $PWSH_PROFILE_INSTALL_FULLPATH
+    _debug_check_path $TERMINAL_SETTINGS_INSTALL_FULLPATH
+    _debug_check_path $VIMRC_INSTALL_FULLPATH
+    _debug_check_path $VSCODE_KEYBINDINGS_INSTALL_FULLPATH
+    _debug_check_path $VSCODE_SETTINGS_INSTALL_FULLPATH
+    _debug_check_path $VSCODE_SNIPPETS_INSTALL_FULLPATH
+    _debug_check_path $BINARIES_INSTALL_FULLPATH
+
+    ## Journal things...
+    _debug_check_path $JOURNAL_DIR
+}
+
+
 ##----------------------------------------------------------------------------##
 ## Colors things...                                                           ##
 ##----------------------------------------------------------------------------##
