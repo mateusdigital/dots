@@ -856,6 +856,43 @@ function nuke_dir()
     rm -Recurse -Force $path_to_remove;
 }
 
+## kill
+##------------------------------------------------------------------------------
+function kill-process()
+{
+    $process_name = $args[0];
+    $line         = (ps | grep $process_name);
+
+    if($line.Length -eq 0) {
+        _log_fatal "No process with name: (${process_name})";
+        return;
+    } elseif($line.Length -gt 1 -and $line.GetType().FullName -ne "System.String") {
+        ## @todo(stdmatt): [Pretty Print] 09 Dec, 2021 at 00:58:30
+        ## Print each process in a different line.
+        _log_fatal "More than one process were found: (`n${line}`n)";
+        return;
+    }
+
+    $comps_dirty = $line.Split(" ");
+    $comps_clean = @();
+
+    for($i = 0; $i -lt $comps_dirty.Length; $i += 1) {
+        $comp = $comps_dirty[$i];
+        if($comp.Length -eq 0) {
+            continue;
+        }
+        $comps_clean += $comp;
+    }
+
+    $PROCESS_ID_INDEX_IN_PS_OUTPUT = 4;
+    $process_id                    = $comps_clean[$PROCESS_ID_INDEX_IN_PS_OUTPUT];
+
+    _log "Killing proccess: ($process_name id: ${process_id})";
+    kill $process_id -Force
+}
+
+
+
 # Set-Alias -name rm    -Value C:\Users\stdmatt\.stdmatt_bin\ark_rm.exe    -Force -Option AllScope
 # Set-Alias -name touch -Value C:\Users\stdmatt\.stdmatt_bin\ark_touch.exe -Force -Option AllScope
 
