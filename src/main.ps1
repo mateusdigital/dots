@@ -891,7 +891,12 @@ function kill-process()
     kill $process_id -Force
 }
 
-
+##------------------------------------------------------------------------------
+function kill-for-anvil()
+{
+    kill-process guild
+    kill-process hoard
+}
 
 # Set-Alias -name rm    -Value C:\Users\stdmatt\.stdmatt_bin\ark_rm.exe    -Force -Option AllScope
 # Set-Alias -name touch -Value C:\Users\stdmatt\.stdmatt_bin\ark_touch.exe -Force -Option AllScope

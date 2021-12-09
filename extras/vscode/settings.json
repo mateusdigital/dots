@@ -169,9 +169,9 @@
     "workbench.editor.limit.value": 20,
     "workbench.editor.tabSizing": "shrink",
     "workbench.colorCustomizations": {
-        "statusBar.background": "#d65656",
-        "statusBar.noFolderBackground": "#d65656",
-        "statusBar.debuggingBackground": "#d65656",
+        "statusBar.background": "#A0A1A8",
+        "statusBar.noFolderBackground": "#A0A1A8",
+        "statusBar.debuggingBackground": "#A0A1A8",
         "statusBar.foreground": "#000",
         "statusBar.debuggingForeground": "#000"
     },
