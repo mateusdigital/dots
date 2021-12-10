@@ -8,7 +8,8 @@ $SCRIPT_DIR      = Split-Path "$SCRIPT_FULLPATH" -Parent;
 $HOME_DIR        = "$env:USERPROFILE";
 ##------------------------------------------------------------------------------
 ## Profile
-$PROFILE_INSTALL_FULLPATH = "$HOME_DIR/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
+
+$PROFILE_INSTALL_FULLPATH = "$HOME_DIR/Documents/PowerShell/Microsoft.PowerShell_profile.ps1";
 $PROFILE_SOURCE_FULLPATH  = "$SCRIPT_DIR/src/main.ps1";
 ## Extras
 $EXTRAS_SOURCE_DIRPATH = "$SCRIPT_DIR/extras";
