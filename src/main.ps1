@@ -250,6 +250,38 @@ function _dir_exists()
     return (Test-Path -Path $args[0] -PathType Container);
 }
 
+##------------------------------------------------------------------------------
+function _basepath()
+{
+    $arg = $args[0];
+    $arg = $arg.Replace("\", "/");
+    if ((_string_is_null_or_whitespace $arg)) {
+        return "";
+    }
+
+    return $arg.Split("/")[-1];
+}
+
+##------------------------------------------------------------------------------
+function _dirpath()
+{
+    $arg = $args[0];
+    if ((_string_is_null_or_whitespace $arg)) {
+        return "";
+    }
+
+    $comps = $arg.Split("/");
+    if($comps.Length -eq 1) {
+        return $comps;
+    }
+
+    $final = "";
+    for($i = 0; $i -lt $comps.Length; $i += 0) {
+        $final += $comps[$i];
+    }
+    return $final;
+}
+
     # Set-PSBreakpoint -Script $MyInvocation.PSCommandPath -Line 104
 
 ##------------------------------------------------------------------------------
@@ -309,19 +341,6 @@ function _get_file_time()
 }
 
 ##------------------------------------------------------------------------------
-function _path_join()
-{
-    $fullpath = "";
-    for ($i = 0; $i -lt $args.Length; $i++) {
-        $fullpath += $($args[$i]);
-        if($i -ne ($args.Length -1)) {
-            $fullpath = $fullpath + "/";
-        }
-    }
-    return $fullpath;
-}
-
-##------------------------------------------------------------------------------
 function show_version()
 {
     $value = [string]::Format(
@@ -375,7 +394,7 @@ function create-shortcut()
         _log_fatal("Missing source path - Aborting...");
         return;
     }
-    if ( _string/cm/_is_null_or_whitespace($dst_path) ) {
+    if ( _string_is_null_or_whitespace($dst_path) ) {
         _log_fatal("Missing target path - Aborting...");
         return;
     }
@@ -402,7 +421,7 @@ function edit-profile()
 ##------------------------------------------------------------------------------
 function reload-profile()
 {
-    . $profile
+    & $profile
 }
 
 
@@ -721,8 +740,11 @@ function install-fonts()
     $fonts_folder                  = "$FONTS_SOURCE_DIR/jetbrains-mono";
     $where_the_fonts_are_installed = "$FONTS_INSTALL_FULLPATH";
 
-    foreach($font in Get-ChildItem -Path $fonts_folder -File) {
-        $dest = "$where_the_fonts_are_installed/$font";
+    $folder_contents = Get-ChildItem -Path $fonts_folder -File
+    foreach($font in $folder_contents) {
+        $dest = _basepath $font.FullName;
+        $dest = "$where_the_fonts_are_installed/$dst";
+
         if(Test-Path -Path $dest) {
             _log_verbose "Font ($font) already installed";
         } else {
@@ -733,7 +755,6 @@ function install-fonts()
         }
     }
 }
-
 
 ##----------------------------------------------------------------------------##
 ## Shell                                                                      ##
