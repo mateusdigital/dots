@@ -294,8 +294,8 @@ function _log_get_call_function_name()
             continue;
         }
         return $function_name;
-
     }
+
     return $function_name;
 }
 
