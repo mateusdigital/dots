@@ -551,7 +551,7 @@ function sync-journal()
     $current_date    = date;
     $commit_msg      = "[sync-journal] ($current_pc_name) - ($current_date)";
 
-    echo $commit_msg;
+    _log $commit_msg;
     git commit -m "$commit_msg";
 
     git pull
@@ -561,7 +561,7 @@ function sync-journal()
 ##------------------------------------------------------------------------------
 function sync-dots()
 {
-    echo "REFACTOR!!!"
+    _log "REFACTOR!!!"
     # if(!(_dir_exists $DOTS_DIR)) {
     #     "DOTS_DIR doesn't exits...";
     #     return;
@@ -714,7 +714,6 @@ function git_commit_version()
 ##------------------------------------------------------------------------------
 function install-binaries()
 {
-    echo $BINARIES_SOURCE_DIR;
     foreach($filename in Get-ChildItem -Path $BINARIES_SOURCE_DIR -File) {
         $src_path = "$BINARIES_SOURCE_DIR/$filename";
         $dst_path = "$BINARIES_INSTALL_FULLPATH/$filename";
