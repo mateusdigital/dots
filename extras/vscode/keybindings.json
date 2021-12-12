@@ -33,7 +33,7 @@
     { "key": "alt+e alt+o", "command": "C_Cpp.SwitchHeaderSource", "when": "editorTextFocus && editorLangId == 'c' || editorTextFocus && editorLangId == 'cpp' || editorTextFocus && editorLangId == 'cuda-cpp'" },
 
     //--------------------------------------------------------------------------
-    // Toggle Pannels
+    // Toggle Panels
     //    Explorer
     { "key": "alt+o alt+p", "command": "workbench.view.explorer",                  "when": "!sideBarVisible || activeViewlet != 'workbench.view.explorer'" },
     { "key": "alt+o alt+p", "command": "workbench.action.toggleSidebarVisibility", "when": " sideBarVisible && activeViewlet == 'workbench.view.explorer'" },
