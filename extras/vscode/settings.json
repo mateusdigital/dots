@@ -81,13 +81,72 @@
     // Extensions
     //
     //--------------------------------------------------------------------------
-    "extensions.autoUpdate": false,
+    "extensions.autoUpdate":       false,
     "extensions.autoCheckUpdates": true,
         // Bracket Pair Colorizer
+        "bracket-pair-colorizer-2.colorMode":               "Consecutive",
         "bracket-pair-colorizer-2.forceUniqueOpeningColor": false,
-        "bracket-pair-colorizer-2.colorMode": "Consecutive",
-        "bracket-pair-colorizer-2.showBracketsInGutter": true,
-        "bracket-pair-colorizer-2.highlightActiveScope": true,
+        "bracket-pair-colorizer-2.showBracketsInGutter":    true,
+        "bracket-pair-colorizer-2.highlightActiveScope":    true,
+        // Peacock
+        "peacock.affectEditorGroupBorder":     true,
+        "peacock.affectDebuggingStatusBar":    true,
+        "peacock.affectPanelBorder":           true,
+        "peacock.affectSideBarBorder":         true,
+        "peacock.affectTabActiveBorder":       true,
+        "peacock.affectStatusBar":             false,
+        "peacock.affectStatusAndTitleBorders": true,
+        // Todo-Tree
+        // @todo(stdmatt): 12 Dec, 2021 at 08:37:14
+        // asdfasdfdas
+        // @notice asdfasdfadfdasasdfasd
+        // asdfasdfas
+        // @XXX asdfasdfasdfsda
+        // asdfasdfas
+
+        "todo-tree.regex.enableMultiLine": true,
+        "todo-tree.regex.regexCaseSensitive": false,
+        "todo-tree.regex.subTagRegex": "^\\s*\\((.*)\\)",
+        "todo-tree.highlights.customHighlight": {
+            "@todo": {
+                "type":       "text",
+
+                "foreground": "#FFD700",
+                "iconColour": "#FFD700",
+                "opacity": 0,
+
+                "gutterIcon": true,
+                "icon":       "hubot",
+            },
+
+            "@notice": {
+                "type":       "text",
+
+                "foreground": "#5396CE",
+                "iconColour": "#5396CE",
+                "opacity": 0,
+
+                "gutterIcon": true,
+                "icon":       "smiley",
+            },
+
+            "@XXX": {
+                "type":       "text",
+
+                "foreground": "#D65656",
+                "iconColour": "#D65656",
+                "opacity": 0,
+
+                "gutterIcon": true,
+                "icon":       "bug",
+            }
+        },
+        "todo-tree.general.tags": [
+            "@XXX",
+            "@notice",
+            "@todo"
+        ],
+
 
     //
     // Files
@@ -112,19 +171,23 @@
     //--------------------------------------------------------------------------
     "cSpell.userWords": [
         "Adeel",
+        "antialiasing",
         "arkadia",
         "CFCX",
         "CFCXUI",
+        "commandline",
         "coord",
         "FCXUI",
         "FCXUITTTS",
         "Gameplay",
         "GBDK",
+        "grayscale",
         "mmesquita",
         "pingo",
         "repochecker",
         "Ruslan",
         "stdmatt",
+        "Titlebar",
         "yoyo"
     ],
 
@@ -173,7 +236,29 @@
         "statusBar.noFolderBackground": "#A0A1A8",
         "statusBar.debuggingBackground": "#A0A1A8",
         "statusBar.foreground": "#000",
-        "statusBar.debuggingForeground": "#000"
+        "statusBar.debuggingForeground": "#000",
+        "activityBar.activeBackground": "#1a1a1a",
+        "activityBar.activeBorder": "#606020",
+        "activityBar.background": "#1a1a1a",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "activityBarBadge.background": "#606020",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "sash.hoverBorder": "#1a1a1a",
+        "statusBarItem.hoverBackground": "#1a1a1a",
+        "statusBarItem.remoteBackground": "#000000",
+        "statusBarItem.remoteForeground": "#e7e7e7",
+        "titleBar.activeBackground": "#000000",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveBackground": "#00000099",
+        "titleBar.inactiveForeground": "#e7e7e799",
+        "editorGroup.border": "#1a1a1a",
+        "panel.border": "#1a1a1a",
+        "sideBar.border": "#1a1a1a",
+        "statusBar.border": "#000000",
+        "statusBar.debuggingBorder": "#000000",
+        "titleBar.border": "#000000",
+        "tab.activeBorder": "#1a1a1a"
     },
 
     //
@@ -221,5 +306,9 @@
     "security.workspace.trust.untrustedFiles": "open",
     "security.workspace.trust.enabled": false,
 
+    //
+    // Terminal
+    //
+    //--------------------------------------------------------------------------
     "terminal.integrated.shell.windows": "c:/Program Files/PowerShell/7/pwsh.exe",
 }
