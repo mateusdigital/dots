@@ -415,7 +415,15 @@ function create-shortcut()
 ##------------------------------------------------------------------------------
 function edit-profile()
 {
-    code $profile
+    code --new-window                        `
+         --wait                              `
+        $profile                             `
+        $TERMINAL_SETTINGS_INSTALL_FULLPATH  `
+        $VSCODE_KEYBINDINGS_INSTALL_FULLPATH `
+        $VSCODE_SETTINGS_INSTALL_FULLPATH    `
+        $VSCODE_SNIPPETS_INSTALL_FULLPATH;
+
+    sync-extras;
 }
 
 ##------------------------------------------------------------------------------
