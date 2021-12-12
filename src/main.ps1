@@ -507,7 +507,7 @@ function sync-extras()
     New-Item -ItemType HardLink                  `
         -Path   "$PROFILE_INSTALL_FULLPATH"      `
         -Target "$PWSH_PROFILE_INSTALL_FULLPATH" `
-        -Force;
+        -Force > $null;
 
 
     ## Terminal
