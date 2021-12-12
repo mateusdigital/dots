@@ -722,13 +722,17 @@ function git_commit_version()
 ##------------------------------------------------------------------------------
 function install-binaries()
 {
-    foreach($filename in Get-ChildItem -Path $BINARIES_SOURCE_DIR -File) {
+    $folder_contents = (Get-ChildItem -Path $BINARIES_SOURCE_DIR -File);
+    foreach($filename in $folder_contents) {
+        $filename = $filename.Name;
         $src_path = "$BINARIES_SOURCE_DIR/$filename";
         $dst_path = "$BINARIES_INSTALL_FULLPATH/$filename";
+
         _log_verbose "Copying binary: ($filename) to ($dst_path)";
         cp $src_path $dst_path;
     }
 }
+
 
 
 ##----------------------------------------------------------------------------##
@@ -944,3 +948,5 @@ function http-server()
 ##----------------------------------------------------------------------------##
 cls
 Get-Date
+
+install-binaries;
