@@ -31,6 +31,8 @@
     // @todo(stdmatt): Add navigation to the quick fix (that small light bulb)....
     //    Switch Source
     { "key": "alt+e alt+o", "command": "C_Cpp.SwitchHeaderSource", "when": "editorTextFocus && editorLangId == 'c' || editorTextFocus && editorLangId == 'cpp' || editorTextFocus && editorLangId == 'cuda-cpp'" },
+    //    Show in Explorer
+    { "key": "ctrl+[ ctrl+s", "command": "workbench.files.action.showActiveFileInExplorer" },
 
     //--------------------------------------------------------------------------
     // Toggle Panels
@@ -73,15 +75,8 @@
     { "key": "alt+r", "command": "editor.action.startFindReplaceAction" },
     //    Insert date time...
     // @todo(stdmatt): 30 Nov, 2021 at 05:58:07
-    // Check how we want to add the comment prefix on it...
-    {
-        "key": "alt+;",
-        "command": "editor.action.insertSnippet",
-        "args": {
-            "name": "add_current_time"
-        }
-     },
-
+    //      Check how we want to add the comment prefix on it...
+    { "key": "alt+;", "command": "editor.action.insertSnippet", "args": { "name": "add_current_time" } },
     //    Fold
     { "key": "ctrl+,", "command": "editor.fold"   },
     { "key": "ctrl+.", "command": "editor.unfold" },
@@ -91,87 +86,39 @@
     { "key": "ctrl+n",       "command": "explorer.newFile",   "when": " sideBarFocus && sideBarVisible && activeViewlet == 'workbench.view.explorer' && !inQuickOpen" },
     { "key": "ctrl+shift+n", "command": "explorer.newFolder", "when": " sideBarFocus && sideBarVisible && activeViewlet == 'workbench.view.explorer' && !inQuickOpen" },
 
+
+    // Case Transform
+    { "key": "alt+t alt+l", "command": "editor.action.transformToLowercase" },
+    { "key": "alt+t alt+s", "command": "editor.action.transformToSnakecase" },
+    { "key": "alt+t alt+t", "command": "editor.action.transformToTitlecase" },
+    { "key": "alt+t alt+u", "command": "editor.action.transformToUppercase" },
+
+    // stdmatt's extenstions
+    { "key": "ctrl+/", "command": "stdmatt_extensions.comment_line_separator" },
+    { "key": "shift+alt+/", "command": "stdmatt_extensions.comment_block_separator" },
+
+
     //
     // Remove stuff...
     //
-    {
-        "key": "ctrl+n",
-        "command": "-workbench.action.files.newUntitledFile"
-    },
-    {
-        "key": "ctrl+p",
-        "command": "-workbench.action.quickOpen"
-    },
-    {
-        "key": "ctrl+h",
-        "command": "-editor.action.startFindReplaceAction",
-        "when": "editorFocus || editorIsOpen"
-    },
-    {
-        "key": "ctrl+h",
-        "command": "-testing.toggleTestingPeekHistory",
-        "when": "testing.isPeekVisible"
-    },
-    {
-        "key": "ctrl+shift+c",
-        "command": "-workbench.action.terminal.openNativeConsole",
-        "when": "!terminalFocus"
-    },
-    {
-        "key": "ctrl+-",
-        "command": "-workbench.action.zoomOut"
-    },
-    {
-        "key": "ctrl+shift+alt+up ctrl+shift+alt+up",
-        "command": "workbench.action.zoomIn"
-    },
-    {
-        "key": "ctrl+shift+=",
-        "command": "-workbench.action.zoomIn"
-    },
-    {
-        "key": "ctrl+shift+alt+down ctrl+shift+alt+down",
-        "command": "workbench.action.zoomOut"
-    },
-    {
-        "key": "ctrl+numpad_subtract",
-        "command": "-workbench.action.zoomOut"
-    },
-    {
-        "key": "ctrl+shift+h",
-        "command": "-workbench.action.replaceInFiles"
-    },
-    {
-        "key": "alt+o",
-        "command": "-C_Cpp.SwitchHeaderSource",
-        "when": "editorTextFocus && editorLangId == 'c' || editorTextFocus && editorLangId == 'cpp' || editorTextFocus && editorLangId == 'cuda-cpp'"
-    },
-    {
-        "key": "shift+alt+f",
-        "command": "-notebook.formatCell",
-        "when": "editorHasDocumentFormattingProvider && editorTextFocus && inCompositeEditor && notebookEditable && !editorReadonly && activeEditor == 'workbench.editor.notebook'"
-    },
-    {
-        "key": "shift+alt+f",
-        "command": "-editor.action.formatDocument",
-        "when": "editorHasDocumentFormattingProvider && editorTextFocus && !editorReadonly && !inCompositeEditor"
-    },
-    {
-        "key": "shift+alt+f",
-        "command": "-editor.action.formatDocument.none",
-        "when": "editorTextFocus && !editorHasDocumentFormattingProvider && !editorReadonly"
-    },
-    {
-        "key": "shift+alt+f",
-        "command": "-notebook.format",
-        "when": "notebookEditable && !editorTextFocus && activeEditor == 'workbench.editor.notebook'"
-    },
-    {
-        "key": "shift+alt+f",
-        "command": "workbench.action.findInFiles"
-    },
-    {
-        "key": "ctrl+shift+f",
-        "command": "-workbench.action.findInFiles"
-    },
+    { "key": "ctrl+n", "command": "-workbench.action.files.newUntitledFile" },
+    { "key": "ctrl+p", "command": "-workbench.action.quickOpen" },
+    { "key": "ctrl+h", "command": "-editor.action.startFindReplaceAction", "when": "editorFocus || editorIsOpen" },
+    { "key": "ctrl+h", "command": "-testing.toggleTestingPeekHistory", "when": "testing.isPeekVisible" },
+    { "key": "ctrl+shift+c", "command": "-workbench.action.terminal.openNativeConsole", "when": "!terminalFocus" },
+    { "key": "ctrl+-", "command": "-workbench.action.zoomOut" },
+    { "key": "ctrl+shift+alt+up ctrl+shift+alt+up", "command": "workbench.action.zoomIn" },
+    { "key": "ctrl+shift+=", "command": "-workbench.action.zoomIn" },
+    { "key": "ctrl+shift+alt+down ctrl+shift+alt+down", "command": "workbench.action.zoomOut" },
+    { "key": "ctrl+numpad_subtract", "command": "-workbench.action.zoomOut" },
+    { "key": "ctrl+shift+h", "command": "-workbench.action.replaceInFiles" },
+    { "key": "alt+o", "command": "-C_Cpp.SwitchHeaderSource", "when": "editorTextFocus && editorLangId == 'c' || editorTextFocus && editorLangId == 'cpp' || editorTextFocus && editorLangId == 'cuda-cpp'" },
+    { "key": "shift+alt+f", "command": "-notebook.formatCell", "when": "editorHasDocumentFormattingProvider && editorTextFocus && inCompositeEditor && notebookEditable && !editorReadonly && activeEditor == 'workbench.editor.notebook'" },
+    { "key": "shift+alt+f", "command": "-editor.action.formatDocument", "when": "editorHasDocumentFormattingProvider && editorTextFocus && !editorReadonly && !inCompositeEditor" },
+    { "key": "shift+alt+f", "command": "-editor.action.formatDocument.none", "when": "editorTextFocus && !editorHasDocumentFormattingProvider && !editorReadonly" },
+    { "key": "shift+alt+f", "command": "-notebook.format", "when": "notebookEditable && !editorTextFocus && activeEditor == 'workbench.editor.notebook'" },
+    { "key": "shift+alt+f", "command": "workbench.action.findInFiles" },
+    { "key": "ctrl+shift+f", "command": "-workbench.action.findInFiles" },
+    { "key": "ctrl+/", "command": "-editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
+    { "key": "ctrl+/", "command": "-toggleExplainMode", "when": "suggestWidgetVisible" },
 ]

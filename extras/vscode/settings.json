@@ -1,5 +1,5 @@
 {
-    // @notice(stdamtt): Vim isout of alphabetical order
+    // @notice(stdamtt): Vim is out of alphabetical order
     // cause it's just easier to edit it first.
 
     //
@@ -152,18 +152,22 @@
     // Files
     //
     //--------------------------------------------------------------------------
-    "files.eol": "\n",
+    "files.eol":                    "\n",
     "files.trimTrailingWhitespace": true,
-    "files.trimFinalNewlines": true,
-    "files.insertFinalNewline": false,
+    "files.trimFinalNewlines":      true,
+    "files.insertFinalNewline":     false,
+
+    "files.associations": {
+        "*.mold": "cpp",
+        ".ark_bump": "json"
+    },
+
     "files.exclude": {
         "**/__pycache__": true,
         "**/*.fla": true,
         "**/*.swf": true
     },
-    "files.associations": {
-        "*.mold": "cpp"
-    },
+
 
     //
     // MISC
@@ -173,6 +177,8 @@
         "Adeel",
         "antialiasing",
         "arkadia",
+        "Behaviours",
+        "berzerk",
         "CFCX",
         "CFCXUI",
         "commandline",
@@ -184,10 +190,12 @@
         "grayscale",
         "mmesquita",
         "pingo",
+        "pixi",
         "repochecker",
         "Ruslan",
         "stdmatt",
         "Titlebar",
+        "tweens",
         "yoyo"
     ],
 
