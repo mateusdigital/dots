@@ -599,7 +599,7 @@ function sync-all()
     sync-dots;
     sync-journal;
 
-    config-git;
+    git-config;
     install-fonts;
     install-binaries;
 
@@ -644,7 +644,7 @@ function journal()
 ## Git                                                                        ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
-function config-git()
+function git-config()
 {
     _log_verbose "Configuring git...";
     git config --global user.name         "stdmatt";
@@ -655,7 +655,21 @@ function config-git()
 }
 
 ##------------------------------------------------------------------------------
-function git_commit_version()
+function git-first-date-of()
+{
+    $filename = $args[0];
+    if(-not (_file_exists($filename))) {
+        _log_fatal "Missing ($filename)";
+        return;
+    }
+
+    $date_format = "%d %b, %Y";
+    $lines       = (git log --diff-filter=A --follow --format=%ad  --date=format:$date_format --reverse -- "${filename}");
+    echo $lines;
+}
+
+##------------------------------------------------------------------------------
+function git-commit-version()
 {
     $changelog_filename = "CHANGELOG.txt";
     if(-not (_file_exists($changelog_filename))) {
@@ -871,7 +885,7 @@ Set-Alias -Name cd -Value _stdmatt_cd -Force -Option AllScope
 
 ## rm
 ##------------------------------------------------------------------------------
-function nuke_dir()
+function nuke-dir()
 {
     $path_to_remove = $args[0];
     if($path_to_remove -eq "") {
