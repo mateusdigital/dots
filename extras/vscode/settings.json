@@ -96,14 +96,6 @@
         "peacock.affectTabActiveBorder":       true,
         "peacock.affectStatusBar":             false,
         "peacock.affectStatusAndTitleBorders": true,
-        // Todo-Tree
-        // @todo(stdmatt): 12 Dec, 2021 at 08:37:14
-        // asdfasdfdas
-        // @notice asdfasdfadfdasasdfasd
-        // asdfasdfas
-        // @XXX asdfasdfasdfsda
-        // asdfasdfas
-
         "todo-tree.regex.enableMultiLine": true,
         "todo-tree.regex.regexCaseSensitive": false,
         "todo-tree.regex.subTagRegex": "^\\s*\\((.*)\\)",
@@ -183,14 +175,24 @@
         "CFCXUI",
         "commandline",
         "coord",
+        "curr",
+        "emulicious",
         "FCXUI",
         "FCXUITTTS",
         "Gameplay",
         "GBDK",
         "grayscale",
+        "hubot",
+        "Jetbrains",
+        "keyclick",
+        "mateus",
+        "mesquita",
         "mmesquita",
+        "outdent",
         "pingo",
         "pixi",
+        "pycache",
+        "pylint",
         "repochecker",
         "Ruslan",
         "stdmatt",
@@ -319,8 +321,9 @@
     //
     //--------------------------------------------------------------------------
     "terminal.integrated.shell.windows": "c:/Program Files/PowerShell/7/pwsh.exe",
-
-
+    "terminal.external.windowsExec": "C:\\Users\\mateus.mesquita\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe",
+    "terminal.integrated.defaultProfile.windows": "wt",
+    "terminal.explorerKind": "external",
 
     // Update
     //--------------------------------------------------------------------------

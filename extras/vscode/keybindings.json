@@ -65,6 +65,23 @@
     //    Maximize Group
     { "key": "alt+e alt+m", "command": "workbench.action.minimizeOtherEditors" },
 
+
+    {
+        "key": "f5",
+        "command": "workbench.action.debug.continue",
+        "when": "debugState == 'stopped'"
+    },
+    {
+        "key": "f5",
+        "command": "workbench.action.debug.start",
+        "when": "debuggersAvailable && debugState == 'inactive'"
+    },
+    {
+        "key": "f5",
+        "command": "workbench.action.debug.restart",
+        "when": "inDebugMode && debugState != 'stopped' && debugState != 'inactive'"
+    },
+
     //--------------------------------------------------------------------------
     // Actions
     //    Clipboard
@@ -120,5 +137,14 @@
     { "key": "shift+alt+f", "command": "workbench.action.findInFiles" },
     { "key": "ctrl+shift+f", "command": "-workbench.action.findInFiles" },
     { "key": "ctrl+/", "command": "-editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
-    { "key": "ctrl+/", "command": "-toggleExplainMode", "when": "suggestWidgetVisible" },
+    {
+        "key": "ctrl+/",
+        "command": "-toggleExplainMode",
+        "when": "suggestWidgetVisible"
+    },
+    {
+        "key": "ctrl+shift+f5",
+        "command": "-workbench.action.debug.restart",
+        "when": "inDebugMode"
+    },
 ]
