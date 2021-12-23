@@ -185,6 +185,7 @@
         "coord",
         "FCXUI",
         "FCXUITTTS",
+        "fullname",
         "Gameplay",
         "GBDK",
         "grayscale",
@@ -240,33 +241,33 @@
     "workbench.editor.limit.value": 20,
     "workbench.editor.tabSizing": "shrink",
     "workbench.colorCustomizations": {
-        "statusBar.background": "#A0A1A8",
-        "statusBar.noFolderBackground": "#A0A1A8",
-        "statusBar.debuggingBackground": "#A0A1A8",
+        "statusBar.background": "#d65656",
+        "statusBar.noFolderBackground": "#d65656",
+        "statusBar.debuggingBackground": "#d65656",
         "statusBar.foreground": "#000",
         "statusBar.debuggingForeground": "#000",
-        "activityBar.activeBackground": "#1a1a1a",
-        "activityBar.activeBorder": "#606020",
-        "activityBar.background": "#1a1a1a",
+        "activityBar.activeBackground": "#2b05f9",
+        "activityBar.activeBorder": "#fa2b05",
+        "activityBar.background": "#2b05f9",
         "activityBar.foreground": "#e7e7e7",
         "activityBar.inactiveForeground": "#e7e7e799",
-        "activityBarBadge.background": "#606020",
+        "activityBarBadge.background": "#fa2b05",
         "activityBarBadge.foreground": "#e7e7e7",
-        "sash.hoverBorder": "#1a1a1a",
+        "sash.hoverBorder": "#2b05f9",
         "statusBarItem.hoverBackground": "#1a1a1a",
         "statusBarItem.remoteBackground": "#000000",
         "statusBarItem.remoteForeground": "#e7e7e7",
-        "titleBar.activeBackground": "#000000",
+        "titleBar.activeBackground": "#2204c7",
         "titleBar.activeForeground": "#e7e7e7",
-        "titleBar.inactiveBackground": "#00000099",
+        "titleBar.inactiveBackground": "#2204c799",
         "titleBar.inactiveForeground": "#e7e7e799",
-        "editorGroup.border": "#1a1a1a",
-        "panel.border": "#1a1a1a",
-        "sideBar.border": "#1a1a1a",
+        "editorGroup.border": "#2b05f9",
+        "panel.border": "#2b05f9",
+        "sideBar.border": "#2b05f9",
         "statusBar.border": "#000000",
         "statusBar.debuggingBorder": "#000000",
-        "titleBar.border": "#000000",
-        "tab.activeBorder": "#1a1a1a"
+        "titleBar.border": "#2204c7",
+        "tab.activeBorder": "#2b05f9"
     },
 
     //
@@ -283,29 +284,34 @@
     // Languages...
     //
     //--------------------------------------------------------------------------
+    // Html
     "html.autoClosingTags": false,
+    // Python
     "python.linting.pylintEnabled": false,
+    "python.showStartPage":         false,
+    // C#
     "csharp.suppressDotnetInstallWarning": true,
-    "python.showStartPage": false,
-    "csharp.testsCodeLens.enabled": false,
-    "csharp.referencesCodeLens.enabled": false,
+    "csharp.testsCodeLens.enabled":        false,
+    "csharp.referencesCodeLens.enabled":   false,
+    // Powershell
+    "powershell.buttons.showRunButtons":                   false,
+    "powershell.codeFolding.showLastLine":                 false,
+    "powershell.codeFormatting.addWhitespaceAroundPipe":   false,
+    "powershell.codeFormatting.alignPropertyValuePairs":   false,
+    "powershell.codeFormatting.newLineAfterCloseBrace":    false,
+    "powershell.codeFormatting.newLineAfterOpenBrace":     false,
+    "powershell.codeFormatting.openBraceOnSameLine":       false,
+    "powershell.codeFormatting.pipelineIndentationStyle": "None",
+    "powershell.codeFormatting.whitespaceAfterSeparator":  false,
+    "powershell.codeFormatting.whitespaceAroundOperator":  false,
+    "powershell.codeFormatting.whitespaceAroundPipe":      false,
+    "powershell.codeFormatting.whitespaceBeforeOpenBrace": false,
+    "powershell.codeFormatting.whitespaceBeforeOpenParen": false,
+    // Others
     "notebook.cellToolbarLocation": {
         "default": "right",
         "jupyter-notebook": "left"
     },
-    "powershell.buttons.showRunButtons": false,
-    "powershell.codeFolding.showLastLine": false,
-    "powershell.codeFormatting.addWhitespaceAroundPipe": false,
-    "powershell.codeFormatting.alignPropertyValuePairs": false,
-    "powershell.codeFormatting.newLineAfterCloseBrace": false,
-    "powershell.codeFormatting.newLineAfterOpenBrace": false,
-    "powershell.codeFormatting.openBraceOnSameLine": false,
-    "powershell.codeFormatting.pipelineIndentationStyle": "None",
-    "powershell.codeFormatting.whitespaceAfterSeparator": false,
-    "powershell.codeFormatting.whitespaceAroundOperator": false,
-    "powershell.codeFormatting.whitespaceAroundPipe": false,
-    "powershell.codeFormatting.whitespaceBeforeOpenBrace": false,
-    "powershell.codeFormatting.whitespaceBeforeOpenParen": false,
 
     //
     // Security
@@ -319,11 +325,27 @@
     //
     //--------------------------------------------------------------------------
     "terminal.integrated.shell.windows": "c:/Program Files/PowerShell/7/pwsh.exe",
-
-
-
-    // Update
-    //--------------------------------------------------------------------------
     "bracket-pair-colorizer-2.depreciation-notice": false,
     "powershell.promptToUpdatePowerShell": false,
+    "emulicious-debugger.emuliciousPath": "C:\\Users\\mmesquita\\.stdmatt_bin\\Emulicious-with-Java",
+
+
+
+    "stdmatt_vscode.editor_colors": {
+        "test": "#FF00FF",
+        "tools": "#696c9d"
+    },
+
+    "stdmatt_vscode.snippets": {
+        "@todo":[
+            "$LINE_COMMENT @todo(stdmatt): [${1:TITLE}] - $CURRENT_DATE $CURRENT_MONTH_NAME_SHORT, $CURRENT_YEAR at $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
+            "$LINE_COMMENT ${2}"
+        ]
+    },
+    "javascript.format.enable": false,
+    "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+    "javascript.inlayHints.parameterTypes.enabled": true,
+    "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
+    "javascript.inlayHints.variableTypes.enabled": true,
+    "javascript.preferences.quoteStyle": "double",
 }
