@@ -89,13 +89,14 @@
         "bracket-pair-colorizer-2.showBracketsInGutter":    true,
         "bracket-pair-colorizer-2.highlightActiveScope":    true,
         // Peacock
-        "peacock.affectEditorGroupBorder":     true,
-        "peacock.affectDebuggingStatusBar":    true,
-        "peacock.affectPanelBorder":           true,
-        "peacock.affectSideBarBorder":         true,
-        "peacock.affectTabActiveBorder":       true,
+        "peacock.affectEditorGroupBorder":     false,
+        "peacock.affectDebuggingStatusBar":    false,
+        "peacock.affectPanelBorder":           false,
+        "peacock.affectSideBarBorder":         false,
+        "peacock.affectTabActiveBorder":       false,
         "peacock.affectStatusBar":             false,
         "peacock.affectStatusAndTitleBorders": true,
+        // Todo-Tree
         "todo-tree.regex.enableMultiLine": true,
         "todo-tree.regex.regexCaseSensitive": false,
         "todo-tree.regex.subTagRegex": "^\\s*\\((.*)\\)",
@@ -138,7 +139,6 @@
             "@notice",
             "@todo"
         ],
-
 
     //
     // Files
@@ -185,11 +185,13 @@
         "grayscale",
         "hubot",
         "Jetbrains",
+        "kaleido",
         "keyclick",
         "mateus",
         "mesquita",
         "mmesquita",
         "outdent",
+        "perlin",
         "pingo",
         "pixi",
         "pycache",
@@ -243,33 +245,32 @@
     "workbench.editor.limit.value": 20,
     "workbench.editor.tabSizing": "shrink",
     "workbench.colorCustomizations": {
-        "statusBar.background": "#d65656",
-        "statusBar.noFolderBackground": "#d65656",
-        "statusBar.debuggingBackground": "#d65656",
+        "statusBar.background": "#A0A1A8",
+        "statusBar.noFolderBackground": "#A0A1A8",
+        "statusBar.debuggingBackground": "#A0A1A8",
         "statusBar.foreground": "#000",
         "statusBar.debuggingForeground": "#000",
-        "activityBar.activeBackground": "#2b05f9",
-        "activityBar.activeBorder": "#fa2b05",
-        "activityBar.background": "#2b05f9",
+        "activityBar.activeBackground": "#4b2ddf",
+        "activityBar.activeBorder": "#e1593d",
+        "activityBar.background": "#4b2ddf",
         "activityBar.foreground": "#e7e7e7",
         "activityBar.inactiveForeground": "#e7e7e799",
-        "activityBarBadge.background": "#fa2b05",
+        "activityBarBadge.background": "#e1593d",
         "activityBarBadge.foreground": "#e7e7e7",
-        "sash.hoverBorder": "#2b05f9",
+        "sash.hoverBorder": "#4b2ddf",
         "statusBarItem.hoverBackground": "#1a1a1a",
         "statusBarItem.remoteBackground": "#000000",
         "statusBarItem.remoteForeground": "#e7e7e7",
-        "titleBar.activeBackground": "#2204c7",
+        "titleBar.activeBackground": "#381dbc",
         "titleBar.activeForeground": "#e7e7e7",
-        "titleBar.inactiveBackground": "#2204c799",
+        "titleBar.inactiveBackground": "#381dbc99",
         "titleBar.inactiveForeground": "#e7e7e799",
-        "editorGroup.border": "#2b05f9",
-        "panel.border": "#2b05f9",
-        "sideBar.border": "#2b05f9",
+        "panel.border": "#373737",
+        "sideBar.border": "#373737",
         "statusBar.border": "#000000",
         "statusBar.debuggingBorder": "#000000",
-        "titleBar.border": "#2204c7",
-        "tab.activeBorder": "#2b05f9"
+        "titleBar.border": "#381dbc",
+        "tab.activeBorder": "#373737"
     },
 
     //
@@ -309,6 +310,13 @@
     "powershell.codeFormatting.whitespaceAroundPipe":      false,
     "powershell.codeFormatting.whitespaceBeforeOpenBrace": false,
     "powershell.codeFormatting.whitespaceBeforeOpenParen": false,
+    // Javascript
+    "javascript.format.enable":                               false,
+    "javascript.inlayHints.functionLikeReturnTypes.enabled":  true,
+    "javascript.inlayHints.parameterTypes.enabled":           false,
+    "javascript.inlayHints.propertyDeclarationTypes.enabled": false,
+    "javascript.inlayHints.variableTypes.enabled":            false,
+    "javascript.preferences.quoteStyle":                      "double",
     // Others
     "notebook.cellToolbarLocation": {
         "default": "right",
@@ -338,22 +346,77 @@
     "emulicious-debugger.emuliciousPath": "C:\\Users\\mmesquita\\.stdmatt_bin\\Emulicious-with-Java",
 
 
-
     "stdmatt_vscode.editor_colors": {
         "test": "#FF00FF",
         "tools": "#696c9d"
     },
 
     "stdmatt_vscode.snippets": {
-        "@todo":[
-            "$LINE_COMMENT @todo(stdmatt): [${1:TITLE}] - $CURRENT_DATE $CURRENT_MONTH_NAME_SHORT, $CURRENT_YEAR at $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
-            "$LINE_COMMENT ${2}"
+        "_todo":[
+            "@todo(stdmatt): [${1:TITLE}] - $CURRENT_DATE $CURRENT_MONTH_NAME_SHORT, $CURRENT_YEAR at $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
+            "${2}"
+        ],
+        "_notice":[
+            "@notice(stdmatt): [${1:TITLE}] - $CURRENT_DATE $CURRENT_MONTH_NAME_SHORT, $CURRENT_YEAR at $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
+            "${2}"
+        ],
+        "_XXX":[
+            "@XXX(stdmatt): [${1:TITLE}] - $CURRENT_DATE $CURRENT_MONTH_NAME_SHORT, $CURRENT_YEAR at $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
+            "${2}"
+        ],
+
+        //------------------------------------------------------------------------//
+        // File Header                                                            //
+        //------------------------------------------------------------------------//
+        //--------------------------------------------------------------------------
+        "_ark": [
+            "----------------------------------------------------------------------------",
+            "                                         888                                ",
+            "                                         888                                ",
+            "                                         888                                ",
+            "                         8888b.  888d888 888  888                           ",
+            "                            `88b 888P'   888 .88P                           ",
+            "                        .d888888 888     888888K                            ",
+            "                        888  888 888     888 `88b                           ",
+            "                        `Y888888 888     888  888                           ",
+            "                                                                            ",
+            "                                                                            ",
+            "  File      : $TM_FILENAME                                                            ${1}",
+            "  Project   : $WORKSPACE_NAME                                                         ${2}",
+            "  Date      : $CURRENT_DATE $CURRENT_MONTH_NAME_SHORT, $CURRENT_YEAR_SHORT                                                    ${3}",
+            "  License   : GPLv3                                                         ",
+            "  Author    : stdmatt <stdmatt@pixelwizards.io>                             ",
+            "  Copyright : stdmatt - $CURRENT_YEAR                                                ",
+            "                                                                            ",
+            "  Description :                                                             ",
+            "                                                                            ",
+            "---------------------------------------------------------------------------~",
+        ],
+
+        //--------------------------------------------------------------------------
+        "_stdmatt": [
+            "----------------------------------------------------------------------------",
+            "                        _      _                 _   _                      ",
+            "                       | |    | |               | | | |                     ",
+            "                    ___| |_ __| |_ __ ___   __ _| |_| |_                    ",
+            "                   / __| __/ _` | '_ ` _ \\ / _` | __| __|                   ",
+            "                   \\__ \\ || (_| | | | | | | (_| | |_| |_                    ",
+            "                   |___/\\__\\__,_|_| |_| |_|\\__,_|\\__|\\__|                   ",
+            "                                                                            ",
+            "                                                                            ",
+            "  File      : $TM_FILENAME                                                            ${1}",
+            "  Project   : $WORKSPACE_NAME                                                         ${2}",
+            "  Date      : $CURRENT_DATE $CURRENT_MONTH_NAME_SHORT, $CURRENT_YEAR_SHORT                                                    ${3}",
+            "  License   : GPLv3                                                         ",
+            "  Author    : stdmatt <stdmatt@pixelwizards.io>                             ",
+            "  Copyright : stdmatt - $CURRENT_YEAR                                                ",
+            "                                                                            ",
+            "  Description :                                                             ",
+            "                                                                            ",
+            "---------------------------------------------------------------------------~",
         ]
     },
-    "javascript.format.enable": false,
-    "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
-    "javascript.inlayHints.parameterTypes.enabled": true,
-    "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
-    "javascript.inlayHints.variableTypes.enabled": true,
-    "javascript.preferences.quoteStyle": "double",
+    "stdmatt_extensions.editor_colors": {
+        "test": "#FF00FF"
+    },
 }
