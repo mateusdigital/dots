@@ -110,9 +110,9 @@
     { "key": "alt+t alt+t", "command": "editor.action.transformToTitlecase" },
     { "key": "alt+t alt+u", "command": "editor.action.transformToUppercase" },
 
-    // stdmatt's extenstions
-    { "key": "ctrl+/", "command": "stdmatt_extensions.comment_line_separator" },
-    { "key": "shift+alt+/", "command": "stdmatt_extensions.comment_block_separator" },
+    // stdmatt's extensions
+    { "key": "ctrl+/",      "command": "stdmatt_vscode.Command_Comment_Line_line_separator" },
+    { "key": "shift+alt+/", "command": "stdmatt_vscode.Command_Comment_Line_block_separator" },
 
 
     //
@@ -137,11 +137,7 @@
     { "key": "shift+alt+f", "command": "workbench.action.findInFiles" },
     { "key": "ctrl+shift+f", "command": "-workbench.action.findInFiles" },
     { "key": "ctrl+/", "command": "-editor.action.commentLine", "when": "editorTextFocus && !editorReadonly" },
-    {
-        "key": "ctrl+/",
-        "command": "-toggleExplainMode",
-        "when": "suggestWidgetVisible"
-    },
+    { "key": "ctrl+/", "command": "-toggleExplainMode", "when": "suggestWidgetVisible" },
     {
         "key": "ctrl+shift+f5",
         "command": "-workbench.action.debug.restart",
