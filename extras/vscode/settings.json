@@ -48,34 +48,35 @@
     // Debugger
     //
     //--------------------------------------------------------------------------
-    "debug.onTaskErrors": "abort",
+    "debug.onTaskErrors":    "abort",
     "debug.toolBarLocation": "docked",
 
     //
     // Editor
     //
     //--------------------------------------------------------------------------
-    "editor.renderWhitespace": "all",
-    "editor.rulers": [ 80, 120 ],
-    "editor.fontLigatures": true,
-    "editor.minimap.renderCharacters": false,
+    "editor.codeLens":                          false,
+    "editor.renderWhitespace":                  "all",
+    "editor.acceptSuggestionOnEnter":           "smart",
     "editor.acceptSuggestionOnCommitCharacter": false,
-    "editor.acceptSuggestionOnEnter": "smart",
-    "editor.fontFamily": "Jetbrains Mono Light",
-    "editor.fontSize": 15,
-    "editor.codeLens": false,
+    "editor.minimap.renderCharacters":          false,
+
+    "editor.fontFamily":    "Jetbrains Mono Light",
+    "editor.fontSize":      15,
+    "editor.fontLigatures": true,
+    "editor.rulers":        [ 80, 120 ],
 
     //
     // Explorer
     //
     //--------------------------------------------------------------------------
-    "explorer.confirmDelete": false,
-    "explorer.openEditors.visible": 0,
-    "explorer.confirmDragAndDrop": false,
-    "explorer.autoReveal": false,
-    "explorer.compactFolders": false,
+    "explorer.confirmDelete":             false,
+    "explorer.confirmDragAndDrop":        false,
+    "explorer.autoReveal":                false,
+    "explorer.compactFolders":            false,
     "explorer.copyRelativePathSeparator": "/",
-    "explorer.openEditors.sortOrder": "alphabetical",
+    "explorer.openEditors.sortOrder":     "alphabetical",
+    "explorer.openEditors.visible":       0,
 
     //
     // Extensions
@@ -83,6 +84,15 @@
     //--------------------------------------------------------------------------
     "extensions.autoUpdate":       false,
     "extensions.autoCheckUpdates": true,
+        // Auto Align
+        "alignment.surroundSpace" : {
+            "colon":      [-1, 1],  // The first number specify how much space to add to the left, can be negative.
+                                    // The second number is how much space to the right, can be negative.
+            "assignment": [1, 1],   // The same as above.
+            "arrow":      [1, 1],   // The same as above.
+            "comment":    2         // Special how much space to add between the trailing comment and the code.
+                                    // If this value is negative, it means don't align the trailing comment.
+        },
         // Bracket Pair Colorizer
         "bracket-pair-colorizer-2.colorMode":               "Consecutive",
         "bracket-pair-colorizer-2.forceUniqueOpeningColor": false,
@@ -97,9 +107,9 @@
         "peacock.affectStatusBar":             false,
         "peacock.affectStatusAndTitleBorders": true,
         // Todo-Tree
-        "todo-tree.regex.enableMultiLine": true,
+        "todo-tree.regex.enableMultiLine":    true,
         "todo-tree.regex.regexCaseSensitive": false,
-        "todo-tree.regex.subTagRegex": "^\\s*\\((.*)\\)",
+        "todo-tree.regex.subTagRegex":        "^\\s*\\((.*)\\)",
         "todo-tree.highlights.customHighlight": {
             "@todo": {
                 "type":       "text",
@@ -150,14 +160,14 @@
     "files.insertFinalNewline":     false,
 
     "files.associations": {
-        "*.mold": "cpp",
+        "*.mold":    "cpp",
         ".ark_bump": "json"
     },
 
     "files.exclude": {
         "**/__pycache__": true,
-        "**/*.fla": true,
-        "**/*.swf": true
+        "**/*.fla":       true,
+        "**/*.swf":       true
     },
 
 
@@ -174,23 +184,40 @@
         "CFCX",
         "CFCXUI",
         "commandline",
+        "contribs",
         "coord",
+        "Criativos",
         "curr",
+        "Devilware",
+        "Eazz",
         "emulicious",
         "FCXUI",
         "FCXUITTTS",
+        "Firehorse",
+        "FTUE",
         "fullname",
+        "Fullscreen",
         "Gameplay",
         "GBDK",
+        "Ginga",
         "grayscale",
         "hubot",
+        "Imidiar",
+        "Jamon",
         "Jetbrains",
         "kaleido",
         "keyclick",
+        "Kyiv",
+        "libreflix",
         "mateus",
         "mesquita",
+        "Metaballs",
+        "Minicip",
+        "Miniclip",
         "mmesquita",
         "outdent",
+        "pacman",
+        "Pequenos",
         "perlin",
         "pingo",
         "pixi",
@@ -198,10 +225,19 @@
         "pylint",
         "repochecker",
         "Ruslan",
+        "Sapucaí",
+        "Seguro",
         "stdmatt",
         "Titlebar",
         "tweens",
-        "yoyo"
+        "Ubisoft's",
+        "Volador",
+        "Wargaming",
+        "yoyo",
+        "Zaragozza",
+        "Батько",
+        "дівчинки",
+        "красива"
     ],
 
     //
@@ -236,14 +272,16 @@
     // Workbench
     //
     //--------------------------------------------------------------------------
+    "workbench.colorTheme":                           "Visual Assist Dark Theme",
     "workbench.settings.enableNaturalLanguageSearch": false,
-    "workbench.tree.renderIndentGuides": "always",
-    "workbench.editor.enablePreviewFromQuickOpen": false,
-    "workbench.colorTheme": "Visual Assist Dark Theme",
-    "workbench.editor.enablePreview": false,
-    "workbench.startupEditor": "none",
-    "workbench.editor.limit.value": 20,
-    "workbench.editor.tabSizing": "shrink",
+    "workbench.tree.renderIndentGuides":              "always",
+    "workbench.editor.enablePreviewFromQuickOpen":    false,
+    "workbench.editor.enablePreview":                 false,
+    "workbench.startupEditor":                        "none",
+    "workbench.editor.limit.value":                   20,
+    "workbench.editor.tabSizing":                     "shrink",
+
+    // Color Customizations....
     "workbench.colorCustomizations": {
         "statusBar.background": "#A0A1A8",
         "statusBar.noFolderBackground": "#A0A1A8",
@@ -258,38 +296,22 @@
         "activityBarBadge.background": "#19a68c",
         "activityBarBadge.foreground": "#e7e7e7",
         "sash.hoverBorder": "#f0e19d",
-        "statusBarItem.hoverBackground": "#1a1a1a",
-        "statusBarItem.remoteBackground": "#000000",
-        "statusBarItem.remoteForeground": "#e7e7e7",
         "titleBar.activeBackground": "#e9d471",
         "titleBar.activeForeground": "#15202b",
-        "titleBar.inactiveBackground": "#e9d47199",
-        "titleBar.inactiveForeground": "#15202b99",
-        "panel.border": "#f0e19d",
-        "sideBar.border": "#f0e19d",
-        "statusBar.border": "#000000",
-        "statusBar.debuggingBorder": "#000000",
         "titleBar.border": "#e9d471",
-        "tab.activeBorder": "#f0e19d",
-        "editorGroup.border": "#f0e19d"
+        "titleBar.inactiveBackground": "#e9d47199",
+        "titleBar.inactiveForeground": "#15202b99"
     },
 
     //
     // Window
     //
     //--------------------------------------------------------------------------
-    "window.title": "${dirty}${activeEditorShort} -- ${activeEditorMedium} -- ${rootName}",
-    "window.customMenuBarAltFocus": false,
-    "window.zoomLevel": 1,
-    "window.dialogStyle": "custom",
+    "window.title":                  "${dirty}${activeEditorShort} -- ${activeEditorMedium} -- ${rootName}",
+    "window.customMenuBarAltFocus":  false,
+    "window.zoomLevel":              1,
+    "window.dialogStyle":            "custom",
     "window.enableMenuBarMnemonics": false,
-
-    //
-    // Languages...
-    //
-    //--------------------------------------------------------------------------
-    // Html
-    "html.autoClosingTags": false,
     // Python
     "python.linting.pylintEnabled": false,
     "python.showStartPage":         false,
@@ -320,7 +342,7 @@
     "javascript.preferences.quoteStyle":                      "double",
     // Others
     "notebook.cellToolbarLocation": {
-        "default": "right",
+        "default":          "right",
         "jupyter-notebook": "left"
     },
 
@@ -329,22 +351,21 @@
     //
     //--------------------------------------------------------------------------
     "security.workspace.trust.untrustedFiles": "open",
-    "security.workspace.trust.enabled": false,
+    "security.workspace.trust.enabled":        false,
 
     //
     // Terminal
     //
     //--------------------------------------------------------------------------
-    "terminal.integrated.shell.windows": "c:/Program Files/PowerShell/7/pwsh.exe",
-    "terminal.external.windowsExec": "C:\\Users\\mateus.mesquita\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe",
+    "terminal.integrated.shell.windows":          "c:/Program Files/PowerShell/7/pwsh.exe",
+    "terminal.external.windowsExec":              "C:\\Users\\mateus.mesquita\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe",
     "terminal.integrated.defaultProfile.windows": "wt",
-    "terminal.explorerKind": "external",
+    "terminal.explorerKind":                      "external",
 
     // Update
     //--------------------------------------------------------------------------
     "bracket-pair-colorizer-2.depreciation-notice": false,
-    "powershell.promptToUpdatePowerShell": false,
-    "emulicious-debugger.emuliciousPath": "C:\\Users\\mmesquita\\.stdmatt_bin\\Emulicious-with-Java",
+    "powershell.promptToUpdatePowerShell":          false,
 
 
     "stdmatt_vscode.editor_colors": {
@@ -419,4 +440,10 @@
     "stdmatt_extensions.editor_colors": {
         "test": "#FF00FF"
     },
+
+
+    //
+    "emulicious-debugger.emuliciousPath": "C:\\Users\\mmesquita\\.stdmatt_bin\\Emulicious-with-Java",
+    "html.format.endWithNewline": true,
+
 }

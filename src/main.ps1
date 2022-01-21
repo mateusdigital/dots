@@ -669,66 +669,22 @@ function git-first-date-of()
 }
 
 ##------------------------------------------------------------------------------
-function git-commit-version()
+function git-get-repo-url()
 {
-    $changelog_filename = "CHANGELOG.txt";
-    if(-not (_file_exists($changelog_filename))) {
-        _log_fatal "Missing ($changelog_filename)";
-        return;
+    $remote = (git remote -v); # | head -1 | expand -t1 | cut -d" " -f2;
+    if($remote.GetType().Name -eq "Object[]") {
+        $remote = $remote[0]
     }
 
-    ## @XXXXXXX(stdmatt): This is so super fragile for now....
-    $file_data = Get-Content $changelog_filename;
-    $curr_version_line_index = -1;
-    $prev_version_line_index = -1;
+    $components = $remote.Replace("`t", " ").Split(" ");
+    $url        = $components[1];
 
-    for(($i = 0); $i -lt $file_data.Length; $i++) {
-        $line = $file_data[$i];
-        if($line.StartsWith("//")) {
-            if($curr_version_line_index -eq -1) {
-                continue;
-            } else {
-                $prev_version_line_index = $i
-                break;
-            }
-        }
-
-        if($line.StartsWith("v")) {
-            if($curr_version_line_index -eq -1) {
-                $curr_version_line_index = $i;
-            }
-        }
-    }
-
-    ## Grab the version number...
-    $version = $file_data[$curr_version_line_index];
-    $version = $version.Split(" ")[0];
-
-    ## Grab the commit message...
-    $commit_body = "";
-    for($i = ($curr_version_line_index + 1); $i -lt $prev_version_line_index; $i++)
-    {
-        $line = $file_data[$i].Trim(" ");
-        $commit_body += $line + "`n";
-    }
-    $commit_body = $commit_body.Trim();
-
-    ## Make the full msg...
-    $commit_msg  = "[NEW_VERSION] $version" + "`n";
-    $commit_msg += "`n";
-    $commit_msg += "$commit_body";
-
-    $date      = (Get-Date -UFormat "%H_%M_%S");
-    $salt      = (Get-Random);
-    $temp_path = "${env:Temp}/${date}_${salt}.txt";
-
-    ## Create the commit.
-    echo "$commit_msg" | Out-File  -Encoding utf8 "$temp_path";
-    git commit -F $temp_path;
-
-    ## Create the tag.
-    git tag $version;
+    echo $url;
 }
+
+git-get-repo-url
+
+
 
 ##----------------------------------------------------------------------------##
 ## Binaries                                                                   ##
