@@ -11,38 +11,6 @@
     "vim.overrideCopy":          false,
     "vim.useSystemClipboard":    true,
     "vim.statusBarColorControl": true,
-    //    Colors
-    // "vim.statusBarColors.normal":                ["#A0A1A8", "#000"],
-    // "vim.statusBarColors.insert":                ["#d65656", "#000"],
-    // "vim.statusBarColors.visual":                ["#569CD6", "#000"],
-    // "vim.statusBarColors.visualline":            ["#2C884A", "#000"],
-    // "vim.statusBarColors.visualblock":           ["#FFD700", "#000"],
-    // "vim.statusBarColors.replace":               "#D08770",
-    // "vim.statusBarColors.commandlineinprogress": "#007ACC",
-    // "vim.statusBarColors.searchinprogressmode":  "#007ACC",
-    // "vim.statusBarColors.surroundinputmode":     "#007ACC",
-    //    Bindings - Normal
-    // "vim.normalModeKeyBindingsNonRecursive": [
-        // Go to both line start / end
-        // { "before": ["L"], "after": ["$"]      },
-        // { "before": ["H"], "after": ["^"]      },
-        // { "before": ["P"], "after": ["$", "p"] }, // Paste at line end...
-        // Indentation...
-        // { "before": [">"], "commands": ["editor.action.indentLines"]  },
-        // { "before": ["<"], "commands": ["editor.action.outdentLines"] },
-        // Join lines....
-        // { "before": ["<Leader>", "."], "commands": ["editor.action.quickFix"] },
-    // ],
-    //    Bindings - Visual
-    // "vim.visualModeKeyBindingsNonRecursive": [
-        // Go to both line start / end
-        // { "before": ["$"], "after": ["$", "h" ] }, // @NOTICE(stdmatt): Fix that annoying bug that the cursor goes past the end of the line -11/12/2021, 6:23:04 AM
-        // { "before": ["L"], "after": ["$", "h"]  },
-        // { "before": ["H"], "after": ["^"]       },
-        // Indentation...
-        // { "before": [">"], "commands": ["editor.action.indentLines"]  },
-        // { "before": ["<"], "commands": ["editor.action.outdentLines"] },
-    // ],
 
     //
     // Debugger
@@ -57,13 +25,20 @@
     //--------------------------------------------------------------------------
     "editor.codeLens":                          false,
     "editor.renderWhitespace":                  "all",
+
+    "editor.bracketPairColorization.enabled":   true,
+    "editor.minimap.renderCharacters":          false,
+
     "editor.acceptSuggestionOnEnter":           "smart",
     "editor.acceptSuggestionOnCommitCharacter": false,
-    "editor.minimap.renderCharacters":          false,
+
+    "editor.scrollBeyondLastColumn": 0,
+    "editor.scrollBeyondLastLine": false,
 
     "editor.fontFamily":    "Jetbrains Mono Light",
     "editor.fontSize":      15,
     "editor.fontLigatures": true,
+
     "editor.rulers":        [ 80, 120 ],
 
     //
@@ -106,8 +81,14 @@
         "peacock.affectTabActiveBorder":       false,
         "peacock.affectStatusBar":             false,
         "peacock.affectStatusAndTitleBorders": true,
+        "peacock.showColorInStatusBar": false,
+        // Live Server
+        "liveServer.settings.donotShowInfoMsg": true,
         // NeoVim
+        "vscode-neovim.logLevel": "warn",
         "vscode-neovim.neovimExecutablePaths.win32": "C:\\Neovim\\bin\\nvim.exe",
+        "vscode-neovim.mouseSelectionStartVisualMode": true,
+        "vscode-neovim.neovimInitVimPaths.win32": "C:\\Users\\mmesquita\\.vimrc", // @XXX(stdmatt): We **must** not hardcode the path...
         // Todo-Tree
         "todo-tree.regex.enableMultiLine":    true,
         "todo-tree.regex.regexCaseSensitive": false,
@@ -366,6 +347,7 @@
         "Devilware",
         "Eazz",
         "emulicious",
+        "favicons",
         "FCXUI",
         "FCXUITTTS",
         "Firehorse",
@@ -409,6 +391,7 @@
         "startofline",
         "stdmatt",
         "surroundinputmode",
+        "termcolor",
         "Titlebar",
         "Titlecase",
         "tweens",
@@ -426,10 +409,5 @@
 
     // Color Customizations....
     "workbench.colorCustomizations": {
-        "statusBar.background": "#5f00af",
-        "statusBar.noFolderBackground": "#5f00af",
-        "statusBar.debuggingBackground": "#5f00af",
-        "statusBar.foreground": "#000",
-        "statusBar.debuggingForeground": "#000"
     },
 }
