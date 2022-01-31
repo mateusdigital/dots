@@ -1,5 +1,5 @@
 {
-    // @notice(stdamtt): Vim is out of alphabetical order
+    // @notice(stdmatt): Vim is out of alphabetical order
     // cause it's just easier to edit it first.
 
     //
@@ -12,37 +12,37 @@
     "vim.useSystemClipboard":    true,
     "vim.statusBarColorControl": true,
     //    Colors
-    "vim.statusBarColors.normal":                ["#A0A1A8", "#000"],
-    "vim.statusBarColors.insert":                ["#d65656", "#000"],
-    "vim.statusBarColors.visual":                ["#569CD6", "#000"],
-    "vim.statusBarColors.visualline":            ["#2C884A", "#000"],
-    "vim.statusBarColors.visualblock":           ["#FFD700", "#000"],
-    "vim.statusBarColors.replace":               "#D08770",
-    "vim.statusBarColors.commandlineinprogress": "#007ACC",
-    "vim.statusBarColors.searchinprogressmode":  "#007ACC",
-    "vim.statusBarColors.surroundinputmode":     "#007ACC",
+    // "vim.statusBarColors.normal":                ["#A0A1A8", "#000"],
+    // "vim.statusBarColors.insert":                ["#d65656", "#000"],
+    // "vim.statusBarColors.visual":                ["#569CD6", "#000"],
+    // "vim.statusBarColors.visualline":            ["#2C884A", "#000"],
+    // "vim.statusBarColors.visualblock":           ["#FFD700", "#000"],
+    // "vim.statusBarColors.replace":               "#D08770",
+    // "vim.statusBarColors.commandlineinprogress": "#007ACC",
+    // "vim.statusBarColors.searchinprogressmode":  "#007ACC",
+    // "vim.statusBarColors.surroundinputmode":     "#007ACC",
     //    Bindings - Normal
-    "vim.normalModeKeyBindingsNonRecursive": [
+    // "vim.normalModeKeyBindingsNonRecursive": [
         // Go to both line start / end
-        { "before": ["L"], "after": ["$"]      },
-        { "before": ["H"], "after": ["^"]      },
-        { "before": ["P"], "after": ["$", "p"] }, // Paste at line end...
+        // { "before": ["L"], "after": ["$"]      },
+        // { "before": ["H"], "after": ["^"]      },
+        // { "before": ["P"], "after": ["$", "p"] }, // Paste at line end...
         // Indentation...
-        { "before": [">"], "commands": ["editor.action.indentLines"]  },
-        { "before": ["<"], "commands": ["editor.action.outdentLines"] },
+        // { "before": [">"], "commands": ["editor.action.indentLines"]  },
+        // { "before": ["<"], "commands": ["editor.action.outdentLines"] },
         // Join lines....
-        { "before": ["<Leader>", "."], "commands": ["editor.action.quickFix"] },
-    ],
+        // { "before": ["<Leader>", "."], "commands": ["editor.action.quickFix"] },
+    // ],
     //    Bindings - Visual
-    "vim.visualModeKeyBindingsNonRecursive": [
+    // "vim.visualModeKeyBindingsNonRecursive": [
         // Go to both line start / end
-        { "before": ["$"], "after": ["$", "h" ] }, // @NOTICE(stdmatt): Fix that annoying bug that the cursor goes past the end of the line -11/12/2021, 6:23:04 AM
-        { "before": ["L"], "after": ["$", "h"]  },
-        { "before": ["H"], "after": ["^"]       },
+        // { "before": ["$"], "after": ["$", "h" ] }, // @NOTICE(stdmatt): Fix that annoying bug that the cursor goes past the end of the line -11/12/2021, 6:23:04 AM
+        // { "before": ["L"], "after": ["$", "h"]  },
+        // { "before": ["H"], "after": ["^"]       },
         // Indentation...
-        { "before": [">"], "commands": ["editor.action.indentLines"]  },
-        { "before": ["<"], "commands": ["editor.action.outdentLines"] },
-    ],
+        // { "before": [">"], "commands": ["editor.action.indentLines"]  },
+        // { "before": ["<"], "commands": ["editor.action.outdentLines"] },
+    // ],
 
     //
     // Debugger
@@ -106,6 +106,8 @@
         "peacock.affectTabActiveBorder":       false,
         "peacock.affectStatusBar":             false,
         "peacock.affectStatusAndTitleBorders": true,
+        // NeoVim
+        "vscode-neovim.neovimExecutablePaths.win32": "C:\\Neovim\\bin\\nvim.exe",
         // Todo-Tree
         "todo-tree.regex.enableMultiLine":    true,
         "todo-tree.regex.regexCaseSensitive": false,
@@ -172,75 +174,6 @@
 
 
     //
-    // MISC
-    //
-    //--------------------------------------------------------------------------
-    "cSpell.userWords": [
-        "Adeel",
-        "antialiasing",
-        "arkadia",
-        "Behaviours",
-        "berzerk",
-        "CFCX",
-        "CFCXUI",
-        "commandline",
-        "contribs",
-        "coord",
-        "Criativos",
-        "curr",
-        "Devilware",
-        "Eazz",
-        "emulicious",
-        "FCXUI",
-        "FCXUITTTS",
-        "Firehorse",
-        "FTUE",
-        "fullname",
-        "Fullscreen",
-        "Gameplay",
-        "GBDK",
-        "Ginga",
-        "grayscale",
-        "hubot",
-        "Imidiar",
-        "Jamon",
-        "Jetbrains",
-        "kaleido",
-        "keyclick",
-        "Kyiv",
-        "libreflix",
-        "mateus",
-        "mesquita",
-        "Metaballs",
-        "Minicip",
-        "Miniclip",
-        "mmesquita",
-        "outdent",
-        "pacman",
-        "Pequenos",
-        "perlin",
-        "pingo",
-        "pixi",
-        "pycache",
-        "pylint",
-        "repochecker",
-        "Ruslan",
-        "Sapucaí",
-        "Seguro",
-        "stdmatt",
-        "Titlebar",
-        "tweens",
-        "Ubisoft's",
-        "Volador",
-        "Wargaming",
-        "yoyo",
-        "Zaragozza",
-        "Батько",
-        "дівчинки",
-        "красива"
-    ],
-
-    //
     // SCM
     //
     //--------------------------------------------------------------------------
@@ -265,14 +198,8 @@
     // Update
     //
     //--------------------------------------------------------------------------
-    "update.enableWindowsBackgroundUpdates": false,
-    "update.mode": "manual",
-
-    //
-    // Workbench
-    //
-    //--------------------------------------------------------------------------
-    "workbench.colorTheme":                           "Visual Assist Dark Theme",
+    "update.enableWindowsBackgroundUpdates":          false,
+    "update.mode":                                    "manual",
     "workbench.settings.enableNaturalLanguageSearch": false,
     "workbench.tree.renderIndentGuides":              "always",
     "workbench.editor.enablePreviewFromQuickOpen":    false,
@@ -280,34 +207,13 @@
     "workbench.startupEditor":                        "none",
     "workbench.editor.limit.value":                   20,
     "workbench.editor.tabSizing":                     "shrink",
-
-    // Color Customizations....
-    "workbench.colorCustomizations": {
-        "statusBar.background": "#A0A1A8",
-        "statusBar.noFolderBackground": "#A0A1A8",
-        "statusBar.debuggingBackground": "#A0A1A8",
-        "statusBar.foreground": "#000",
-        "statusBar.debuggingForeground": "#000",
-        "activityBar.activeBackground": "#f0e19d",
-        "activityBar.activeBorder": "#19a68c",
-        "activityBar.background": "#f0e19d",
-        "activityBar.foreground": "#15202b",
-        "activityBar.inactiveForeground": "#15202b99",
-        "activityBarBadge.background": "#19a68c",
-        "activityBarBadge.foreground": "#e7e7e7",
-        "sash.hoverBorder": "#f0e19d",
-        "titleBar.activeBackground": "#e9d471",
-        "titleBar.activeForeground": "#15202b",
-        "titleBar.border": "#e9d471",
-        "titleBar.inactiveBackground": "#e9d47199",
-        "titleBar.inactiveForeground": "#15202b99"
-    },
+    "workbench.colorTheme":                           "Visual Assist Dark Theme",
 
     //
     // Window
     //
     //--------------------------------------------------------------------------
-    "window.title":                  "${dirty}${activeEditorShort} -- ${activeEditorMedium} -- ${rootName}",
+    "window.title":                  "${dirty}[${activeEditorShort}] ${separator} ${activeEditorMedium} ${separator} ${rootName}",
     "window.customMenuBarAltFocus":  false,
     "window.zoomLevel":              1,
     "window.dialogStyle":            "custom",
@@ -353,21 +259,15 @@
     "security.workspace.trust.untrustedFiles": "open",
     "security.workspace.trust.enabled":        false,
 
-    //
-    // Terminal
-    //
-    //--------------------------------------------------------------------------
-    "terminal.integrated.shell.windows":          "c:/Program Files/PowerShell/7/pwsh.exe",
-    "terminal.external.windowsExec":              "C:\\Users\\mateus.mesquita\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe",
-    "terminal.integrated.defaultProfile.windows": "wt",
-    "terminal.explorerKind":                      "external",
-
     // Update
     //--------------------------------------------------------------------------
     "bracket-pair-colorizer-2.depreciation-notice": false,
     "powershell.promptToUpdatePowerShell":          false,
 
 
+    //
+    // stdmatt
+    //
     "stdmatt_vscode.editor_colors": {
         "test": "#FF00FF",
         "tools": "#696c9d"
@@ -442,8 +342,94 @@
     },
 
 
-    //
-    "emulicious-debugger.emuliciousPath": "C:\\Users\\mmesquita\\.stdmatt_bin\\Emulicious-with-Java",
-    "html.format.endWithNewline": true,
+    //------------------------------------------------------------------------//
+    // MISC                                                                   //
+    //   Things that change too much! Putting it on the bottom of the file    //
+    //   so make the merge a little less cluttered                            //
+    //------------------------------------------------------------------------//
+    //--------------------------------------------------------------------------
+    "cSpell.userWords": [
+        "Adeel",
+        "antialiasing",
+        "arkadia",
+        "Behaviours",
+        "berzerk",
+        "CFCX",
+        "CFCXUI",
+        "commandline",
+        "commandlineinprogress",
+        "contribs",
+        "coord",
+        "Criativos",
+        "cuda",
+        "curr",
+        "Devilware",
+        "Eazz",
+        "emulicious",
+        "FCXUI",
+        "FCXUITTTS",
+        "Firehorse",
+        "FTUE",
+        "fullname",
+        "Fullscreen",
+        "Gameplay",
+        "GBDK",
+        "Ginga",
+        "grayscale",
+        "hubot",
+        "Imidiar",
+        "Jamon",
+        "Jetbrains",
+        "kaleido",
+        "keyclick",
+        "Kyiv",
+        "libreflix",
+        "mateus",
+        "mesquita",
+        "Metaballs",
+        "Minicip",
+        "Miniclip",
+        "mmesquita",
+        "neovim",
+        "numpad",
+        "outdent",
+        "pacman",
+        "Pequenos",
+        "perlin",
+        "pingo",
+        "pixi",
+        "pycache",
+        "pylint",
+        "repochecker",
+        "Ruslan",
+        "Sapucaí",
+        "searchinprogressmode",
+        "Seguro",
+        "Snakecase",
+        "startofline",
+        "stdmatt",
+        "surroundinputmode",
+        "Titlebar",
+        "Titlecase",
+        "tweens",
+        "Ubisoft's",
+        "visualblock",
+        "visualline",
+        "Volador",
+        "Wargaming",
+        "yoyo",
+        "Zaragozza",
+        "Батько",
+        "дівчинки",
+        "красива"
+    ],
 
+    // Color Customizations....
+    "workbench.colorCustomizations": {
+        "statusBar.background": "#5f00af",
+        "statusBar.noFolderBackground": "#5f00af",
+        "statusBar.debuggingBackground": "#5f00af",
+        "statusBar.foreground": "#000",
+        "statusBar.debuggingForeground": "#000"
+    },
 }
