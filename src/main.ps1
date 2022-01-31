@@ -58,7 +58,6 @@ $PROGRAM_COPYRIGHT_OWNER = "stdmatt";
 $PROGRAM_COPYRIGHT_YEARS = "2021";
 $PROGRAM_DATE            = "30 Nov, 2021";
 $PROGRAM_LICENSE         = "GPLv3";
-
 ##------------------------------------------------------------------------------
 ## Other
 $WORKSTATION_PREFIX = "KIV-WKS"; ## My workstation prefix, so I can know that I'm working computer...
@@ -119,6 +118,7 @@ function _debug_check_path()
         echo (_red $target_path);
     }
 }
+
 ##------------------------------------------------------------------------------
 function _debug_check_paths()
 {
@@ -184,12 +184,12 @@ $_C_BRIGHT_WHITE   = 97;
 ##------------------------------------------------------------------------------
 function _color($color)
 {
-    $input = "";
+    $input_value = "";
     foreach($item in $args) {
-        $input = $input + $item;
+        $input_value = $input_value + $item;
     }
 
-    $start = "$_C_ESC[" + $color    + "m" + $input;
+    $start = "$_C_ESC[" + $color    + "m" + $input_value;
     $end   = "$_C_ESC[" + $_C_RESET + "m";
 
     $value = $start + $end;
@@ -682,10 +682,6 @@ function git-get-repo-url()
     echo $url;
 }
 
-git-get-repo-url
-
-
-
 ##----------------------------------------------------------------------------##
 ## Binaries                                                                   ##
 ##----------------------------------------------------------------------------##
@@ -918,9 +914,3 @@ function http-server()
 ##----------------------------------------------------------------------------##
 cls
 Get-Date
-
-# Chocolatey profile
-$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-if (Test-Path($ChocolateyProfile)) {
-  Import-Module "$ChocolateyProfile"
-}
