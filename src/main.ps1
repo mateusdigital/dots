@@ -113,7 +113,7 @@ $BINARIES_INSTALL_FULLPATH = "$STDMATT_BIN_DIR";
 ## Journal things...
 $JOURNAL_DIR       = "$HOME_DIR/Desktop/Journal";
 $JOURNAL_GIT_URL   = "https://gitlab.com/stdmatt-private/journal";
-$JOURNAL_FILE_EXT = ".md";
+$JOURNAL_FILE_EXT = ".info";
 
 
 ##------------------------------------------------------------------------------
@@ -487,7 +487,9 @@ function journal()
     ## @todo(stdmatt): Would be awesome to have the same-layout on vscode everytime.
     ## Check if it's possible to save a setup or pass command line options with this.
     ## Jan 14, 21
-    code $JOURNAL_DIR;
+    _stdmatt_cd $JOURNAL_DIR;
+    nv .
+    _stdmatt_cd "-";
 }
 
 
