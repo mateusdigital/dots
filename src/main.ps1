@@ -71,7 +71,7 @@ $HOME_DIR        = "$env:USERPROFILE";
 $DOWNLOADS_DIR   = "$HOME_DIR/Downloads";
 $DOCUMENTS_DIR   = "$HOME_DIR/Documents";
 $DESKTOP_DIR     = "$HOME_DIR/Desktop";
-$STDMATT_BIN_DIR = "$HOME_DIR/.stdmatt_bin";    ## My binaries that I don't wanna on system folder...
+$STDMATT_BIN_DIR = "$HOME_DIR/.stdmatt/bin";    ## My binaries that I don't wanna on system folder...
 $PROJECTS_DIR    = "$DOCUMENTS_DIR/Projects";
 
 ## Dealing with workstation, needs to ajudst some paths...
@@ -622,13 +622,15 @@ function install-extras()
 ##------------------------------------------------------------------------------
 function install-binaries()
 {
+    $null = (mkdir $BINARIES_INSTALL_FULLPATH -Force);
+
     $folder_contents = (Get-ChildItem -Path $BINARIES_SOURCE_DIR -File);
     foreach($filename in $folder_contents) {
         $filename = $filename.Name;
-        $src_path = "$BINARIES_SOURCE_DIR/$filename";
-        $dst_path = "$BINARIES_INSTALL_FULLPATH/$filename";
+        $src_path = (Join-Path $BINARIES_SOURCE_DIR       $filename);
+        $dst_path = (Join-Path $BINARIES_INSTALL_FULLPATH $filename);
 
-        _log_verbose "Copying binary: ($filename) to ($dst_path)";
+        _log_verbose "Copying binary: ($src_path) to ($dst_path)";
         cp $src_path $dst_path;
     }
 }
