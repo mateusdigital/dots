@@ -5,6 +5,7 @@
 $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
 $env:DOTS_IS_VERSBOSE            = 0;
 
+
 ##----------------------------------------------------------------------------##
 ## PSReadLine                                                                 ##
 ##----------------------------------------------------------------------------##
@@ -63,6 +64,7 @@ $WORKSTATION_PREFIX = "KIV-WKS"; ## My workstation prefix, so I can know that I'
 ##------------------------------------------------------------------------------
 ## Binary aliases...
 $FILE_MANAGER = "explorer.exe";
+$NEOVIM       = "nvim";
 ##------------------------------------------------------------------------------
 ## General Paths...
 $HOME_DIR        = "$env:USERPROFILE";
@@ -81,24 +83,31 @@ $DOTS_DIR = "$PROJECTS_DIR/stdmatt/personal/dots";
 
 ##------------------------------------------------------------------------------
 ## Sync Paths...
-$FONTS_SOURCE_DIR    = "$DOTS_DIR/extras/fonts";
-$GIT_SOURCE_DIR      = "$DOTS_DIR/extras/git";
-$TERMINAL_SOURCE_DIR = "$DOTS_DIR/extras/terminal";
-$PROFILE_SOURCE_DIR  = "$DOTS_DIR/src";
-$VIM_SOURCE_DIR      = "$DOTS_DIR/extras/vim";
-$VSCODE_SOURCE_DIR   = "$DOTS_DIR/extras/vscode";
-$BINARIES_SOURCE_DIR = "$DOTS_DIR/extras/bin/win32";
-
-$FONTS_INSTALL_FULLPATH              = "$HOME_DIR/AppData/Local/Microsoft/Windows/Fonts";## @XXX(stdmatt): Just a hack to check if thing will work... but if it will I'll not change it today 11/11/2021, 2:03:40 PM
-$GIT_IGNORE_INSTALL_FULLPATH         = "$HOME_DIR/.gitignore";
-$PROFILE_INSTALL_FULLPATH            = "$HOME_DIR/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1";
-$PWSH_PROFILE_INSTALL_FULLPATH       = "$HOME_DIR/Documents/PowerShell/Microsoft.PowerShell_profile.ps1";
-$TERMINAL_SETTINGS_INSTALL_FULLPATH  = "$HOME_DIR/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json";
-$VIMRC_INSTALL_FULLPATH              = "$HOME_DIR/.vimrc";
+##  Fonts
+$FONTS_SOURCE_DIR       = "$DOTS_DIR/extras/fonts";
+$FONTS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Microsoft/Windows/Fonts";## @XXX(stdmatt): Just a hack to check if thing will work... but if it will I'll not change it today 11/11/2021, 2:03:40 PM
+##  GIT
+$GIT_SOURCE_DIR              = "$DOTS_DIR/extras/git";
+$GIT_IGNORE_INSTALL_FULLPATH = "$HOME_DIR/.gitignore";
+##  Powershell Profile
+$PROFILE_SOURCE_DIR            = "$DOTS_DIR/src";
+$PROFILE_INSTALL_FULLPATH      = "$HOME_DIR/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1";
+$PWSH_PROFILE_INSTALL_FULLPATH = "$HOME_DIR/Documents/PowerShell/Microsoft.PowerShell_profile.ps1";
+##  Windows Terminal
+$TERMINAL_SOURCE_DIR                = "$DOTS_DIR/extras/terminal";
+$TERMINAL_SETTINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json";
+##  Vim
+$VIM_SOURCE_DIR               = "$DOTS_DIR/extras/vim";
+$VIMRC_INSTALL_FULLPATH       = "$HOME_DIR/.vimrc";
+$NEOVIM_INIT_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/nvim/init.vim"
+##  VsCode
+$VSCODE_SOURCE_DIR                   = "$DOTS_DIR/extras/vscode";
 $VSCODE_KEYBINDINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Roaming/Code/User/keybindings.json";
 $VSCODE_SETTINGS_INSTALL_FULLPATH    = "$HOME_DIR/AppData/Roaming/Code/User/settings.json";
 $VSCODE_SNIPPETS_INSTALL_FULLPATH    = "$HOME_DIR/AppData/Roaming/Code/User/snippets/stdmatt_snippets.code-snippets";
-$BINARIES_INSTALL_FULLPATH           = "$STDMATT_BIN_DIR";
+##  Binaries
+$BINARIES_SOURCE_DIR       = "$DOTS_DIR/extras/bin/win32";
+$BINARIES_INSTALL_FULLPATH = "$STDMATT_BIN_DIR";
 
 ##------------------------------------------------------------------------------
 ## Journal things...
@@ -358,57 +367,6 @@ Check http://stdmatt.com for more :)",
 }
 
 ##----------------------------------------------------------------------------##
-## Files                                                                      ##
-##----------------------------------------------------------------------------##
-##------------------------------------------------------------------------------
-##   Open the Filesystem Manager into a given path.
-##   If no path was given open the current dir.
-function files()
-{
-    $target_path = $args[0];
-
-    if($target_path -ne "."                           -or
-       $target_path -ne ".."                          -or
-       (_string_is_null_or_whitespace($target_path))  -or
-       (_file_exists                 ($target_path)))
-    {
-        if ( $target_path -eq "" )  {
-            $target_path=".";
-        }
-
-        & $FILE_MANAGER $target_path;
-        return;
-    }
-
-    _log_fatal("Path($target_path) doesn't not exists - Aborting...");
-}
-
-##------------------------------------------------------------------------------
-function create-shortcut()
-{
-    $src_path = $args[0];
-    $dst_path = $args[1];
-
-    if ( _string_is_null_or_whitespace($src_path) ) {
-        _log_fatal("Missing source path - Aborting...");
-        return;
-    }
-    if ( _string_is_null_or_whitespace($dst_path) ) {
-        _log_fatal("Missing target path - Aborting...");
-        return;
-    }
-
-    $src_path = (Resolve-Path $src_path).ToString();
-
-    ## @todo(stdmatt): Check if the string ends with .lnk and if not add it - Dec 28, 2020
-    $WshShell            = New-Object -ComObject WScript.Shell
-    $Shortcut            = $WshShell.CreateShortcut($dst_path);
-    $Shortcut.TargetPath = $src_path;
-    $Shortcut.Save();
-}
-
-
-##----------------------------------------------------------------------------##
 ## Profile                                                                    ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
@@ -435,114 +393,6 @@ function reload-profile()
 ##----------------------------------------------------------------------------##
 ## Sync...                                                                    ##
 ##----------------------------------------------------------------------------##
-##------------------------------------------------------------------------------
-function _copy_newer_file()
-{
-    $INDENT="   "
-    $NL="`n";
-
-    $repo_file    = $args[0];
-    $fs_file      = $args[1];
-    $sync_to      = $null;
-
-    ## Check if there's any file missing, if so just copy it...
-    $fs_exists   = _file_exists "$fs_file";
-    $repo_exists = _file_exists "$repo_file";
-    if($fs_exists -xor $repo_exists) {
-        if($repo_exists) {
-            $sync_to = "fs";
-        } else {
-            $sync_to = "repo";
-        }
-    }
-
-    ## Check which file is newer...
-    if($sync_to -eq $null -and $(Get-FileHash $fs_file).hash -eq $(Get-FileHash $repo_file).hash) {
-        $sync_to = $null;
-    } else {
-        $fs_time   = (_get_file_time $fs_file  );
-        $repo_time = (_get_file_time $repo_file);
-
-        if($fs_time -eq $INVALID_FILE_TIME -and $repo_time -eq $INVALID_FILE_TIME) {
-            _log_fatal "Both paths are invalid..." $NL `
-                    "$INDENT FS   : ($fs_file)" $NL `
-                    "$INDENT Repo : ($repo_file)" ;
-            return;
-        }
-        if($fs_time -gt $repo_time) {
-            $sync_to = "repo";
-        } elseif($repo_time -gt $fs_time) {
-            $sync_to = "fs";
-        } else {
-            $sync_to = $null;
-        }
-    }
-
-    ## Copy if needed..
-    if($sync_to -eq "fs") {
-        _log "Syncing Repo -> FS"      $NL `
-             "$INDENT Repo : ($(_green  $repo_file))" $NL `
-             "$INDENT FS   : ($(_yellow $fs_file))"       ;
-
-        Copy-Item $repo_file $fs_file -Force;
-    } elseif($sync_to -eq "repo") {
-        _log "Syncing FS -> Repo"      $NL `
-             "$INDENT FS   : ($(_green  $fs_file))"   $NL `
-             "$INDENT Repo : ($(_yellow $repo_file))"     ;
-
-        Copy-Item $fs_file $repo_file -Force;
-    } else {
-        _log "Files are equal..."     $NL `
-             "$INDENT FS   : ($(_green $fs_file))"   $NL `
-             "$INDENT Repo : ($(_green $repo_file))"     ;
-    }
-}
-
-##------------------------------------------------------------------------------
-function sync-extras()
-{
-    ## Git
-    _copy_newer_file                 `
-        "$GIT_SOURCE_DIR/.gitignore" `
-        "$GIT_IGNORE_INSTALL_FULLPATH";
-
-    ## Profile
-    _copy_newer_file                   `
-        "$PROFILE_SOURCE_DIR/main.ps1" `
-        "$PWSH_PROFILE_INSTALL_FULLPATH";
-
-    New-Item -ItemType HardLink                  `
-        -Path   "$PROFILE_INSTALL_FULLPATH"      `
-        -Target "$PWSH_PROFILE_INSTALL_FULLPATH" `
-        -Force > $null;
-
-
-    ## Terminal
-    _copy_newer_file                                 `
-        "$TERMINAL_SOURCE_DIR/windows_terminal.json" `
-        "$TERMINAL_SETTINGS_INSTALL_FULLPATH";
-
-    ## Vim
-    _copy_newer_file             `
-        "$VIM_SOURCE_DIR/.vimrc" `
-        "$VIMRC_INSTALL_FULLPATH";
-
-    ## VSCode - Keybindings
-    _copy_newer_file                          `
-        "$VSCODE_SOURCE_DIR/keybindings.json" `
-        "$VSCODE_KEYBINDINGS_INSTALL_FULLPATH";
-
-    ## VSCode - Settings
-    _copy_newer_file                       `
-        "$VSCODE_SOURCE_DIR/settings.json" `
-        "$VSCODE_SETTINGS_INSTALL_FULLPATH";
-
-    ## VSCode - Keybindings
-    _copy_newer_file                       `
-        "$VSCODE_SOURCE_DIR/snippets.json" `
-        "$VSCODE_SNIPPETS_INSTALL_FULLPATH"
-}
-
 ##------------------------------------------------------------------------------
 function sync-journal()
 {
@@ -599,6 +449,8 @@ function sync-all()
     sync-journal;
 
     git-config;
+
+    install-extras;
     install-fonts;
     install-binaries;
 
@@ -682,8 +534,89 @@ function git-get-repo-url()
 }
 
 ##----------------------------------------------------------------------------##
-## Binaries                                                                   ##
+## Install                                                                    ##
 ##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
+function _copy_newer_file()
+{
+    $INDENT="   "
+    $NL="`n";
+
+    $repo_file    = $args[0];
+    $fs_file      = $args[1];
+    $sync_to      = $null;
+
+    ## Check if there's any file missing, if so just copy it...
+    $fs_exists   = _file_exists "$fs_file";
+    $repo_exists = _file_exists "$repo_file";
+    if($fs_exists -xor $repo_exists) {
+        if($repo_exists) {
+            $sync_to = "fs";
+        } else {
+            $sync_to = "repo";
+        }
+    }
+
+    ## Check which file is newer...
+    if($sync_to -eq $null -and $(Get-FileHash $fs_file).hash -eq $(Get-FileHash $repo_file).hash) {
+        $sync_to = $null;
+    } else {
+        $fs_time   = (_get_file_time $fs_file  );
+        $repo_time = (_get_file_time $repo_file);
+
+        if($fs_time -eq $INVALID_FILE_TIME -and $repo_time -eq $INVALID_FILE_TIME) {
+            _log_fatal "Both paths are invalid..." $NL `
+                    "$INDENT FS   : ($fs_file)" $NL `
+                    "$INDENT Repo : ($repo_file)" ;
+            return;
+        }
+        if($fs_time -gt $repo_time) {
+            $sync_to = "repo";
+        } elseif($repo_time -gt $fs_time) {
+            $sync_to = "fs";
+        } else {
+            $sync_to = $null;
+        }
+    }
+
+    ## Copy if needed..
+    if($sync_to -eq "fs") {
+        _log "Syncing Repo -> FS"      $NL `
+             "$INDENT Repo : ($(_green  $repo_file))" $NL `
+             "$INDENT FS   : ($(_yellow $fs_file))"       ;
+
+        Copy-Item $repo_file $fs_file -Force;
+    } elseif($sync_to -eq "repo") {
+        _log "Syncing FS -> Repo"      $NL `
+             "$INDENT FS   : ($(_green  $fs_file))"   $NL `
+             "$INDENT Repo : ($(_yellow $repo_file))"     ;
+
+        Copy-Item $fs_file $repo_file -Force;
+    } else {
+        _log "Files are equal..."     $NL `
+             "$INDENT FS   : ($(_green $fs_file))"   $NL `
+             "$INDENT Repo : ($(_green $repo_file))"     ;
+    }
+}
+
+##------------------------------------------------------------------------------
+function install-extras()
+{
+    ## Git
+    _copy_newer_file "$GIT_SOURCE_DIR/.gitignore" "$GIT_IGNORE_INSTALL_FULLPATH";
+    ## Profile
+    _copy_newer_file "$PROFILE_SOURCE_DIR/main.ps1" "$PWSH_PROFILE_INSTALL_FULLPATH";
+    ## Terminal
+    _copy_newer_file "$TERMINAL_SOURCE_DIR/windows_terminal.json" "$TERMINAL_SETTINGS_INSTALL_FULLPATH";
+    ## Vim
+    _copy_newer_file "$VIM_SOURCE_DIR/.vimrc"   "$VIMRC_INSTALL_FULLPATH";
+    _copy_newer_file "$VIM_SOURCE_DIR/init.vim" "$NEOVIM_INIT_INSTALL_FULLPATH";
+    ## VSCode
+    _copy_newer_file "$VSCODE_SOURCE_DIR/keybindings.json" "$VSCODE_KEYBINDINGS_INSTALL_FULLPATH";
+    _copy_newer_file "$VSCODE_SOURCE_DIR/settings.json"    "$VSCODE_SETTINGS_INSTALL_FULLPATH";
+    _copy_newer_file "$VSCODE_SOURCE_DIR/snippets.json"    "$VSCODE_SNIPPETS_INSTALL_FULLPATH";
+}
+
 ##------------------------------------------------------------------------------
 function install-binaries()
 {
@@ -698,11 +631,6 @@ function install-binaries()
     }
 }
 
-
-
-##----------------------------------------------------------------------------##
-## Fonts                                                                      ##
-##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
 function install-fonts()
 {
@@ -731,6 +659,7 @@ function install-fonts()
         }
     }
 }
+
 
 ##----------------------------------------------------------------------------##
 ## Shell                                                                      ##
@@ -805,6 +734,8 @@ function global:prompt
 ##----------------------------------------------------------------------------##
 ## Aliases                                                                    ##
 ##----------------------------------------------------------------------------##
+
+## cd
 ##------------------------------------------------------------------------------
 ## @notice(stdmatt): This is pretty cool - It makes the cd to behave like
 ## the bash one that i can cd - and it goes to the OLDPWD.
@@ -829,29 +760,83 @@ function _stdmatt_cd()
     Set-Location $target_path; ## Needs to be the Powershell builtin or infinity recursion
 }
 
-## cd
 ##------------------------------------------------------------------------------
 Remove-Item -Path Alias:cd
 Set-Alias -Name cd -Value _stdmatt_cd -Force -Option AllScope
 
-## rm
+
+##----------------------------------------------------------------------------##
+## Files                                                                      ##
+##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
-function nuke-dir()
+##   Open the Filesystem Manager into a given path.
+##   If no path was given open the current dir.
+function files()
 {
-    $path_to_remove = $args[0];
-    if($path_to_remove -eq "") {
-        _log_fatal "No directory path was given";
+    $target_path = $args[0];
+
+    if($target_path -ne "."                           -or
+       $target_path -ne ".."                          -or
+       (_string_is_null_or_whitespace($target_path))  -or
+       (_file_exists                 ($target_path)))
+    {
+        if ( $target_path -eq "" )  {
+            $target_path=".";
+        }
+
+        & $FILE_MANAGER $target_path;
         return;
     }
 
-    $dir_is_valid = _dir_exists $path_to_remove;
-    if(-not $dir_is_valid) {
-        _log_fatal "Path isn't a valid directory...";
-        return;
-    }
-
-    rm -Recurse -Force $path_to_remove;
+    _log_fatal("Path($target_path) doesn't not exists - Aborting...");
 }
+
+##------------------------------------------------------------------------------
+function create-link()
+{
+    $src_path = $args[0];
+    $dst_path = $args[1];
+
+    if ( _string_is_null_or_whitespace($src_path) ) {
+        _log_fatal("Missing source path - Aborting...");
+        return;
+    }
+
+    New-Item -ItemType SymbolicLink -Target $src_path -Path $dst_path -Force;
+}
+
+##------------------------------------------------------------------------------
+function create-shortcut()
+{
+    $src_path = $args[0];
+    $dst_path = $args[1];
+
+    if ( _string_is_null_or_whitespace($src_path) ) {
+        _log_fatal("Missing source path - Aborting...");
+        return;
+    }
+    if ( _string_is_null_or_whitespace($dst_path) ) {
+        _log_fatal("Missing target path - Aborting...");
+        return;
+    }
+
+    $src_path = (Resolve-Path $src_path).ToString();
+
+    ## @todo(stdmatt): Check if the string ends with .lnk and if not add it - Dec 28, 2020
+    $WshShell            = New-Object -ComObject WScript.Shell
+    $Shortcut            = $WshShell.CreateShortcut($dst_path);
+    $Shortcut.TargetPath = $src_path;
+    $Shortcut.Save();
+}
+
+
+## vim
+##------------------------------------------------------------------------------
+## Remove-Alias -Path Alias:nv -Force -Option AllScope
+Set-Alias -Name vi  -Value nvim.exe -Force -Option AllScope
+Set-Alias -Name vim -Value nvim.exe -Force -Option AllScope
+Set-Alias -Name nv  -Value nvim.exe -Force -Option AllScope
+
 
 ## kill
 ##------------------------------------------------------------------------------
@@ -894,6 +879,26 @@ function kill-for-anvil()
     kill-process guild
     kill-process hoard
 }
+
+## rm
+##------------------------------------------------------------------------------
+function nuke-dir()
+{
+    $path_to_remove = $args[0];
+    if($path_to_remove -eq "") {
+        _log_fatal "No directory path was given";
+        return;
+    }
+
+    $dir_is_valid = _dir_exists $path_to_remove;
+    if(-not $dir_is_valid) {
+        _log_fatal "Path isn't a valid directory...";
+        return;
+    }
+
+    rm -Recurse -Force $path_to_remove;
+}
+
 
 # Set-Alias -name rm    -Value C:\Users\stdmatt\.stdmatt_bin\ark_rm.exe    -Force -Option AllScope
 # Set-Alias -name touch -Value C:\Users\stdmatt\.stdmatt_bin\ark_touch.exe -Force -Option AllScope
