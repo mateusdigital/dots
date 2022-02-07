@@ -31,8 +31,11 @@
         // Misc actions
         { "command": "find", "keys": "ctrl+shift+f" },
         { "command": { "action": "copy", "singleLine": false }, "keys": "ctrl+shift+c" },
-        { "command": "paste", "                                  keys": "ctrl+shift+v" },
+        { "command": "paste", "keys": "ctrl+shift+v" },
 
+        // { "command": "unbound", "keys": ["ctrl+c"] },
+        { "command": "unbound", "keys": ["ctrl+v"] },
+        
         // Pane
         //   Resize
         { "command": { "action": "resizePane", "direction": "left"  }, "keys": "ctrl+shift+h" },
@@ -59,7 +62,7 @@
             {
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
 
-                "name": "HACK THE PLANET!!",
+                "name": "OMG!!",
                 "icon":        "ms-appx:///ProfileIcons/{61c54bbd-c2c6-5271-96e7-009a87ff44bf}.png",
                 "colorScheme": "VA",
                 "commandline": "C:/Program Files/PowerShell/7/pwsh.exe",
