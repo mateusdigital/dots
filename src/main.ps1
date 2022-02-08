@@ -806,7 +806,7 @@ function create-link()
         return;
     }
 
-    New-Item -ItemType SymbolicLink -Target $src_path -Path $dst_path -Force;
+    New-Item -ItemType HardLink -Target $src_path -Path $dst_path -Force;
 }
 
 ##------------------------------------------------------------------------------
