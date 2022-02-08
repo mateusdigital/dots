@@ -5,6 +5,94 @@
 $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
 $env:DOTS_IS_VERSBOSE            = 0;
 
+
+##----------------------------------------------------------------------------##
+## Library Code                                                               ##
+##----------------------------------------------------------------------------##
+
+##
+## Private Functions
+##
+
+##------------------------------------------------------------------------------
+function _sh_check_wsl()
+{
+    if($IsLinux) {
+        $result = (uname).IndexOf("WSL2");
+        if($result -eq -1) {
+            return $false;
+        }
+        return $true;
+    }
+    return $false;
+}
+
+##------------------------------------------------------------------------------
+function _sh_fwd_slash()
+{
+    return $args[0].Replace("\", "/");
+}
+
+
+##
+## Globals
+##
+
+##------------------------------------------------------------------------------
+$sh_IsWsl = (_sh_check_wsl);
+
+
+##
+## Public Functions
+##
+
+
+##------------------------------------------------------------------------------
+function sh_get_home_dir()
+{
+    if ($HOME -eq "") {
+        return "$env:USERPROFILE"
+    }
+
+    return $HOME;
+}
+
+##------------------------------------------------------------------------------
+function sh_join_path()
+{
+    ## @XXX(stdmatt): [Optimize] - 08 Feb, 2022
+    $fullpath = $args[0];
+    for($i = 1; $i -lt $args.Length; $i += 1) {
+        $item     = $args[$i]
+        $fullpath = (Join-Path $fullpath $item);
+    }
+    return (_sh_fwd_slash $fullpath);
+}
+
+##------------------------------------------------------------------------------
+function sh_to_os_path()
+{
+    $path = $args[0];
+    if($args.Length -eq 0) {
+        return "";
+    }
+
+    $new_path              = $path;
+    $looks_like_win32_path = ($path -match "([a-z]|[A-Z]):(\\|/)");
+    if($looks_like_win32_path) {
+        if($sh_IsWsl) {
+            $new_path = (wslpath -u $path);
+        }
+    } else {
+        if($IsWindows) {
+            $new_path = (wslpath -m $path);
+        }
+    }
+
+    return $new_path;
+}
+
+
 ##----------------------------------------------------------------------------##
 ## PSReadLine                                                                 ##
 ##----------------------------------------------------------------------------##
@@ -51,10 +139,10 @@ Set-PSReadLineOption -Colors @{
 ## Info                                                                       ##
 ##----------------------------------------------------------------------------##
 $PROGRAM_NAME            = "dots";
-$PROGRAM_VERSION         = "2.1.0";
+$PROGRAM_VERSION         = "3.0.0";
 $PROGRAM_AUTHOR          = "stdmatt - <stdmatt@pixelwizads.io>";
 $PROGRAM_COPYRIGHT_OWNER = "stdmatt";
-$PROGRAM_COPYRIGHT_YEARS = "2021";
+$PROGRAM_COPYRIGHT_YEARS = "2021, 2022";
 $PROGRAM_DATE            = "30 Nov, 2021";
 $PROGRAM_LICENSE         = "GPLv3";
 ##------------------------------------------------------------------------------
@@ -62,16 +150,16 @@ $PROGRAM_LICENSE         = "GPLv3";
 $WORKSTATION_PREFIX = "KIV-WKS"; ## My workstation prefix, so I can know that I'm working computer...
 ##------------------------------------------------------------------------------
 ## General Paths...
-$HOME_DIR        = "$env:USERPROFILE";
-$DOWNLOADS_DIR   = "$HOME_DIR/Downloads";
-$DOCUMENTS_DIR   = "$HOME_DIR/Documents";
-$DESKTOP_DIR     = "$HOME_DIR/Desktop";
-$STDMATT_BIN_DIR = "$HOME_DIR/.stdmatt/bin";    ## My binaries that I don't wanna on system folder...
-$PROJECTS_DIR    = "$DOCUMENTS_DIR/Projects";
+$HOME_DIR        = (sh_get_home_dir);
+$DOWNLOADS_DIR   = (sh_join_path "$HOME_DIR"      "Downloads");
+$DOCUMENTS_DIR   = (sh_join_path "$HOME_DIR"      "Documents");
+$DESKTOP_DIR     = (sh_join_path "$HOME_DIR"      "Desktop");
+$STDMATT_BIN_DIR = (sh_join_path "$HOME_DIR"      ".stdmatt/bin"); ## My binaries that I don't wanna on system folder...
+$PROJECTS_DIR    = (sh_join_path "$DOCUMENTS_DIR" "Projects");
 
-## Dealing with workstation, needs to ajudst some paths...
+## Dealing with workstation, needs to adjust some paths...
 if((hostname).Contains($WORKSTATION_PREFIX)) {
-    $PROJECTS_DIR = "E:/Projects";
+    $PROJECTS_DIR = sh_to_os_path("E:/Projects");
 }
 
 $DOTS_DIR = "$PROJECTS_DIR/stdmatt/personal/dots";
@@ -111,55 +199,6 @@ $BINARIES_INSTALL_FULLPATH = "$STDMATT_BIN_DIR";
 $JOURNAL_DIR       = "$HOME_DIR/Desktop/Journal";
 $JOURNAL_GIT_URL   = "https://gitlab.com/stdmatt-private/journal";
 $JOURNAL_FILE_EXT = ".info";
-
-
-##------------------------------------------------------------------------------
-function _debug_check_path()
-{
-    $target_path = $args[0];
-    if (Test-Path $target_path) {
-        echo (_green $target_path);
-    } else {
-        echo (_red $target_path);
-    }
-}
-
-##------------------------------------------------------------------------------
-function _debug_check_paths()
-{
-    ## General Paths
-    _debug_check_path $HOME_DIR
-    _debug_check_path $DOWNLOADS_DIR
-    _debug_check_path $DOCUMENTS_DIR
-    _debug_check_path $DESKTOP_DIR
-    _debug_check_path $STDMATT_BIN_DIR
-    _debug_check_path $PROJECTS_DIR
-    _debug_check_path $DOTS_DIR
-
-    ## Sync Paths...
-    _debug_check_path $FONTS_SOURCE_DIR
-    _debug_check_path $GIT_SOURCE_DIR
-    _debug_check_path $TERMINAL_SOURCE_DIR
-    _debug_check_path $PROFILE_SOURCE_DIR
-    _debug_check_path $VIM_SOURCE_DIR
-    _debug_check_path $VSCODE_SOURCE_DIR
-    _debug_check_path $BINARIES_SOURCE_DIR
-
-    _debug_check_path $FONTS_INSTALL_FULLPATH
-    _debug_check_path $GIT_IGNORE_INSTALL_FULLPATH
-    _debug_check_path $PROFILE_INSTALL_FULLPATH
-    _debug_check_path $PWSH_PROFILE_INSTALL_FULLPATH
-    _debug_check_path $TERMINAL_SETTINGS_INSTALL_FULLPATH
-    _debug_check_path $VIMRC_INSTALL_FULLPATH
-    _debug_check_path $VSCODE_KEYBINDINGS_INSTALL_FULLPATH
-    _debug_check_path $VSCODE_SETTINGS_INSTALL_FULLPATH
-    _debug_check_path $VSCODE_SNIPPETS_INSTALL_FULLPATH
-    _debug_check_path $BINARIES_INSTALL_FULLPATH
-
-    ## Journal things...
-    _debug_check_path $JOURNAL_DIR
-}
-
 
 ##----------------------------------------------------------------------------##
 ## Colors things...                                                           ##
@@ -299,7 +338,7 @@ function _log_get_call_function_name()
             continue;
         }
         return $function_name;
-    }
+   }
 
     return $function_name;
 }
@@ -495,10 +534,14 @@ function journal()
 function git-config()
 {
     _log_verbose "Configuring git...";
+
     git config --global user.name         "stdmatt";
     git config --global user.email        "stdmatt@pixelwizards.io";
-    git config --global core.excludesfile "$HOME_DIR/.gitignore"; ## Set the gitignore globaly...
-    git config --global core.editor       "code --wait"           ## Set vscode as default editor...
+    git config --global core.excludesfile "$HOME_DIR/.gitignore";     ## Set the gitignore globaly...
+    git config --global core.editor       "code --wait"               ## Set vscode as default editor...
+    git config --global core.autocrlf     false
+    git config --global core.filemode     false
+
     _log_verbose "Done... ;D";
 }
 
@@ -649,8 +692,8 @@ function install-binaries()
     $folder_contents = (Get-ChildItem -Path $BINARIES_SOURCE_DIR -File);
     foreach($filename in $folder_contents) {
         $filename = $filename.Name;
-        $src_path = (Join-Path $BINARIES_SOURCE_DIR       $filename);
-        $dst_path = (Join-Path $BINARIES_INSTALL_FULLPATH $filename);
+        $src_path = (sh_join_path $BINARIES_SOURCE_DIR       $filename);
+        $dst_path = (sh_join_path $BINARIES_INSTALL_FULLPATH $filename);
 
         _log_verbose "Copying binary: ($src_path) to ($dst_path)";
         cp $src_path $dst_path;
@@ -927,6 +970,8 @@ function kill-for-anvil()
 {
     kill-process guild
     kill-process hoard
+    kill-process Phoenix.Module
+    kill-process Phoenix.Studio
 }
 
 ## rm
@@ -961,6 +1006,9 @@ function http-server()
 {
     python3 -m http.server $args[1];
 }
+
+
+
 
 
 ##----------------------------------------------------------------------------##
