@@ -18,8 +18,9 @@ $env:DOTS_IS_VERSBOSE            = 0;
 function _sh_check_wsl()
 {
     if($IsLinux) {
-        $result = (uname).IndexOf("WSL2");
-        if($result -eq -1) {
+        $result = (uname -a);
+        $index  = $result.IndexOf("WSL2");
+        if($index -eq -1) {
             return $false;
         }
         return $true;
