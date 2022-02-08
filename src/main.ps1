@@ -5,7 +5,6 @@
 $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
 $env:DOTS_IS_VERSBOSE            = 0;
 
-
 ##----------------------------------------------------------------------------##
 ## PSReadLine                                                                 ##
 ##----------------------------------------------------------------------------##
@@ -86,16 +85,18 @@ $FONTS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Microsoft/Windows/Fonts";## @
 $GIT_SOURCE_DIR              = "$DOTS_DIR/extras/git";
 $GIT_IGNORE_INSTALL_FULLPATH = "$HOME_DIR/.gitignore";
 ##  Powershell Profile
-$PROFILE_SOURCE_DIR            = "$DOTS_DIR/src";
-$PROFILE_INSTALL_FULLPATH      = "$HOME_DIR/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1";
-$PWSH_PROFILE_INSTALL_FULLPATH = "$HOME_DIR/Documents/PowerShell/Microsoft.PowerShell_profile.ps1";
+$PROFILE_SOURCE_DIR                  = "$DOTS_DIR/src";
+$PROFILE_INSTALL_FULLPATH            = "$HOME_DIR/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"; ## Default Windows Powershell.
+$PWSH_WIN32_PROFILE_INSTALL_FULLPATH = "$HOME_DIR/Documents/PowerShell/Microsoft.PowerShell_profile.ps1";        ## pwsh profile in Windows.
+$PWSH_GNU_PROFILE_INSTALL_FULLPATH   = "$HOME_DIR/.config/powershell/Microsoft.PowerShell_profile.ps1";          ## pwsh profile in GNU/Linux.
 ##  Windows Terminal
 $TERMINAL_SOURCE_DIR                = "$DOTS_DIR/extras/terminal";
 $TERMINAL_SETTINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json";
 ##  Vim
-$VIM_SOURCE_DIR               = "$DOTS_DIR/extras/vim";
-$VIMRC_INSTALL_FULLPATH       = "$HOME_DIR/.vimrc";
-$NEOVIM_INIT_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/nvim/init.vim"
+$VIM_SOURCE_DIR                     = "$DOTS_DIR/extras/vim";
+$VIMRC_INSTALL_FULLPATH             = "$HOME_DIR/.vimrc";
+$NEOVIM_WIN32_INIT_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/nvim/init.vim";
+$NEOVIM_GNU_INIT_INSTALL_FULLPATH   = "$HOME_DIR/.config/nvim/init.vim";
 ##  VsCode
 $VSCODE_SOURCE_DIR                   = "$DOTS_DIR/extras/vscode";
 $VSCODE_KEYBINDINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Roaming/Code/User/keybindings.json";
@@ -368,14 +369,12 @@ Check http://stdmatt.com for more :)",
 ##------------------------------------------------------------------------------
 function edit-profile()
 {
-    code --new-window                        `
-         --wait                              `
+    nv                                       `
         $profile                             `
         $TERMINAL_SETTINGS_INSTALL_FULLPATH  `
         $VSCODE_KEYBINDINGS_INSTALL_FULLPATH `
         $VSCODE_SETTINGS_INSTALL_FULLPATH    `
         $VSCODE_SNIPPETS_INSTALL_FULLPATH;
-
     sync-extras;
 }
 
@@ -598,22 +597,49 @@ function _copy_newer_file()
 }
 
 ##------------------------------------------------------------------------------
-function install-extras()
+function install-profile()
 {
+    ## @notice(stdmatt): [Copy vs Link] - 08 Feb, 2022
+    ##   We have the following scenario:
+    ##     - Multiple platforms to support
+    ##       (Win32, WSL, GNU, etc...)
+    ##     - Multiple locations for the same file
+    ##       pwsh loads in different place, nvim as well, etc...
+    ##   So the approach that we are using are:
+    ##     - We have one authorative file.
+    ##       This file is a copy from / to the repo.
+    ##     - All other "copies" of this file are actually hardlinks
+    ##       to the authorative one. This way we can edit just in one place
+    ##       and have only one point of sync.
+    ##   Example:
+    ##      copy /repo/important_file.ps1  -> /filesystem/import_file.ps1 (Authorative)
+    ##      link /filesytem/import_file.ps -> /filesystem/another/file2.ps1 (Hardlink)
+    ##      ...
+    ##      link /filesytem/import_file.ps -> /filesystem/another/fileN.ps1 (Hardlink)
+
     ## Git
     _copy_newer_file "$GIT_SOURCE_DIR/.gitignore" "$GIT_IGNORE_INSTALL_FULLPATH";
+
     ## Profile
-    _copy_newer_file "$PROFILE_SOURCE_DIR/main.ps1" "$PWSH_PROFILE_INSTALL_FULLPATH";
+    _copy_newer_file "$PROFILE_SOURCE_DIR/main.ps1"  $PROFILE_INSTALL_FULLPATH;
+    create-link      $PROFILE_INSTALL_FULLPATH       $PWSH_WIN32_PROFILE_INSTALL_FULLPATH;
+    create-link      $PROFILE_INSTALL_FULLPATH       $PWSH_GNU_PROFILE_INSTALL_FULLPATH;
+
     ## Terminal
     _copy_newer_file "$TERMINAL_SOURCE_DIR/windows_terminal.json" "$TERMINAL_SETTINGS_INSTALL_FULLPATH";
+
     ## Vim
     _copy_newer_file "$VIM_SOURCE_DIR/.vimrc"   "$VIMRC_INSTALL_FULLPATH";
-    _copy_newer_file "$VIM_SOURCE_DIR/init.vim" "$NEOVIM_INIT_INSTALL_FULLPATH";
+
+    _copy_newer_file "$VIM_SOURCE_DIR/init.vim"          $NEOVIM_WIN32_INIT_INSTALL_FULLPATH;
+    create-link      $NEOVIM_WIN32_INIT_INSTALL_FULLPATH $NEOVIM_GNU_INIT_INSTALL_FULLPATH;
+
     ## VSCode
     _copy_newer_file "$VSCODE_SOURCE_DIR/keybindings.json" "$VSCODE_KEYBINDINGS_INSTALL_FULLPATH";
     _copy_newer_file "$VSCODE_SOURCE_DIR/settings.json"    "$VSCODE_SETTINGS_INSTALL_FULLPATH";
     _copy_newer_file "$VSCODE_SOURCE_DIR/snippets.json"    "$VSCODE_SNIPPETS_INSTALL_FULLPATH";
 }
+
 
 ##------------------------------------------------------------------------------
 function install-binaries()
@@ -926,6 +952,7 @@ function nuke-dir()
 # Set-Alias -name rm    -Value C:\Users\stdmatt\.stdmatt_bin\ark_rm.exe    -Force -Option AllScope
 # Set-Alias -name touch -Value C:\Users\stdmatt\.stdmatt_bin\ark_touch.exe -Force -Option AllScope
 
+
 ##----------------------------------------------------------------------------##
 ## HTTP Server                                                                ##
 ##----------------------------------------------------------------------------##
@@ -941,3 +968,5 @@ function http-server()
 ##----------------------------------------------------------------------------##
 cls
 Get-Date
+
+install-profile;
