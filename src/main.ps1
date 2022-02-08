@@ -551,10 +551,10 @@ function git-config()
 
     git config --global user.name         "stdmatt";
     git config --global user.email        "stdmatt@pixelwizards.io";
-    git config --global core.excludesfile "$HOME_DIR/.gitignore";     ## Set the gitignore globaly...
-    git config --global core.editor       "code --wait"               ## Set vscode as default editor...
-    git config --global core.autocrlf     false
-    git config --global core.filemode     false
+    git config --global core.excludesfile "~/.gitignore";            ## Set the gitignore globaly...
+    git config --global core.editor       "nvim";                    ## Set nvim as default editor...
+    git config --global core.autocrlf     false;
+    git config --global core.filemode     false;
 
     _log_verbose "Done... ;D";
 }
