@@ -35,17 +35,8 @@ function _sh_fwd_slash()
 
 
 ##
-## Globals
-##
-
-##------------------------------------------------------------------------------
-$sh_IsWsl = (_sh_check_wsl);
-
-
-##
 ## Public Functions
 ##
-
 
 ##------------------------------------------------------------------------------
 function sh_get_home_dir()
@@ -55,6 +46,21 @@ function sh_get_home_dir()
     }
 
     return $HOME;
+}
+
+##------------------------------------------------------------------------------
+function sh_get_os_name()
+{
+    if($sh_IsWsl) {
+        return "WSL";
+    } elseif($IsWindows) {
+        return "Win32";
+    } elseif($IsLinux) {
+        return "GNU";
+    } elseif($IsMacOS) {
+        return "mac";
+    }
+    return "unsupported";
 }
 
 ##------------------------------------------------------------------------------
@@ -91,6 +97,14 @@ function sh_to_os_path()
 
     return $new_path;
 }
+
+##
+## Globals
+##
+
+##------------------------------------------------------------------------------
+$sh_IsWsl   = (_sh_check_wsl);
+$sh_os_name = (sh_get_os_name);
 
 
 ##----------------------------------------------------------------------------##
@@ -734,22 +748,6 @@ function install-fonts()
 ## Shell                                                                      ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
-function _random_prompt_color($color, $arg)
-{
-    if($color-eq 0) {
-        $arg = _yellow $arg;
-    } elseif($color -eq 1) {
-        $arg = _green $arg;
-    } elseif($color -eq 2) {
-        $arg = _blue $arg;
-    } else {
-        $arg = _red $arg;
-    }
-
-    return $arg;
-}
-
-##------------------------------------------------------------------------------
 function _make_git_prompt()
 {
     $git_line = (git branch 2> $null);
@@ -762,37 +760,37 @@ function _make_git_prompt()
         $git_tag    = (git describe --tags (git rev-list --tags --max-count=1) 2> $null);
 
         if($git_tag) {
-            $git_line = "${git_branch}:${git_tag}";
+            $git_line = "${git_branch}-${git_tag}";
         } else {
             $git_line = "${git_branch}";
         }
 
-        $git_line = "[${git_line}]";
+        $git_line = ":[$git_line]";
     }
 
-    $curr_path   = (Get-Location).Path;
-    $prompt      = ":)";
-    $color_index = (Get-Date -UFormat "%M") % 4; ## Makes the color cycle withing minutes
+    $curr_path    = (Get-Location).Path;
+    $prompt       = ":)";
+    $color_index  = (Get-Date -UFormat "%M") % 4; ## Makes the color cycle withing minutes
+    $spaces       = " ";
+    $os_name      = (rgb 0x62 0x62 0x62 ":[${sh_os_name}]"); ## Dark gray
+    $git_line     = (rgb 0x62 0x62 0x62 "${git_line}"     ); ## Dark gray
+    $prompt       = (rgb 0x9E 0x9E 0x9E "$prompt"         ); ## Light gray
+    $colored_path = "";
 
-    ## @notice(stdmatt): 07 Dec, 2021 at 10:05:12
-    ## Makes the git info right aligned.
-    $spaces = " ";
-    # if(0) {
-    #     $curr_path_len = $curr_path.Length;
-    #     $git_line_len  = $git_line.Length;
-    #     $term_cols     = $Host.UI.RawUI.WindowSize.Width
-    #     $spaces_len    = $term_cols - ($curr_path_len + $git_line_len);
-    #     $spaces        = (" " * $spaces_len);
-    # }
+    if($color_index -eq 0) {
+        $colored_path = (_yellow "$curr_path");
+    } elseif($color_index -eq 1) {
+        $colored_path = (_green "$curr_path");
+    } elseif($color_index -eq 2) {
+        $colored_path = (_blue "$curr_path");
+    } else {
+        $colored_path = (_red "$curr_path");
+    }
 
-    $prompt    = rgb 0x9E 0x9E 0x9E $prompt;   ## Light gray
-    $git_line  = rgb 0x62 0x62 0x62 $git_line; ## Dark gray
-    $curr_path =_random_prompt_color $color_index "$curr_path";
-
-    $output = "${curr_path}${spaces}${git_line}`n${prompt} ";
+    $output = "${colored_path}${os_name}${git_line}`n${prompt} ";
     return $output;
 }
-
+_make_git_prompt;
 ##------------------------------------------------------------------------------
 function global:prompt
 {
@@ -914,7 +912,7 @@ function create-shortcut()
 
     $src_path = (Resolve-Path $src_path).ToString();
 
-    ## @todo(stdmatt): Check if the string ends with .lnk and if not add it - Dec 28, 2020
+    ## @todo(stdmatt): Check if thestring ends with .lnk and if not add it - Dec 28, 2020
     $WshShell            = New-Object -ComObject WScript.Shell
     $Shortcut            = $WshShell.CreateShortcut($dst_path);
     $Shortcut.TargetPath = $src_path;
