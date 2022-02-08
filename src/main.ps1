@@ -62,10 +62,6 @@ $PROGRAM_LICENSE         = "GPLv3";
 ## Other
 $WORKSTATION_PREFIX = "KIV-WKS"; ## My workstation prefix, so I can know that I'm working computer...
 ##------------------------------------------------------------------------------
-## Binary aliases...
-$FILE_MANAGER = "explorer.exe";
-$NEOVIM       = "nvim";
-##------------------------------------------------------------------------------
 ## General Paths...
 $HOME_DIR        = "$env:USERPROFILE";
 $DOWNLOADS_DIR   = "$HOME_DIR/Downloads";
@@ -778,7 +774,6 @@ Set-Alias -Name cd -Value _stdmatt_cd -Force -Option AllScope
 function files()
 {
     $target_path = $args[0];
-
     if($target_path -ne "."                           -or
        $target_path -ne ".."                          -or
        (_string_is_null_or_whitespace($target_path))  -or
@@ -788,11 +783,35 @@ function files()
             $target_path=".";
         }
 
-        & $FILE_MANAGER $target_path;
+        $file_manager = _host_get_file_manager;
+        if($file_manager -eq "") {
+            _log_fatal("No file manager was found - Aborting...");
+        }
+
+        & $file_manager $target_path;
         return;
     }
 
-    _log_fatal("Path($target_path) doesn't not exists - Aborting...");
+    _log_fatal("Path ($target_path) doesn't not exists - Aborting...");
+}
+
+##------------------------------------------------------------------------------
+function _host_get_file_manager()
+{
+    if($IsWindows) {
+        return "explorer.exe";
+    } elseif($IsLinux) {
+        ## @todo(stdmatt): [File explorer on Linux] - 08 Feb, 2022
+        ## Perhaps check with uname if we are under wsl and if so just
+        ## open the explorer, otherwise open the deault for linux...
+
+        ## @???(stdmatt): [$IsWSL] - 08 Feb, 2022
+        ## Should we create something like the IsWindows and IsLinux to
+        ## check if we are under WSL??
+        return "explorer.exe";
+    } else {
+        return "";
+    }
 }
 
 ##------------------------------------------------------------------------------
