@@ -429,7 +429,8 @@ function edit-profile()
         $VSCODE_KEYBINDINGS_INSTALL_FULLPATH `
         $VSCODE_SETTINGS_INSTALL_FULLPATH    `
         $VSCODE_SNIPPETS_INSTALL_FULLPATH;
-    sync-extras;
+
+    install-extras;
 }
 
 ##------------------------------------------------------------------------------
@@ -493,7 +494,6 @@ function sync-dots()
 function sync-all()
 {
     ## dots functions...
-    sync-extras;
     sync-dots;
     sync-journal;
 
