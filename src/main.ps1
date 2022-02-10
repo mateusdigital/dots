@@ -40,6 +40,14 @@ function _sh_fwd_slash()
 ##
 
 ##------------------------------------------------------------------------------
+function sh_dirpath()
+{
+    $arg   = $args[0];
+    $final = (Split-Path $arg -Parent);
+
+    return $final;
+}
+##------------------------------------------------------------------------------
 function sh_get_home_dir()
 {
     if ($HOME -eq "") {
@@ -322,28 +330,6 @@ function _basepath()
 }
 
 ##------------------------------------------------------------------------------
-function _dirpath()
-{
-    $arg = $args[0];
-    if ((_string_is_null_or_whitespace $arg)) {
-        return "";
-    }
-
-    $comps = $arg.Split("/");
-    if($comps.Length -eq 1) {
-        return $comps;
-    }
-
-    $final = "";
-    for($i = 0; $i -lt $comps.Length; $i += 0) {
-        $final += $comps[$i];
-    }
-    return $final;
-}
-
-    # Set-PSBreakpoint -Script $MyInvocation.PSCommandPath -Line 104
-
-##------------------------------------------------------------------------------
 function _log_get_call_function_name()
 {
     $callstack = Get-PSCallStack;
@@ -430,7 +416,7 @@ function edit-profile()
         $VSCODE_SETTINGS_INSTALL_FULLPATH    `
         $VSCODE_SNIPPETS_INSTALL_FULLPATH;
 
-    install-extras;
+    install-profile;
 }
 
 ##------------------------------------------------------------------------------
@@ -493,17 +479,15 @@ function sync-dots()
 ##------------------------------------------------------------------------------
 function sync-all()
 {
-    ## dots functions...
     sync-dots;
     sync-journal;
 
     git-config;
 
-    install-extras;
+    install-profile;
     install-fonts;
     install-binaries;
 
-    ## External stuff...
     repochecker --all $PROJECTS_DIR;
 }
 
@@ -640,6 +624,8 @@ function _copy_newer_file()
              "$INDENT Repo : ($(_green  $repo_file))" $NL `
              "$INDENT FS   : ($(_yellow $fs_file))"       ;
 
+        $fs_dir_path = (sh_dirpath $fs_file);
+        $null        = (mkdir -Force $fs_dir_path);
         Copy-Item $repo_file $fs_file -Force;
     } elseif($sync_to -eq "repo") {
         _log "Syncing FS -> Repo"      $NL `
@@ -697,7 +683,6 @@ function install-profile()
     _copy_newer_file "$VSCODE_SOURCE_DIR/settings.json"    "$VSCODE_SETTINGS_INSTALL_FULLPATH";
     _copy_newer_file "$VSCODE_SOURCE_DIR/snippets.json"    "$VSCODE_SNIPPETS_INSTALL_FULLPATH";
 }
-
 
 ##------------------------------------------------------------------------------
 function install-binaries()
@@ -791,7 +776,7 @@ function _make_git_prompt()
     $output = "${colored_path}${os_name}${git_line}`n${prompt} ";
     return $output;
 }
-_make_git_prompt;
+
 ##------------------------------------------------------------------------------
 function global:prompt
 {
@@ -802,7 +787,6 @@ function global:prompt
 ##----------------------------------------------------------------------------##
 ## Aliases                                                                    ##
 ##----------------------------------------------------------------------------##
-
 ## cd
 ##------------------------------------------------------------------------------
 ## @notice(stdmatt): This is pretty cool - It makes the cd to behave like
@@ -1005,9 +989,6 @@ function http-server()
 {
     python3 -m http.server $args[1];
 }
-
-
-
 
 
 ##----------------------------------------------------------------------------##
