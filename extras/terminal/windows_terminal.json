@@ -33,9 +33,11 @@
         { "command": { "action": "copy", "singleLine": false }, "keys": "ctrl+shift+c" },
         { "command": "paste", "keys": "ctrl+shift+v" },
 
-        // { "command": "unbound", "keys": ["ctrl+c"] },
+        { "command": "unbound", "keys": ["ctrl+c"] },
         { "command": "unbound", "keys": ["ctrl+v"] },
-        
+        { "command": "unbound", "keys": ["ctrl+tab"] },
+        { "command": "unbound", "keys": ["ctrl+shift+tab"] },
+
         // Pane
         //   Resize
         { "command": { "action": "resizePane", "direction": "left"  }, "keys": "ctrl+shift+h" },
@@ -64,7 +66,7 @@
 
                 "name": "OMG!!",
                 "icon":        "ms-appx:///ProfileIcons/{61c54bbd-c2c6-5271-96e7-009a87ff44bf}.png",
-                "colorScheme": "VA",
+                "colorScheme": "codedark",
                 "commandline": "C:/Program Files/PowerShell/7/pwsh.exe",
                 "font":
                 {
@@ -139,6 +141,39 @@
 
             "cursorColor":         "#FFFFFF",
             "selectionBackground": "#FFFFFF"
+        },
+        {
+            "name": "codedark",
+            "author": "Tomas Iser (https://github.com/tomasiser)",
+
+            "background": "#1E1E1E",
+            "foreground": "#D4D4D4",
+
+            "black"   : "#1E1E1E", // # Base 00 -
+            "red"     : "#D16969", // # Base 08 -
+            "green"   : "#608B4E", // # Base 0B -
+            "yellow"  : "#D7BA7D", // # Base 0A -
+            "blue"    : "#569CD6", // # Base 0D -
+            "purple"  : "#C586C0", // # Base 0E -
+            "cyan"    : "#9CDCFE", // # Base 0C -
+            "white"   : "#D4D4D4", // # Base 05 -
+
+            "brightBlack"   : "#1E1E1E", // # Base 00 -
+            "brightRed"     : "#D16969", // # Base 08 -
+            "brightGreen"   : "#608B4E", // # Base 0B -
+            "brightYellow"  : "#D7BA7D", // # Base 0A -
+            "brightBlue"    : "#569CD6", // # Base 0D -
+            "brightPurple"  : "#C586C0", // # Base 0E -
+            "brightCyan"    : "#9CDCFE", // # Base 0C -
+            "brightWhite"   : "#D4D4D4", // # Base 05 -
+
+            // ="3C/3C/3C" # Base 03 - Bright Black
+            // =$color01 # Base 08 - Bright Red
+            // =$color02 # Base 0B - Bright Green
+            // =$color03 # Base 0A - Bright Yellow
+            // =$color04 # Base 0D - Bright Blue
+            // =$color05 # Base 0E - Bright Magenta
+            // =$color06 # Base 0C - Bright Cyan
         },
 
         {
