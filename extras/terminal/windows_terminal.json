@@ -115,41 +115,13 @@
     "schemes":
     [
         {
-            "name": "VA",
-
-            "background": "#1E1E1E",
-            "foreground": "#AEAF6A",
-
-            "black":  "#0C0C0C",
-            "blue":   "#5396CE",
-            "cyan":   "#54CFB0",
-            "green":  "#2C884A",
-            "purple": "#B34778",
-            "red":    "#D65656",
-            "white":  "#FFFFFF",
-            "yellow": "#FFD700",
-
-            "brightBlack":  "#767676",
-            "brightBlue":   "#5396CE",
-            "brightCyan":   "#61D6D6",
-            "brightGreen":  "#2C884A",
-            "brightPurple": "#B34778",
-            "brightRed":    "#D65656",
-            "brightWhite":  "#F2F2F2",
-            "brightYellow": "#FFD700",
-
-
-            "cursorColor":         "#FFFFFF",
-            "selectionBackground": "#FFFFFF"
-        },
-        {
             "name": "codedark",
             "author": "Tomas Iser (https://github.com/tomasiser)",
 
             "background": "#1E1E1E",
             "foreground": "#D4D4D4",
 
-            "black"   : "#1E1E1E", // # Base 00 -
+            "black"   : "#808080", // # Base 00 -
             "red"     : "#D16969", // # Base 08 -
             "green"   : "#608B4E", // # Base 0B -
             "yellow"  : "#D7BA7D", // # Base 0A -
@@ -158,7 +130,7 @@
             "cyan"    : "#9CDCFE", // # Base 0C -
             "white"   : "#D4D4D4", // # Base 05 -
 
-            "brightBlack"   : "#1E1E1E", // # Base 00 -
+            "brightBlack"   : "#808080", // # Base 00 -
             "brightRed"     : "#D16969", // # Base 08 -
             "brightGreen"   : "#608B4E", // # Base 0B -
             "brightYellow"  : "#D7BA7D", // # Base 0A -
@@ -166,41 +138,6 @@
             "brightPurple"  : "#C586C0", // # Base 0E -
             "brightCyan"    : "#9CDCFE", // # Base 0C -
             "brightWhite"   : "#D4D4D4", // # Base 05 -
-
-            // ="3C/3C/3C" # Base 03 - Bright Black
-            // =$color01 # Base 08 - Bright Red
-            // =$color02 # Base 0B - Bright Green
-            // =$color03 # Base 0A - Bright Yellow
-            // =$color04 # Base 0D - Bright Blue
-            // =$color05 # Base 0E - Bright Magenta
-            // =$color06 # Base 0C - Bright Cyan
-        },
-
-        {
-            "name": "GruvBox",
-
-            "foreground":          "#EBDBB2",
-            "background":          "#32302F",
-            "black":               "#282828",
-            "white":               "#FBF1C7",
-            "red":                 "#FB4934",
-            "green":               "#B8BB26",
-            "blue":                "#83A598",
-            "cyan":                "#8EC07C",
-            "purple":              "#D3869B",
-            "yellow":              "#FABD2F",
-            "brightBlack":         "#EBDBB2", //@todo(stdmatt): Black on the theme background is super difficult to see..
-                                              //                So I'm copying the value of the foreground color.
-            "brightWhite":         "#FBF1C7",
-            "brightRed":           "#FB4934",
-            "brightBlue":          "#83A598",
-            "brightGreen":         "#B8BB26",
-            "brightCyan":          "#8EC07C",
-            "brightPurple":        "#D3869B",
-            "brightYellow":        "#FABD2F",
-
-            "cursorColor":         "#FFFFFF",
-            "selectionBackground": "#FFFFFF",
         },
     ],
 }
