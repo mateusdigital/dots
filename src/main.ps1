@@ -36,7 +36,7 @@ function _sh_fwd_slash()
 
 
 ##
-## Public Functions
+## Public Function
 ##
 
 ##------------------------------------------------------------------------------
@@ -70,6 +70,18 @@ function sh_get_os_name()
         return "mac";
     }
     return "unsupported";
+}
+
+##------------------------------------------------------------------------------
+function sh_get_script_dir()
+{
+    return (sh_dirpath $MyInvocation.InvocationName);
+}
+
+##------------------------------------------------------------------------------
+function sh_get_script_path()
+{
+    return $MyInvocation.PSCommandPath;
 }
 
 ##------------------------------------------------------------------------------
@@ -132,7 +144,7 @@ function _on_vi_mode_change
 ##------------------------------------------------------------------------------
 ## Settings just for the pwsh.
 if($PSVersionTable.PSVersion.Major -ge 7) {
-
+    $int_a = 10;
     Set-PSReadLineOption            `
         -ViModeIndicator     Script `
         -ViModeChangeHandler $Function:_on_vi_mode_change;
@@ -140,19 +152,35 @@ if($PSVersionTable.PSVersion.Major -ge 7) {
 
 ##------------------------------------------------------------------------------
 Set-PSReadLineOption -EditMode Vi;
-Set-PSReadLineOption -Colors @{
-    Command            = "#FF8000"
-    Number             = "#B5CE9B"
-    Member             = "#AEB76B"
-    Operator           = "#DCDCDC"
-    Type               = "#AEB76B"
-    Parameter          = "#AEB76B"
-    Default            = "#AEB76B"
-    String             = "#D69D85"
 
-    ## @todo(stdmatt): Put correct color - 06 Dec, 2021 at 03:53:40
-    Variable           = "#FF00FF"
+## Directly from:
+##   https://github.com/tomasiser/vim-code-dark
+$_ps_color_black         = "#1E1E1E";  ##
+$_ps_color_gray          = "#808080";  ## #include
+$_ps_color_white         = "#D4D4D4";  ## normal text
+$_ps_color_light_blue    = "#9CDCFE";  ## my_variable
+$_ps_color_blue          = "#569CD6";  ## public static void
+$_ps_color_blue_green    = "#4EC9B0";  ## Class_Type
+$_ps_color_green         = "#608B4E";  ## /* comment */
+$_ps_color_light_yellow  = "#B5CEA8";  ## 3.14f
+$_ps_color_yellow        = "#DCDCAA";  ## my_function()
+$_ps_color_yellow_orange = "#D7BA7D";  ## #selector
+$_ps_color_orange        = "#CE9178";  ## "string"
+$_ps_color_light_red     = "#D16969";  ## /[a-Z]/
+$_ps_color_red           = "#F44747";  ## error message
+$_ps_color_pink          = "#C586C0";  ## else if
+
+Set-PSReadLineOption -Colors @{
+    Default            = $_ps_color_white
+    Command            = $_ps_color_yellow
     ContinuationPrompt = "#FF00FF"
+    Number             = $_ps_color_light_yellow
+    Member             = $_ps_color_white
+    Operator           = $_ps_color_white
+    Type               = $_ps_color_light_blue
+    Parameter          = $_ps_color_pink
+    String             = $_ps_color_orange
+    Variable           = $_ps_color_light_blue
 }
 
 ##----------------------------------------------------------------------------##
@@ -273,13 +301,24 @@ function _debug_color_values()
     }
 }
 
-
 ##------------------------------------------------------------------------------
-function rgb($r, $g, $b, $str)
+function rgb_to_ansi($r, $g, $b, $str)
 {
     $esc = [char]27;
     return "$esc[38;2;$r;$g;${b}m$str$esc[0m";
-};
+}
+
+##------------------------------------------------------------------------------
+function hex_to_ansi($hex, $str)
+{
+    $esc = [char]27;
+    $r = [uint32]("#" + $hex[1] + $hex[2]);
+    $g = [uint32]("#" + $hex[3] + $hex[4]);
+    $b = [uint32]("#" + $hex[5] + $hex[6]);
+
+    return "$esc[38;2;$r;$g;${b}m$str$esc[0m";
+}
+
 
 ##------------------------------------------------------------------------------
 function _blue  () { return (_color $_C_BLUE         $args); }
@@ -758,22 +797,24 @@ function _make_git_prompt()
     $prompt       = ":)";
     $color_index  = (Get-Date -UFormat "%M") % 4; ## Makes the color cycle withing minutes
     $spaces       = " ";
-    $os_name      = (rgb 0x62 0x62 0x62 ":[${sh_os_name}]"); ## Dark gray
-    $git_line     = (rgb 0x62 0x62 0x62 "${git_line}"     ); ## Dark gray
-    $prompt       = (rgb 0x9E 0x9E 0x9E "$prompt"         ); ## Light gray
+    $os_name      = (rgb_to_ansi 0x62 0x62 0x62 ":[${sh_os_name}]"); ## Dark gray
+    $git_line     = (rgb_to_ansi 0x62 0x62 0x62 "${git_line}"     ); ## Dark gray
+    $prompt       = (rgb_to_ansi 0x9E 0x9E 0x9E "$prompt"         ); ## Light gray
     $colored_path = "";
 
     if($color_index -eq 0) {
-        $colored_path = (_yellow "$curr_path");
+        $hex = $_ps_color_blue;
     } elseif($color_index -eq 1) {
-        $colored_path = (_green "$curr_path");
+        $hex = $_ps_color_pink;
     } elseif($color_index -eq 2) {
-        $colored_path = (_blue "$curr_path");
+        $hex = $_ps_color_blue_green;
     } else {
-        $colored_path = (_red "$curr_path");
+        $hex = $_ps_color_yellow_orange;
     }
 
-    $output = "${colored_path}${os_name}${git_line}`n${prompt} ";
+    $colored_path  = (hex_to_ansi $hex $curr_path);
+    $output        = "${colored_path}${os_name}${git_line}`n${prompt} ";
+
     return $output;
 }
 
@@ -994,5 +1035,3 @@ function http-server()
 ##----------------------------------------------------------------------------##
 ## Greeting                                                                   ##
 ##----------------------------------------------------------------------------##
-cls
-Get-Date
