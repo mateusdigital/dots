@@ -7,9 +7,20 @@ $env:DOTS_IS_VERSBOSE            = 0;
 
 
 ##----------------------------------------------------------------------------##
+## Info                                                                       ##
+##----------------------------------------------------------------------------##
+$PROGRAM_NAME            = "dots";
+$PROGRAM_VERSION         = "3.0.0";
+$PROGRAM_AUTHOR          = "stdmatt - <stdmatt@pixelwizads.io>";
+$PROGRAM_COPYRIGHT_OWNER = "stdmatt";
+$PROGRAM_COPYRIGHT_YEARS = "2021, 2022";
+$PROGRAM_DATE            = "30 Nov, 2021";
+$PROGRAM_LICENSE         = "GPLv3";
+
+
+##----------------------------------------------------------------------------##
 ## Library Code                                                               ##
 ##----------------------------------------------------------------------------##
-
 ##
 ## Private Functions
 ##
@@ -120,6 +131,48 @@ function sh_to_os_path()
     return $new_path;
 }
 
+## Colors
+$SH_HEX_RED   = "#FF0000";
+$SH_HEX_GREEN = "#00FF00";
+$SH_HEX_BLUE  = "#0000FF";
+
+$SH_HEX_CYAN    = "#00FFFF";
+$SH_HEX_YELLOW  = "#FFFF00";
+$SH_HEX_MAGENTA = "#FF00FF";
+
+$SH_HEX_BLACK      = "#000000";
+$SH_HEX_GRAY       = "#808080";
+$SH_HEX_LIGHT_GRAY = "#D4D4D3";
+$SH_HEX_WHITE      = "#FFFFFF";
+
+##------------------------------------------------------------------------------
+function sh_rgb_to_ansi($r, $g, $b, $str)
+{
+    $esc = [char]27;
+
+    return "$esc[38;2;$r;$g;${b}m$str$esc[0m";
+}
+
+##------------------------------------------------------------------------------
+function sh_hex_to_ansi($hex, $str)
+{
+    $esc = [char]27;
+
+    $r = [uint32]("#" + $hex[1] + $hex[2]);
+    $g = [uint32]("#" + $hex[3] + $hex[4]);
+    $b = [uint32]("#" + $hex[5] + $hex[6]);
+
+    return "$esc[38;2;$r;$g;${b}m$str$esc[0m";
+}
+
+##------------------------------------------------------------------------------
+function sh_ansi($color, $str)
+{
+    ## @todo(stdmatt): Implement....
+    return $str;
+}
+
+
 ##
 ## Globals
 ##
@@ -145,7 +198,6 @@ function _on_vi_mode_change
 ##------------------------------------------------------------------------------
 ## Settings just for the pwsh.
 if($PSVersionTable.PSVersion.Major -ge 7) {
-    $int_a = 10;
     Set-PSReadLineOption            `
         -ViModeIndicator     Script `
         -ViModeChangeHandler $Function:_on_vi_mode_change;
@@ -184,16 +236,6 @@ Set-PSReadLineOption -Colors @{
     Variable           = $_ps_color_light_blue
 }
 
-##----------------------------------------------------------------------------##
-## Info                                                                       ##
-##----------------------------------------------------------------------------##
-$PROGRAM_NAME            = "dots";
-$PROGRAM_VERSION         = "3.0.0";
-$PROGRAM_AUTHOR          = "stdmatt - <stdmatt@pixelwizads.io>";
-$PROGRAM_COPYRIGHT_OWNER = "stdmatt";
-$PROGRAM_COPYRIGHT_YEARS = "2021, 2022";
-$PROGRAM_DATE            = "30 Nov, 2021";
-$PROGRAM_LICENSE         = "GPLv3";
 
 ##----------------------------------------------------------------------------##
 ## Constants                                                                  ##
@@ -201,17 +243,19 @@ $PROGRAM_LICENSE         = "GPLv3";
 ##------------------------------------------------------------------------------
 ## Other
 $WORKSTATION_PREFIX = "KIV-WKS"; ## My workstation prefix, so I can know that I'm working computer...
+$IS_WORK_COMPUTER   = (hostname).Contains($WORKSTATION_PREFIX);
+
 ##------------------------------------------------------------------------------
 ## General Paths...
 $HOME_DIR        = (sh_get_home_dir);
-$DOWNLOADS_DIR   = (sh_join_path "$HOME_DIR"      "Downloads");
-$DOCUMENTS_DIR   = (sh_join_path "$HOME_DIR"      "Documents");
-$DESKTOP_DIR     = (sh_join_path "$HOME_DIR"      "Desktop");
-$STDMATT_BIN_DIR = (sh_join_path "$HOME_DIR"      ".stdmatt/bin"); ## My binaries that I don't wanna on system folder...
-$PROJECTS_DIR    = (sh_join_path "$DOCUMENTS_DIR" "Projects");
+$DOWNLOADS_DIR   = (sh_join_path "$HOME_DIR" "Downloads");
+$DOCUMENTS_DIR   = (sh_join_path "$HOME_DIR" "Documents");
+$DESKTOP_DIR     = (sh_join_path "$HOME_DIR" "Desktop");
+$STDMATT_BIN_DIR = (sh_join_path "$HOME_DIR" ".stdmatt/bin"); ## My binaries that I don't wanna on system folder...
+$PROJECTS_DIR    = (sh_join_path "$HOME_DIR" "Projects");
 
 ## Dealing with workstation, needs to adjust some paths...
-if((hostname).Contains($WORKSTATION_PREFIX)) {
+if($IS_WORK_COMPUTER) {
     $PROJECTS_DIR = sh_to_os_path("E:/Projects");
 }
 
@@ -252,82 +296,6 @@ $BINARIES_INSTALL_FULLPATH = "$STDMATT_BIN_DIR";
 $JOURNAL_DIR       = "$HOME_DIR/Desktop/Journal";
 $JOURNAL_GIT_URL   = "https://gitlab.com/stdmatt-private/journal";
 $JOURNAL_FILE_EXT = ".info";
-
-##----------------------------------------------------------------------------##
-## Colors things...                                                           ##
-##----------------------------------------------------------------------------##
-##------------------------------------------------------------------------------
-$_C_ESC     = [Char]27
-$_C_RESET   = [Char]0;
-## Normal
-$_C_BLACK   = 30;
-$_C_RED     = 31;
-$_C_GREEN   = 32;
-$_C_YELLOW  = 33;
-$_C_BLUE    = 34;
-$_C_MAGENTA = 35;
-$_C_CYAN    = 36;
-$_C_WHITE   = 37;
-## Bright
-$_C_BRIGHT_BLACK   = 90;
-$_C_BRIGHT_RED     = 91;
-$_C_BRIGHT_GREEN   = 92;
-$_C_BRIGHT_YELLOW  = 93;
-$_C_BRIGHT_BLUE    = 94;
-$_C_BRIGHT_MAGENTA = 95;
-$_C_BRIGHT_CYAN    = 96;
-$_C_BRIGHT_WHITE   = 97;
-
-##------------------------------------------------------------------------------
-function _color($color)
-{
-    $input_value = "";
-    foreach($item in $args) {
-        $input_value = $input_value + $item;
-    }
-
-    $start = "$_C_ESC[" + $color    + "m" + $input_value;
-    $end   = "$_C_ESC[" + $_C_RESET + "m";
-
-    $value = $start + $end;
-    return $value;
-}
-
-##------------------------------------------------------------------------------
-function _debug_color_values()
-{
-    for($i = 0; $i -lt 300; $i += 1)
-    {
-        $output = _color $i "Value: $i"
-        echo $output;
-    }
-}
-
-##------------------------------------------------------------------------------
-function rgb_to_ansi($r, $g, $b, $str)
-{
-    $esc = [char]27;
-    return "$esc[38;2;$r;$g;${b}m$str$esc[0m";
-}
-
-##------------------------------------------------------------------------------
-function hex_to_ansi($hex, $str)
-{
-    $esc = [char]27;
-    $r = [uint32]("#" + $hex[1] + $hex[2]);
-    $g = [uint32]("#" + $hex[3] + $hex[4]);
-    $b = [uint32]("#" + $hex[5] + $hex[6]);
-
-    return "$esc[38;2;$r;$g;${b}m$str$esc[0m";
-}
-
-
-##------------------------------------------------------------------------------
-function _blue  () { return (_color $_C_BLUE         $args); }
-function _green () { return (_color $_C_GREEN        $args); }
-function _yellow() { return (_color $_C_YELLOW       $args); }
-function _red   () { return (_color $_C_RED          $args); }
-function _gray  () { return (_color $_C_BRIGHT_BLACK $args); }
 
 
 ##----------------------------------------------------------------------------##
@@ -390,11 +358,11 @@ function _log_fatal()
 {
     $function_name = _log_get_call_function_name;
 
-    $output =  _red  "[FATAL]";
-    $output += _gray "[$function_name] ";
+    $output =  sh_hex_to_ansi $SH_HEX_RED  "[FATAL]";
+    $output += sh_hex_to_ansi $SH_HEX_GRAY "[$function_name] ";
     $output += $args;
 
-    echo $output;
+    Write-Output $output;
 }
 
 ##------------------------------------------------------------------------------
@@ -410,10 +378,10 @@ function _log()
 {
     $function_name = _log_get_call_function_name;
 
-    $output  = _gray "[$function_name] ";
+    $output  = sh_hex_to_ansi $SH_HEX_GRAY "[$function_name] ";
     $output += $args;
 
-    echo $output;
+    Write-Output $output;
 }
 
 ##------------------------------------------------------------------------------
@@ -425,6 +393,84 @@ function _get_file_time()
     }
     return $INVALID_FILE_TIME;
 }
+
+##------------------------------------------------------------------------------
+function _copy_newer_file()
+{
+    $INDENT="   "
+    $NL="`n";
+
+    $repo_file    = $args[0];
+    $fs_file      = $args[1];
+    $sync_to      = $null;
+
+    ## Check if there's any file missing, if so just copy it...
+    $fs_exists   = _file_exists "$fs_file";
+    $repo_exists = _file_exists "$repo_file";
+    if($fs_exists -xor $repo_exists) {
+        if($repo_exists) {
+            $sync_to = "fs";
+        } else {
+            $sync_to = "repo";
+        }
+    }
+
+    ## Check which file is newer...
+    if($null -eq $sync_to -and $(Get-FileHash $fs_file).hash -eq $(Get-FileHash $repo_file).hash) {
+        $sync_to = $null;
+    } else {
+        $fs_time   = (_get_file_time $fs_file  );
+        $repo_time = (_get_file_time $repo_file);
+
+        if($fs_time -eq $INVALID_FILE_TIME -and $repo_time -eq $INVALID_FILE_TIME) {
+            _log_fatal "Both paths are invalid..." $NL `
+                    "$INDENT FS   : ($fs_file)" $NL `
+                    "$INDENT Repo : ($repo_file)" ;
+            return;
+        }
+        if($fs_time -gt $repo_time) {
+            $sync_to = "repo";
+        } elseif($repo_time -gt $fs_time) {
+            $sync_to = "fs";
+        } else {
+            $sync_to = $null;
+        }
+    }
+
+    ## Copy if needed..
+    if($sync_to -eq "fs") {
+        $colored_repo = (sh_hex_to_ansi $SH_HEX_GREEN  $repo_file);
+        $colored_fs   = (sh_hex_to_ansi $SH_HEX_YELLOW $fs_file);
+
+        _log "Syncing Repo -> FS"             $NL `
+             "$INDENT Repo : ($colored_repo)" $NL `
+             "$INDENT FS   : ($colored_fs)"       ;
+
+        $fs_dir_path = (sh_dirpath $fs_file);
+        $null        = (mkdir -Force $fs_dir_path);
+
+        Copy-Item $repo_file $fs_file -Force;
+    }
+    elseif($sync_to -eq "repo") {
+        $colored_repo = (sh_hex_to_ansi $SH_HEX_YELLOW $repo_file);
+        $colored_fs   = (sh_hex_to_ansi $SH_HEX_FS     $fs_file);
+
+        _log "Syncing FS -> Repo"              $NL `
+             "$INDENT FS   : ($colored_fs))"   $NL `
+             "$INDENT Repo : ($colored_repo))"     ;
+
+        Copy-Item $fs_file $repo_file -Force;
+    }
+    else {
+        $colored_repo = (sh_hex_to_ansi $SH_HEX_BLUE $repo_file);
+        $colored_fs   = (sh_hex_to_ansi $SH_HEX_BLUE $fs_file);
+
+        _log_verbose "Files are equal..."      $NL `
+             "$INDENT FS   : ($colored_fs))"   $NL `
+             "$INDENT Repo : ($colored_repo))"     ;
+    }
+}
+
 
 ##------------------------------------------------------------------------------
 function show_version()
@@ -441,7 +487,8 @@ Check http://stdmatt.com for more :)",
         $PROGRAM_COPYRIGHT_OWNER,
         $PROGRAM_LICENSE
     );
-    echo $value;
+
+    Write-Output $value;
 }
 
 ##----------------------------------------------------------------------------##
@@ -450,7 +497,7 @@ Check http://stdmatt.com for more :)",
 ##------------------------------------------------------------------------------
 function edit-profile()
 {
-    nv                                       `
+    nvim                                     `
         $profile                             `
         $TERMINAL_SETTINGS_INSTALL_FULLPATH  `
         $VSCODE_KEYBINDINGS_INSTALL_FULLPATH `
@@ -522,12 +569,8 @@ function sync-all()
 {
     sync-dots;
     sync-journal;
-
     git-config;
-
-    install-profile;
-    install-fonts;
-    install-binaries;
+    install-all;
 
     repochecker --all $PROJECTS_DIR;
 }
@@ -558,11 +601,8 @@ function journal()
     } catch {
     }
 
-    ## @todo(stdmatt): Would be awesome to have the same-layout on vscode everytime.
-    ## Check if it's possible to save a setup or pass command line options with this.
-    ## Jan 14, 21
     _stdmatt_cd $JOURNAL_DIR;
-    nv .
+    nvim .
     _stdmatt_cd "-";
 }
 
@@ -596,7 +636,7 @@ function git-first-date-of()
 
     $date_format = "%d %b, %Y";
     $lines       = (git log --diff-filter=A --follow --format=%ad  --date=format:$date_format --reverse -- "${filename}");
-    echo $lines;
+    Write-Output $lines;
 }
 
 ##------------------------------------------------------------------------------
@@ -610,76 +650,20 @@ function git-get-repo-url()
     $components = $remote.Replace("`t", " ").Split(" ");
     $url        = $components[1];
 
-    echo $url;
+    Write-Output $url;
 }
 
 ##----------------------------------------------------------------------------##
 ## Install                                                                    ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
-function _copy_newer_file()
+function install-all()
 {
-    $INDENT="   "
-    $NL="`n";
-
-    $repo_file    = $args[0];
-    $fs_file      = $args[1];
-    $sync_to      = $null;
-
-    ## Check if there's any file missing, if so just copy it...
-    $fs_exists   = _file_exists "$fs_file";
-    $repo_exists = _file_exists "$repo_file";
-    if($fs_exists -xor $repo_exists) {
-        if($repo_exists) {
-            $sync_to = "fs";
-        } else {
-            $sync_to = "repo";
-        }
-    }
-
-    ## Check which file is newer...
-    if($sync_to -eq $null -and $(Get-FileHash $fs_file).hash -eq $(Get-FileHash $repo_file).hash) {
-        $sync_to = $null;
-    } else {
-        $fs_time   = (_get_file_time $fs_file  );
-        $repo_time = (_get_file_time $repo_file);
-
-        if($fs_time -eq $INVALID_FILE_TIME -and $repo_time -eq $INVALID_FILE_TIME) {
-            _log_fatal "Both paths are invalid..." $NL `
-                    "$INDENT FS   : ($fs_file)" $NL `
-                    "$INDENT Repo : ($repo_file)" ;
-            return;
-        }
-        if($fs_time -gt $repo_time) {
-            $sync_to = "repo";
-        } elseif($repo_time -gt $fs_time) {
-            $sync_to = "fs";
-        } else {
-            $sync_to = $null;
-        }
-    }
-
-    ## Copy if needed..
-    if($sync_to -eq "fs") {
-        _log "Syncing Repo -> FS"      $NL `
-             "$INDENT Repo : ($(_green  $repo_file))" $NL `
-             "$INDENT FS   : ($(_yellow $fs_file))"       ;
-
-        $fs_dir_path = (sh_dirpath $fs_file);
-        $null        = (mkdir -Force $fs_dir_path);
-        Copy-Item $repo_file $fs_file -Force;
-    } elseif($sync_to -eq "repo") {
-        _log "Syncing FS -> Repo"      $NL `
-             "$INDENT FS   : ($(_green  $fs_file))"   $NL `
-             "$INDENT Repo : ($(_yellow $repo_file))"     ;
-
-        Copy-Item $fs_file $repo_file -Force;
-    } else {
-        _log "Files are equal..."     $NL `
-             "$INDENT FS   : ($(_green $fs_file))"   $NL `
-             "$INDENT Repo : ($(_green $repo_file))"     ;
-    }
+    install-profile;
+    install-binaries;
+    install-fonts;
 }
+
 
 ##------------------------------------------------------------------------------
 function install-profile()
@@ -736,7 +720,7 @@ function install-binaries()
         $src_path = (sh_join_path $BINARIES_SOURCE_DIR       $filename);
         $dst_path = (sh_join_path $BINARIES_INSTALL_FULLPATH $filename);
 
-        _log "Copying binary: ($src_path) to ($dst_path)";
+        _log_verbose "Copying binary: ($src_path) to ($dst_path)";
         cp -R $src_path $dst_path;
     }
 }
@@ -760,9 +744,9 @@ function install-fonts()
         $dest = "$where_the_fonts_are_installed/$dst";
 
         if(Test-Path -Path $dest) {
-            _log_verbose "Font ($font) already installed";
+            _log_verbose "Font ($font) already installed.";
         } else {
-            _log_verbose "Installing ($font)";
+            _log_verbose "Installing ($font).";
 
             $copy_flag = [String]::Format("{0:x}", $COPYOPTIONS);
             $obj_folder.CopyHere($font.fullname, $copy_flag);
@@ -797,8 +781,7 @@ function _make_git_prompt()
 
     $curr_path    = (Get-Location).Path;
     $prompt       = ":)";
-    $color_index  = (Get-Date -UFormat "%M") % 4; ## Makes the color cycle withing minutes
-    $spaces       = " ";
+    $color_index  = (Get-Date -UFormat "%M") % 4;                    ## Makes the color cycle withing minutes
     $os_name      = (rgb_to_ansi 0x62 0x62 0x62 ":[${sh_os_name}]"); ## Dark gray
     $git_line     = (rgb_to_ansi 0x62 0x62 0x62 "${git_line}"     ); ## Dark gray
     $prompt       = (rgb_to_ansi 0x9E 0x9E 0x9E "$prompt"         ); ## Light gray
@@ -814,7 +797,7 @@ function _make_git_prompt()
         $hex = $_ps_color_yellow_orange;
     }
 
-    $colored_path  = (hex_to_ansi $hex $curr_path);
+    $colored_path  = (sh_hex_to_ansi $hex $curr_path);
     $output        = "${colored_path}${os_name}${git_line}`n${prompt} ";
 
     return $output;
@@ -859,15 +842,12 @@ function _stdmatt_cd()
 Remove-Item -Path Alias:cd
 Set-Alias -Name cd -Value _stdmatt_cd -Force -Option AllScope
 
-
-##----------------------------------------------------------------------------##
-## Files                                                                      ##
-##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
-##   Open the Filesystem Manager into a given path.
-##   If no path was given open the current dir.
 function files()
 {
+    ## Open the Filesystem Manager into a given path.
+    ## If no path was given open the current dir.
+
     $target_path = $args[0];
     if($target_path -ne "."                           -or
        $target_path -ne ".."                          -or
@@ -920,7 +900,8 @@ function create-link()
         return;
     }
 
-    New-Item -ItemType HardLink -Target $src_path -Path $dst_path -Force;
+    ## @todo(stdmatt): Should we check errors???
+    $null = (New-Item -ItemType HardLink -Target $src_path -Path $dst_path -Force);
 }
 
 ##------------------------------------------------------------------------------
@@ -1037,3 +1018,4 @@ function http-server()
 ##----------------------------------------------------------------------------##
 ## Greeting                                                                   ##
 ##----------------------------------------------------------------------------##
+install-profile
