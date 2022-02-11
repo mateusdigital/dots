@@ -47,6 +47,7 @@ function sh_dirpath()
 
     return $final;
 }
+
 ##------------------------------------------------------------------------------
 function sh_get_home_dir()
 {
@@ -184,9 +185,6 @@ Set-PSReadLineOption -Colors @{
 }
 
 ##----------------------------------------------------------------------------##
-## Constants                                                                  ##
-##----------------------------------------------------------------------------##
-##----------------------------------------------------------------------------##
 ## Info                                                                       ##
 ##----------------------------------------------------------------------------##
 $PROGRAM_NAME            = "dots";
@@ -196,6 +194,10 @@ $PROGRAM_COPYRIGHT_OWNER = "stdmatt";
 $PROGRAM_COPYRIGHT_YEARS = "2021, 2022";
 $PROGRAM_DATE            = "30 Nov, 2021";
 $PROGRAM_LICENSE         = "GPLv3";
+
+##----------------------------------------------------------------------------##
+## Constants                                                                  ##
+##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
 ## Other
 $WORKSTATION_PREFIX = "KIV-WKS"; ## My workstation prefix, so I can know that I'm working computer...
@@ -728,14 +730,14 @@ function install-binaries()
 {
     $null = (mkdir $BINARIES_INSTALL_FULLPATH -Force);
 
-    $folder_contents = (Get-ChildItem -Path $BINARIES_SOURCE_DIR -File);
+    $folder_contents = (Get-ChildItem -Path $BINARIES_SOURCE_DIR);
     foreach($filename in $folder_contents) {
         $filename = $filename.Name;
         $src_path = (sh_join_path $BINARIES_SOURCE_DIR       $filename);
         $dst_path = (sh_join_path $BINARIES_INSTALL_FULLPATH $filename);
 
-        _log_verbose "Copying binary: ($src_path) to ($dst_path)";
-        cp $src_path $dst_path;
+        _log "Copying binary: ($src_path) to ($dst_path)";
+        cp -R $src_path $dst_path;
     }
 }
 
