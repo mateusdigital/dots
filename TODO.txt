@@ -2,3 +2,14 @@
 
 - git_commit_version is totally broken.... - 30 Nov, 2021 at 06:12:35
 - Add a project page for the website. - 10/11/2021, 11:31:47 AM
+
+
+
+m3x_is_directory(CONFIG_FILE_DIR) 
+m3x_make_dirs(CONFIG_FILE_DIR, M3X_CREATE_PARENTS);
+m3x_is_file
+m3x_create_file
+m3x_read_entire_file
+m3x_utf8_t
+mtx_skip_spaces(M3X_SKIP_ALL_SPACES
+M3X_NULL_CHAR
