@@ -52,6 +52,18 @@ function _sh_fwd_slash()
 ##
 
 ##------------------------------------------------------------------------------
+function sh_basepath()
+{
+    $arg = $args[0];
+    $arg = $arg.Replace("\", "/");
+    if ((_string_is_null_or_whitespace $arg)) {
+        return "";
+    }
+
+    return $arg.Split("/")[-1];
+}
+
+##------------------------------------------------------------------------------
 function sh_dirpath()
 {
     $arg   = $args[0];
@@ -290,8 +302,10 @@ $DOTS_DIR = "$PROJECTS_DIR/stdmatt/personal/dots";
 ##------------------------------------------------------------------------------
 ## Sync Paths...
 ##  Fonts
-$FONTS_SOURCE_DIR       = "$DOTS_DIR/extras/fonts";
-$FONTS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Microsoft/Windows/Fonts";## @XXX(stdmatt): Just a hack to check if thing will work... but if it will I'll not change it today 11/11/2021, 2:03:40 PM
+$FONTS_SOURCE_DIR             = "$DOTS_DIR/extras/fonts";
+$FONTS_WIN32_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Microsoft/Windows/Fonts";## @XXX(stdmatt): Just a hack to check if thing will work... but if it will I'll not change it today 11/11/2021, 2:03:40 PM
+$FONTS_MACOS_INSTALL_FULLPATH = "$HOME_DIR/Library/Fonts";
+$FONTS_GNU_INSTALL_FULLPATH   = "$HOME_DIR/.local/share/fonts";
 ##  GIT
 $GIT_SOURCE_DIR              = "$DOTS_DIR/extras/git";
 $GIT_IGNORE_INSTALL_FULLPATH = "$HOME_DIR/.gitignore";
@@ -335,17 +349,6 @@ function _string_is_null_or_whitespace()
 }
 
 
-##------------------------------------------------------------------------------
-function _basepath()
-{
-    $arg = $args[0];
-    $arg = $arg.Replace("\", "/");
-    if ((_string_is_null_or_whitespace $arg)) {
-        return "";
-    }
-
-    return $arg.Split("/")[-1];
-}
 
 ##------------------------------------------------------------------------------
 function _log_get_call_function_name()
@@ -766,32 +769,63 @@ function install-binaries()
 ##------------------------------------------------------------------------------
 function install-fonts()
 {
+    $where_the_fonts_are_installed = "";
+    if($IsWindows) {
+        $where_the_fonts_are_installed = $FONTS_WIN32_INSTALL_FULLPATH;
+    } elseif($IsMacOS) {
+        $where_the_fonts_are_installed = $FONTS_MACOS_INSTALL_FULLPATH;
+    } else {
+        ## @todo(stdmatt): _install_fonts_helper_unix should work in
+        ## everything but windows... but i have no way to test it right now...
+        _log_fatal "Installing fonts not implemented for OS: ($sh_OSName)";
+        return;
+    }
+
+    $folder_contents = (Get-ChildItem -Recurse -File -Path $FONTS_SOURCE_DIR);
+    foreach($font in $folder_contents) {
+        $font_name     = (sh_basepath $font.FullName);
+        $font_fullpath = "$where_the_fonts_are_installed/$font_name";
+
+        if((sh_file_exists $font_fullpath)) {
+            _log_verbose "Font ($font) already installed.";
+            continue;
+        }
+
+        _log_verbose "Installing ($font)...";
+        if($IsWindows) {
+            _install_fonts_helper_win32 $font $font_fullpath;
+        } else{
+            Copy-Item -Force $font.FullName $font_fullpath;
+        }
+    }
+
+    if(-not $IsWindows) {
+        _log_verbose "Flushing fonts cache...";
+        fc-cache -f $where_the_fonts_are_installed;
+    }
+
+    _log_verbose "Fonts were installed...";
+}
+
+##------------------------------------------------------------------------------
+function _install_fonts_helper_win32()
+{
+    ## @XXX(stdmatt): [macos_port] NOT TESTED on win32...
+    $font              = $args[0];
+    $font_install_path = $args[1];
+
     ## Thanks to:Arkady Karasin - https://stackoverflow.com/a/61035940
     $FONTS       = 0x14
     $COPYOPTIONS = 4 + 16;
     $OBJ_SHELL   = New-Object -ComObject Shell.Application;
+    $OBJ_FOLDER  = $OBJ_SHELL.Namespace($FONTS);
+    $COPY_FLAG   = [String]::Format("{0:x}", $COPYOPTIONS);
 
-    $obj_folder = $OBJ_SHELL.Namespace($FONTS);
-
-    $fonts_folder                  = "$FONTS_SOURCE_DIR/jetbrains-mono";
-    $where_the_fonts_are_installed = "$FONTS_INSTALL_FULLPATH";
-
-    $folder_contents = Get-ChildItem -Path $fonts_folder -File
-    foreach($font in $folder_contents) {
-        $dest = _basepath $font.FullName;
-        $dest = "$where_the_fonts_are_installed/$dst";
-
-        if(Test-Path -Path $dest) {
-            _log_verbose "Font ($font) already installed.";
-        } else {
-            _log_verbose "Installing ($font).";
-
-            $copy_flag = [String]::Format("{0:x}", $COPYOPTIONS);
-            $obj_folder.CopyHere($font.fullname, $copy_flag);
-        }
-    }
+    $OBJ_FOLDER.CopyHere($font.fullname, $COPY_FLAG);
+    Copy-Item $font.fullname $font_install_path;
 }
 
+install-fonts
 
 ##----------------------------------------------------------------------------##
 ## Shell                                                                      ##
@@ -895,8 +929,8 @@ function files()
         _log_fatal("No file manager was found - Aborting...");
         return;
     }
-    
-    if(-not (sh_dir_exists $target_path)) { 
+
+    if(-not (sh_dir_exists $target_path)) {
         _log_fatal("Invalid path - Aborting...");
         return;
     }
@@ -919,7 +953,7 @@ function _host_get_file_manager()
         ## Should we create something like the IsWindows and IsLinux to
         ## check if we are under WSL??
         return "explorer.exe";
-    } elseif($IsMacOS) { 
+    } elseif($IsMacOS) {
         return "open";
     }
     else {
