@@ -194,6 +194,10 @@ function sh_rgb_to_ansi($r, $g, $b, $str)
 ##------------------------------------------------------------------------------
 function sh_hex_to_ansi($hex, $str)
 {
+    if($hex.Length -ne 7) {
+        $hex = "#FF00FF";
+    }
+
     $esc = [char]27;
 
     $r = [uint32]("#" + $hex[1] + $hex[2]);
@@ -323,11 +327,6 @@ $VIM_SOURCE_DIR                     = "$DOTS_DIR/extras/vim";
 $VIMRC_INSTALL_FULLPATH             = "$HOME_DIR/.vimrc";
 $NEOVIM_WIN32_INIT_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/nvim/init.vim";
 $NEOVIM_UNIX_INIT_INSTALL_FULLPATH  = "$HOME_DIR/.config/nvim/init.vim";
-##  VsCode
-$VSCODE_SOURCE_DIR                   = "$DOTS_DIR/extras/vscode";
-$VSCODE_KEYBINDINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Roaming/Code/User/keybindings.json";
-$VSCODE_SETTINGS_INSTALL_FULLPATH    = "$HOME_DIR/AppData/Roaming/Code/User/settings.json";
-$VSCODE_SNIPPETS_INSTALL_FULLPATH    = "$HOME_DIR/AppData/Roaming/Code/User/snippets/stdmatt_snippets.code-snippets";
 ##  Binaries
 $BINARIES_SOURCE_DIR       = "$DOTS_DIR/extras/bin/win32";
 $BINARIES_INSTALL_FULLPATH = "$STDMATT_BIN_DIR";
@@ -516,11 +515,6 @@ function edit-profile()
 {
     nvim                                     `
         $profile                             `
-        $TERMINAL_SETTINGS_INSTALL_FULLPATH  `
-        $VSCODE_KEYBINDINGS_INSTALL_FULLPATH `
-        $VSCODE_SETTINGS_INSTALL_FULLPATH    `
-        $VSCODE_SNIPPETS_INSTALL_FULLPATH;
-
     install-profile;
 }
 
@@ -554,42 +548,6 @@ function sync-journal()
 
     git pull
     git push
-}
-
-##------------------------------------------------------------------------------
-function sync-dots()
-{
-    _log "REFACTOR!!!"
-    # if(!(sh_dir_exists $DOTS_DIR)) {
-    #     "DOTS_DIR doesn't exits...";
-    #     return;
-    # }
-
-    # cd $DOTS_DIR;
-    # git add .
-
-    # $current_pc_name = hostname;
-    # $current_date    = date;
-    # $commit_msg      = "[sync-dots] ($current_pc_name) - ($current_date)";
-
-    # echo $commit_msg;
-    # git commit -m "$commit_msg";
-
-    # git pull
-    # git push
-
-    # & ./install.ps1
-}
-
-##------------------------------------------------------------------------------
-function sync-all()
-{
-    sync-dots;
-    sync-journal;
-    git-config;
-    install-all;
-
-    repochecker --all $PROJECTS_DIR;
 }
 
 
@@ -680,11 +638,8 @@ function install-all()
     install-binaries;
     install-fonts;
 
+    git-config;
 }
-
-$env:PATH = $env:PATH + ":" + "/Users/stdmatt/.stdmatt/bin";
-echo $env:PATH;
-
 
 ##------------------------------------------------------------------------------
 function install-profile()
@@ -726,7 +681,7 @@ function install-profile()
     }
 
     ## Vim
-    _copy_newer_file "$VIM_SOURCE_DIR/.vimrc"   "$VIMRC_INSTALL_FULLPATH";
+    _copy_newer_file "$VIM_SOURCE_DIR/.vimrc"  "$VIMRC_INSTALL_FULLPATH";
 
     if($IsWindows) {
         _copy_newer_file "$VIM_SOURCE_DIR/init.vim"          $NEOVIM_WIN32_INIT_INSTALL_FULLPATH;
@@ -735,13 +690,6 @@ function install-profile()
     } else {
         _copy_newer_file "$VIM_SOURCE_DIR/init.vim"          $NEOVIM_UNIX_INIT_INSTALL_FULLPATH;
         sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim';
-    }
-
-    if($IsWindows) {
-        ## VSCode
-        _copy_newer_file "$VSCODE_SOURCE_DIR/keybindings.json" "$VSCODE_KEYBINDINGS_INSTALL_FULLPATH";
-        _copy_newer_file "$VSCODE_SOURCE_DIR/settings.json"    "$VSCODE_SETTINGS_INSTALL_FULLPATH";
-        _copy_newer_file "$VSCODE_SOURCE_DIR/snippets.json"    "$VSCODE_SNIPPETS_INSTALL_FULLPATH";
     }
 }
 
@@ -825,8 +773,6 @@ function _install_fonts_helper_win32()
     Copy-Item $font.fullname $font_install_path;
 }
 
-install-fonts
-
 ##----------------------------------------------------------------------------##
 ## Shell                                                                      ##
 ##----------------------------------------------------------------------------##
@@ -855,8 +801,8 @@ function _make_git_prompt()
     $prompt       = ":)";
     $color_index  = (Get-Date -UFormat "%M") % 4;                    ## Makes the color cycle withing minutes
     $os_name      = (sh_rgb_to_ansi 0x62 0x62 0x62 ":[${sh_OSName}]"); ## Dark gray
-    $git_line     = (sh_rgb_to_ansi 0x62 0x62 0x62 "${git_line}"     ); ## Dark gray
-    $prompt       = (sh_rgb_to_ansi 0x9E 0x9E 0x9E "$prompt"         ); ## Light gray
+    $git_line     = (sh_rgb_to_ansi 0x62 0x62 0x62 "${git_line}"    ); ## Dark gray
+    $prompt       = (sh_rgb_to_ansi 0x9E 0x9E 0x9E "$prompt"        ); ## Light gray
     $colored_path = "";
 
     if($color_index -eq 0) {
@@ -942,23 +888,13 @@ function files()
 ##------------------------------------------------------------------------------
 function _host_get_file_manager()
 {
-    if($IsWindows) {
-        return "explorer.exe";
-    } elseif($IsLinux) {
-        ## @todo(stdmatt): [File explorer on Linux] - 08 Feb, 2022
-        ## Perhaps check with uname if we are under wsl and if so just
-        ## open the explorer, otherwise open the deault for linux...
-
-        ## @???(stdmatt): [$IsWSL] - 08 Feb, 2022
-        ## Should we create something like the IsWindows and IsLinux to
-        ## check if we are under WSL??
+    if($IsWindows -or $sh_IsWsl) {
         return "explorer.exe";
     } elseif($IsMacOS) {
         return "open";
     }
-    else {
-        return "";
-    }
+
+    return "";
 }
 
 ##------------------------------------------------------------------------------
@@ -976,37 +912,13 @@ function create-link()
     $null = (New-Item -ItemType HardLink -Target $src_path -Path $dst_path -Force);
 }
 
-##------------------------------------------------------------------------------
-function create-shortcut()
-{
-    $src_path = $args[0];
-    $dst_path = $args[1];
-
-    if ( _string_is_null_or_whitespace($src_path) ) {
-        _log_fatal("Missing source path - Aborting...");
-        return;
-    }
-    if ( _string_is_null_or_whitespace($dst_path) ) {
-        _log_fatal("Missing target path - Aborting...");
-        return;
-    }
-
-    $src_path = (Resolve-Path $src_path).ToString();
-
-    ## @todo(stdmatt): Check if thestring ends with .lnk and if not add it - Dec 28, 2020
-    $WshShell            = New-Object -ComObject WScript.Shell
-    $Shortcut            = $WshShell.CreateShortcut($dst_path);
-    $Shortcut.TargetPath = $src_path;
-    $Shortcut.Save();
-}
-
-
 ## vim
 ##------------------------------------------------------------------------------
 ## Remove-Alias -Path Alias:nv -Force -Option AllScope
-Set-Alias -Name vi  -Value nvim.exe -Force -Option AllScope
-Set-Alias -Name vim -Value nvim.exe -Force -Option AllScope
-Set-Alias -Name nv  -Value nvim.exe -Force -Option AllScope
+$_nv = if($IsWindows) { "nvim.exe" }  else { "nvim" }
+Set-Alias -Name vi  -Value $_nv -Force -Option AllScope
+Set-Alias -Name vim -Value $_nv -Force -Option AllScope
+Set-Alias -Name nv  -Value $_nv -Force -Option AllScope
 
 
 ## kill
@@ -1063,18 +975,18 @@ function nuke-dir()
         return;
     }
 
-    $dir_is_valid = sh_dir_exists $path_to_remove;
+    $dir_is_valid = (sh_dir_exists $path_to_remove);
     if(-not $dir_is_valid) {
         _log_fatal "Path isn't a valid directory...";
         return;
     }
 
-    rm -Recurse -Force $path_to_remove;
+    if($IsWindows) {
+        rm -Recurse -Force $path_to_remove;
+    } else {
+        rm -rf $path_to_remove;
+    }
 }
-
-
-# Set-Alias -name rm    -Value C:\Users\stdmatt\.stdmatt_bin\ark_rm.exe    -Force -Option AllScope
-# Set-Alias -name touch -Value C:\Users\stdmatt\.stdmatt_bin\ark_touch.exe -Force -Option AllScope
 
 
 ##----------------------------------------------------------------------------##
@@ -1090,4 +1002,5 @@ function http-server()
 ##----------------------------------------------------------------------------##
 ## Greeting                                                                   ##
 ##----------------------------------------------------------------------------##
-install-profile
+## @hack: Make a way to append to the paths...
+$env:PATH = $env:PATH + ":" + "/Users/stdmatt/.stdmatt/bin";
