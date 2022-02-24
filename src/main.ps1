@@ -3,7 +3,7 @@
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
 $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
-$env:DOTS_IS_VERSBOSE            = 0;
+$env:DOTS_IS_VERSBOSE            = 1;
 
 
 ##----------------------------------------------------------------------------##
@@ -21,6 +21,7 @@ $PROGRAM_LICENSE         = "GPLv3";
 ##----------------------------------------------------------------------------##
 ## Library Code                                                               ##
 ##----------------------------------------------------------------------------##
+
 ##
 ## Private Functions
 ##
@@ -109,6 +110,13 @@ function sh_join_path()
 }
 
 ##------------------------------------------------------------------------------
+function sh_mkdir()
+{
+    $path_to_create = $args[0];
+    $null = (New-Item -ItemType directory -Path $path_to_create -Force);
+}
+
+##------------------------------------------------------------------------------
 function sh_to_os_path()
 {
     $path = $args[0];
@@ -149,7 +157,6 @@ $SH_HEX_WHITE      = "#FFFFFF";
 function sh_rgb_to_ansi($r, $g, $b, $str)
 {
     $esc = [char]27;
-
     return "$esc[38;2;$r;$g;${b}m$str$esc[0m";
 }
 
@@ -271,9 +278,9 @@ $GIT_SOURCE_DIR              = "$DOTS_DIR/extras/git";
 $GIT_IGNORE_INSTALL_FULLPATH = "$HOME_DIR/.gitignore";
 ##  Powershell Profile
 $PROFILE_SOURCE_DIR                  = "$DOTS_DIR/src";
-$PROFILE_INSTALL_FULLPATH            = "$HOME_DIR/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"; ## Default Windows Powershell.
 $PWSH_WIN32_PROFILE_INSTALL_FULLPATH = "$HOME_DIR/Documents/PowerShell/Microsoft.PowerShell_profile.ps1";        ## pwsh profile in Windows.
-$PWSH_GNU_PROFILE_INSTALL_FULLPATH   = "$HOME_DIR/.config/powershell/Microsoft.PowerShell_profile.ps1";          ## pwsh profile in GNU/Linux.
+$PWSH_UNIX_PROFILE_INSTALL_FULLPATH  = "$HOME_DIR/.config/powershell/Microsoft.PowerShell_profile.ps1";          ## pwsh profile in Unix.
+$WINDOWS_PROFILE_INSTALL_FULLPATH    = "$HOME_DIR/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"; ## Default Windows Powershell.
 ##  Windows Terminal
 $TERMINAL_SOURCE_DIR                = "$DOTS_DIR/extras/terminal";
 $TERMINAL_SETTINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json";
@@ -281,7 +288,7 @@ $TERMINAL_SETTINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Packages/Microsof
 $VIM_SOURCE_DIR                     = "$DOTS_DIR/extras/vim";
 $VIMRC_INSTALL_FULLPATH             = "$HOME_DIR/.vimrc";
 $NEOVIM_WIN32_INIT_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/nvim/init.vim";
-$NEOVIM_GNU_INIT_INSTALL_FULLPATH   = "$HOME_DIR/.config/nvim/init.vim";
+$NEOVIM_UNIX_INIT_INSTALL_FULLPATH  = "$HOME_DIR/.config/nvim/init.vim";
 ##  VsCode
 $VSCODE_SOURCE_DIR                   = "$DOTS_DIR/extras/vscode";
 $VSCODE_KEYBINDINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Roaming/Code/User/keybindings.json";
@@ -388,8 +395,13 @@ function _log()
 $INVALID_FILE_TIME = -1;
 function _get_file_time()
 {
-    if((_file_exists($args[0]))) {
-        return (Get-Item $args[0]).LastWriteTimeUtc.Ticks;
+    $filename      = $args[0];
+    $is_valid_file = _file_exists($filename);
+
+    if($is_valid_file) {
+        $file_info  = (Get-Item -Force $filename);
+        $file_ticks = $file_info.LastAccessTimeUtc.Ticks;
+        return $file_ticks;
     }
     return $INVALID_FILE_TIME;
 }
@@ -397,44 +409,44 @@ function _get_file_time()
 ##------------------------------------------------------------------------------
 function _copy_newer_file()
 {
-    $INDENT="   "
-    $NL="`n";
+    $INDENT = "   ";
+    $NL     = "`n";
 
     $repo_file    = $args[0];
     $fs_file      = $args[1];
-    $sync_to      = $null;
 
-    ## Check if there's any file missing, if so just copy it...
-    $fs_exists   = _file_exists "$fs_file";
-    $repo_exists = _file_exists "$repo_file";
-    if($fs_exists -xor $repo_exists) {
-        if($repo_exists) {
-            $sync_to = "fs";
-        } else {
-            $sync_to = "repo";
-        }
+    ## Repo file info.
+    $repo_exists = (_file_exists "$repo_file");
+    $repo_hash   = $null;
+    $repo_time   = 0;
+    if($repo_exists) {
+        $repo_hash = $(Get-FileHash $repo_file).hash;
+        $repo_time = (_get_file_time $repo_file);
     }
 
-    ## Check which file is newer...
-    if($null -eq $sync_to -and $(Get-FileHash $fs_file).hash -eq $(Get-FileHash $repo_file).hash) {
-        $sync_to = $null;
-    } else {
-        $fs_time   = (_get_file_time $fs_file  );
-        $repo_time = (_get_file_time $repo_file);
+    ## Fs file info.
+    $fs_exists = (_file_exists "$fs_file");
+    $fs_hash   = $null;
+    $fs_time   = 0;
+    if($fs_exists) {
+        $fs_hash = $(Get-FileHash $fs_file).hash;
+        $fs_time = (_get_file_time $fs_file);
+    }
 
-        if($fs_time -eq $INVALID_FILE_TIME -and $repo_time -eq $INVALID_FILE_TIME) {
-            _log_fatal "Both paths are invalid..." $NL `
-                    "$INDENT FS   : ($fs_file)" $NL `
-                    "$INDENT Repo : ($repo_file)" ;
-            return;
-        }
-        if($fs_time -gt $repo_time) {
-            $sync_to = "repo";
-        } elseif($repo_time -gt $fs_time) {
-            $sync_to = "fs";
-        } else {
-            $sync_to = $null;
-        }
+    if(-not $repo_exists -and -not $fs_exists) {
+        _log_fatal "Both paths are invalid..." $NL `
+                "$INDENT FS   : ($fs_file)"    $NL `
+                "$INDENT Repo : ($repo_file)"  ;
+        return;
+    }
+
+    ## Files are equal...
+    if($repo_hash -eq $fs_hash) {
+        $sync_to = $null;
+    } elseif($fs_time -gt $repo_time) {
+        $sync_to = "repo";
+    } elseif($repo_time -gt $fs_time) {
+        $sync_to = "fs";
     }
 
     ## Copy if needed..
@@ -447,7 +459,7 @@ function _copy_newer_file()
              "$INDENT FS   : ($colored_fs)"       ;
 
         $fs_dir_path = (sh_dirpath $fs_file);
-        $null        = (mkdir -Force $fs_dir_path);
+        $null        = (sh_mkdir   $fs_dir_path);
 
         Copy-Item $repo_file $fs_file -Force;
     }
@@ -455,9 +467,9 @@ function _copy_newer_file()
         $colored_repo = (sh_hex_to_ansi $SH_HEX_YELLOW $repo_file);
         $colored_fs   = (sh_hex_to_ansi $SH_HEX_FS     $fs_file);
 
-        _log "Syncing FS -> Repo"              $NL `
-             "$INDENT FS   : ($colored_fs))"   $NL `
-             "$INDENT Repo : ($colored_repo))"     ;
+        _log "Syncing FS -> Repo"             $NL `
+             "$INDENT FS   : ($colored_fs)"   $NL `
+             "$INDENT Repo : ($colored_repo)" ;
 
         Copy-Item $fs_file $repo_file -Force;
     }
@@ -465,9 +477,9 @@ function _copy_newer_file()
         $colored_repo = (sh_hex_to_ansi $SH_HEX_BLUE $repo_file);
         $colored_fs   = (sh_hex_to_ansi $SH_HEX_BLUE $fs_file);
 
-        _log_verbose "Files are equal..."      $NL `
-             "$INDENT FS   : ($colored_fs))"   $NL `
-             "$INDENT Repo : ($colored_repo))"     ;
+        _log_verbose "Files are equal..."     $NL `
+             "$INDENT FS   : ($colored_fs)"   $NL `
+             "$INDENT Repo : ($colored_repo)" ;
     }
 }
 
@@ -596,7 +608,7 @@ function journal()
     $journal_filename = "$JOURNAL_DIR" + "/" + $curr_date_str + $JOURNAL_FILE_EXT;
 
     try {
-        mkdir -Force $JOURNAL_DIR;
+        (sh_mkdir $JOURNAL_DIR);
         New-Item -Path "$journal_filename" -ItemType File -ea stop
     } catch {
     }
@@ -690,29 +702,50 @@ function install-profile()
     _copy_newer_file "$GIT_SOURCE_DIR/.gitignore" "$GIT_IGNORE_INSTALL_FULLPATH";
 
     ## Profile
-    _copy_newer_file "$PROFILE_SOURCE_DIR/main.ps1"  $PROFILE_INSTALL_FULLPATH;
-    create-link      $PROFILE_INSTALL_FULLPATH       $PWSH_WIN32_PROFILE_INSTALL_FULLPATH;
-    create-link      $PROFILE_INSTALL_FULLPATH       $PWSH_GNU_PROFILE_INSTALL_FULLPATH;
+    if($IsWindows) {
+        _copy_newer_file "$PROFILE_SOURCE_DIR/main.ps1"        $PWSH_WIN32_PROFILE_INSTALL_FULLPATH;
+        create-link       $PWSH_WIN32_PROFILE_INSTALL_FULLPATH $WINDOWS_PROFILE_INSTALL_FULLPATH;
+    } else {
+        _copy_newer_file "$PROFILE_SOURCE_DIR/main.ps1" $PWSH_UNIX_PROFILE_INSTALL_FULLPATH;
+    }
 
     ## Terminal
-    _copy_newer_file "$TERMINAL_SOURCE_DIR/windows_terminal.json" "$TERMINAL_SETTINGS_INSTALL_FULLPATH";
+    if($IsWindows) {
+        _copy_newer_file "$TERMINAL_SOURCE_DIR/windows_terminal.json" "$TERMINAL_SETTINGS_INSTALL_FULLPATH";
+    } else {
+        $os_name = (sh_get_os_name);
+        _log_verbose "No terminal profile for: $os_name";
+    }
 
     ## Vim
     _copy_newer_file "$VIM_SOURCE_DIR/.vimrc"   "$VIMRC_INSTALL_FULLPATH";
 
-    _copy_newer_file "$VIM_SOURCE_DIR/init.vim"          $NEOVIM_WIN32_INIT_INSTALL_FULLPATH;
-    create-link      $NEOVIM_WIN32_INIT_INSTALL_FULLPATH $NEOVIM_GNU_INIT_INSTALL_FULLPATH;
+    if($IsWindows) {
+        _copy_newer_file "$VIM_SOURCE_DIR/init.vim"          $NEOVIM_WIN32_INIT_INSTALL_FULLPATH;
+        create-link      $NEOVIM_WIN32_INIT_INSTALL_FULLPATH $NEOVIM_UNIX_INIT_INSTALL_FULLPATH;
+        ## @todo(stdmatt): Add the install of vim-plug...
+    } else {
+        _copy_newer_file "$VIM_SOURCE_DIR/init.vim"          $NEOVIM_UNIX_INIT_INSTALL_FULLPATH;
+        sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim';
+    }
 
-    ## VSCode
-    _copy_newer_file "$VSCODE_SOURCE_DIR/keybindings.json" "$VSCODE_KEYBINDINGS_INSTALL_FULLPATH";
-    _copy_newer_file "$VSCODE_SOURCE_DIR/settings.json"    "$VSCODE_SETTINGS_INSTALL_FULLPATH";
-    _copy_newer_file "$VSCODE_SOURCE_DIR/snippets.json"    "$VSCODE_SNIPPETS_INSTALL_FULLPATH";
+    if($IsWindows) {
+        ## VSCode
+        _copy_newer_file "$VSCODE_SOURCE_DIR/keybindings.json" "$VSCODE_KEYBINDINGS_INSTALL_FULLPATH";
+        _copy_newer_file "$VSCODE_SOURCE_DIR/settings.json"    "$VSCODE_SETTINGS_INSTALL_FULLPATH";
+        _copy_newer_file "$VSCODE_SOURCE_DIR/snippets.json"    "$VSCODE_SNIPPETS_INSTALL_FULLPATH";
+    }
 }
 
 ##------------------------------------------------------------------------------
 function install-binaries()
 {
-    $null = (mkdir $BINARIES_INSTALL_FULLPATH -Force);
+    if(-not $IsWindows) {
+        _log_verbose "Not on Windows - Just ignoring...";
+        return;
+    }
+
+    $null = (sh_mkdir $BINARIES_INSTALL_FULLPATH);
 
     $folder_contents = (Get-ChildItem -Path $BINARIES_SOURCE_DIR);
     foreach($filename in $folder_contents) {
@@ -782,9 +815,9 @@ function _make_git_prompt()
     $curr_path    = (Get-Location).Path;
     $prompt       = ":)";
     $color_index  = (Get-Date -UFormat "%M") % 4;                    ## Makes the color cycle withing minutes
-    $os_name      = (rgb_to_ansi 0x62 0x62 0x62 ":[${sh_os_name}]"); ## Dark gray
-    $git_line     = (rgb_to_ansi 0x62 0x62 0x62 "${git_line}"     ); ## Dark gray
-    $prompt       = (rgb_to_ansi 0x9E 0x9E 0x9E "$prompt"         ); ## Light gray
+    $os_name      = (sh_rgb_to_ansi 0x62 0x62 0x62 ":[${sh_os_name}]"); ## Dark gray
+    $git_line     = (sh_rgb_to_ansi 0x62 0x62 0x62 "${git_line}"     ); ## Dark gray
+    $prompt       = (sh_rgb_to_ansi 0x9E 0x9E 0x9E "$prompt"         ); ## Light gray
     $colored_path = "";
 
     if($color_index -eq 0) {
