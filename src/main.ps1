@@ -185,8 +185,8 @@ function sh_ansi($color, $str)
 ##
 
 ##------------------------------------------------------------------------------
-$sh_IsWsl   = (_sh_check_wsl);
-$sh_os_name = (sh_get_os_name);
+$sh_IsWsl  = (_sh_check_wsl);
+$sh_OSName = (sh_get_os_name);
 
 
 ##----------------------------------------------------------------------------##
@@ -281,9 +281,10 @@ $PROFILE_SOURCE_DIR                  = "$DOTS_DIR/src";
 $PWSH_WIN32_PROFILE_INSTALL_FULLPATH = "$HOME_DIR/Documents/PowerShell/Microsoft.PowerShell_profile.ps1";        ## pwsh profile in Windows.
 $PWSH_UNIX_PROFILE_INSTALL_FULLPATH  = "$HOME_DIR/.config/powershell/Microsoft.PowerShell_profile.ps1";          ## pwsh profile in Unix.
 $WINDOWS_PROFILE_INSTALL_FULLPATH    = "$HOME_DIR/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"; ## Default Windows Powershell.
-##  Windows Terminal
-$TERMINAL_SOURCE_DIR                = "$DOTS_DIR/extras/terminal";
-$TERMINAL_SETTINGS_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json";
+## Terminal
+$TERMINAL_SOURCE_DIR                      = "$DOTS_DIR/extras/terminal";
+$TERMINAL_WIN32_SETTINGS_INSTALL_FULLPATH = "%APPDATA%\alacritty\alacritty.yml"
+$TERMINAL_UNIX_SETTINGS_INSTALL_FULLPATH  = "$HOME_DIR/.config/alacritty/alacritty.yml"
 ##  Vim
 $VIM_SOURCE_DIR                     = "$DOTS_DIR/extras/vim";
 $VIMRC_INSTALL_FULLPATH             = "$HOME_DIR/.vimrc";
@@ -674,7 +675,11 @@ function install-all()
     install-profile;
     install-binaries;
     install-fonts;
+
 }
+
+$env:PATH = $env:PATH + ":" + "/Users/stdmatt/.stdmatt/bin";
+echo $env:PATH;
 
 
 ##------------------------------------------------------------------------------
@@ -711,10 +716,9 @@ function install-profile()
 
     ## Terminal
     if($IsWindows) {
-        _copy_newer_file "$TERMINAL_SOURCE_DIR/windows_terminal.json" "$TERMINAL_SETTINGS_INSTALL_FULLPATH";
+        _copy_newer_file "$TERMINAL_SOURCE_DIR/alacritty.yml" "$TERMINAL_WIN32_SETTINGS_INSTALL_FULLPATH";
     } else {
-        $os_name = (sh_get_os_name);
-        _log_verbose "No terminal profile for: $os_name";
+        _copy_newer_file "$TERMINAL_SOURCE_DIR/alacritty.yml" "$TERMINAL_UNIX_SETTINGS_INSTALL_FULLPATH";
     }
 
     ## Vim
@@ -815,7 +819,7 @@ function _make_git_prompt()
     $curr_path    = (Get-Location).Path;
     $prompt       = ":)";
     $color_index  = (Get-Date -UFormat "%M") % 4;                    ## Makes the color cycle withing minutes
-    $os_name      = (sh_rgb_to_ansi 0x62 0x62 0x62 ":[${sh_os_name}]"); ## Dark gray
+    $os_name      = (sh_rgb_to_ansi 0x62 0x62 0x62 ":[${sh_OSName}]"); ## Dark gray
     $git_line     = (sh_rgb_to_ansi 0x62 0x62 0x62 "${git_line}"     ); ## Dark gray
     $prompt       = (sh_rgb_to_ansi 0x9E 0x9E 0x9E "$prompt"         ); ## Light gray
     $colored_path = "";
