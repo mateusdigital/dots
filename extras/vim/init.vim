@@ -23,13 +23,14 @@ set undofile
 set signcolumn=yes
 set updatetime=500
 set nowrap
-set clipboard^=unnamed,unnamedplus
+set clipboard^=unnamed,unnamedplus  " Make clipboard works as expected...
+set showtabline=2                   " File tabs allways visible
 " Make the spaces visible.
-:set encoding=utf-8
-:set listchars=trail:·
-:set listchars=space:·
-:set list
-set showtabline=2               " File tabs allways visible
+set encoding=utf-8
+set listchars=trail:·
+set listchars=space:·
+set list
+
 
 
 "-----------------------------------------------------------------------------"
@@ -40,6 +41,7 @@ call plug#begin()
     " Themes
     Plug 'tomasiser/vim-code-dark'
     Plug 'morhetz/gruvbox'
+    Plug 'lifepillar/vim-solarized8'
 
     " Window / Panels / etc...
     Plug 'szw/vim-maximizer'
@@ -80,8 +82,11 @@ if (has("termguicolors"))
    set termguicolors
 endif
 
-colorscheme codedark
+set background=light
+" colorscheme codedark
 " colorscheme gruvbox
+colorscheme solarized8
+
 
 "-----------------------------------------------------------------------------"
 " Remappings                                                                  "
