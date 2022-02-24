@@ -83,9 +83,9 @@ if (has("termguicolors"))
 endif
 
 set background=light
-" colorscheme codedark
+colorscheme codedark
 " colorscheme gruvbox
-colorscheme solarized8
+" colorscheme solarized8
 
 
 "-----------------------------------------------------------------------------"
