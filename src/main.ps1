@@ -98,6 +98,25 @@ function sh_get_script_path()
 }
 
 ##------------------------------------------------------------------------------
+function sh_file_exists()
+{
+    if(_string_is_null_or_whitespace($args[0])) {
+        return $false;
+    }
+    return (Test-Path -Path $args[0] -PathType Leaf);
+}
+
+##------------------------------------------------------------------------------
+function sh_dir_exists()
+{
+    if(_string_is_null_or_whitespace($args[0])) {
+        return $false;
+    }
+
+    return (Test-Path -Path $args[0] -PathType Container);
+}
+
+##------------------------------------------------------------------------------
 function sh_join_path()
 {
     ## @XXX(stdmatt): [Optimize] - 08 Feb, 2022
@@ -315,24 +334,6 @@ function _string_is_null_or_whitespace()
     return [string]::IsNullOrWhiteSpace($args[0]);
 }
 
-##------------------------------------------------------------------------------
-function _file_exists()
-{
-    if(_string_is_null_or_whitespace($args[0])) {
-        return $false;
-    }
-    return (Test-Path -Path $args[0] -PathType Leaf);
-}
-
-##------------------------------------------------------------------------------
-function _dir_exists()
-{
-    if(_string_is_null_or_whitespace($args[0])) {
-        return $false;
-    }
-
-    return (Test-Path -Path $args[0] -PathType Container);
-}
 
 ##------------------------------------------------------------------------------
 function _basepath()
@@ -397,7 +398,7 @@ $INVALID_FILE_TIME = -1;
 function _get_file_time()
 {
     $filename      = $args[0];
-    $is_valid_file = _file_exists($filename);
+    $is_valid_file = sh_file_exists($filename);
 
     if($is_valid_file) {
         $file_info  = (Get-Item -Force $filename);
@@ -417,7 +418,7 @@ function _copy_newer_file()
     $fs_file      = $args[1];
 
     ## Repo file info.
-    $repo_exists = (_file_exists "$repo_file");
+    $repo_exists = (sh_file_exists "$repo_file");
     $repo_hash   = $null;
     $repo_time   = 0;
     if($repo_exists) {
@@ -426,7 +427,7 @@ function _copy_newer_file()
     }
 
     ## Fs file info.
-    $fs_exists = (_file_exists "$fs_file");
+    $fs_exists = (sh_file_exists "$fs_file");
     $fs_hash   = $null;
     $fs_time   = 0;
     if($fs_exists) {
@@ -533,7 +534,7 @@ function reload-profile()
 ##------------------------------------------------------------------------------
 function sync-journal()
 {
-    if(!(_dir_exists $JOURNAL_DIR)) {
+    if(!(sh_dir_exists $JOURNAL_DIR)) {
         git clone "https://gitlab.com/stdmatt-private/journal" "$JOURNAL_DIR";
         return;
     }
@@ -556,7 +557,7 @@ function sync-journal()
 function sync-dots()
 {
     _log "REFACTOR!!!"
-    # if(!(_dir_exists $DOTS_DIR)) {
+    # if(!(sh_dir_exists $DOTS_DIR)) {
     #     "DOTS_DIR doesn't exits...";
     #     return;
     # }
@@ -642,7 +643,7 @@ function git-config()
 function git-first-date-of()
 {
     $filename = $args[0];
-    if(-not (_file_exists($filename))) {
+    if(-not (sh_file_exists($filename))) {
         _log_fatal "Missing ($filename)";
         return;
     }
@@ -884,27 +885,24 @@ function files()
 {
     ## Open the Filesystem Manager into a given path.
     ## If no path was given open the current dir.
-
     $target_path = $args[0];
-    if($target_path -ne "."                           -or
-       $target_path -ne ".."                          -or
-       (_string_is_null_or_whitespace($target_path))  -or
-       (_file_exists                 ($target_path)))
-    {
-        if ( $target_path -eq "" )  {
-            $target_path=".";
-        }
+    if ($target_path -eq "") {
+        $target_path=".";
+    }
 
-        $file_manager = _host_get_file_manager;
-        if($file_manager -eq "") {
-            _log_fatal("No file manager was found - Aborting...");
-        }
-
-        & $file_manager $target_path;
+    $file_manager = (_host_get_file_manager);
+    if($file_manager -eq "") {
+        _log_fatal("No file manager was found - Aborting...");
+        return;
+    }
+    
+    if(-not (sh_dir_exists $target_path)) { 
+        _log_fatal("Invalid path - Aborting...");
         return;
     }
 
-    _log_fatal("Path ($target_path) doesn't not exists - Aborting...");
+    & $file_manager $target_path;
+    return;
 }
 
 ##------------------------------------------------------------------------------
@@ -921,7 +919,10 @@ function _host_get_file_manager()
         ## Should we create something like the IsWindows and IsLinux to
         ## check if we are under WSL??
         return "explorer.exe";
-    } else {
+    } elseif($IsMacOS) { 
+        return "open";
+    }
+    else {
         return "";
     }
 }
@@ -1028,7 +1029,7 @@ function nuke-dir()
         return;
     }
 
-    $dir_is_valid = _dir_exists $path_to_remove;
+    $dir_is_valid = sh_dir_exists $path_to_remove;
     if(-not $dir_is_valid) {
         _log_fatal "Path isn't a valid directory...";
         return;
