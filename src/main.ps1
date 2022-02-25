@@ -984,7 +984,7 @@ function nuke-dir()
     if($IsWindows) {
         rm -Recurse -Force $path_to_remove;
     } else {
-        rm -rf $path_to_remove;
+        rm -rf "$path_to_remove";
     }
 }
 
