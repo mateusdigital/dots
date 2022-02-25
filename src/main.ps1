@@ -628,6 +628,25 @@ function git-get-repo-url()
     Write-Output $url;
 }
 
+##------------------------------------------------------------------------------
+function git-delete-branch()
+{
+    $branch_name = $args[0];
+    $grep_result = (git branch --all | grep $branch_name);
+
+    if($grep_result.Length -eq 0) {
+        _log_fatal "Invalid branch ($branch_name)";
+        return;
+    }
+
+    _log "Deleting branch: ($branch_name)";
+    git branch      --delete $branch_name;
+    git push origin --delete $branch_name;
+
+    _log "Deleted...";
+}
+
+
 ##----------------------------------------------------------------------------##
 ## Install                                                                    ##
 ##----------------------------------------------------------------------------##
