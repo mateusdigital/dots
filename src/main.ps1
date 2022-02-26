@@ -589,13 +589,20 @@ function journal()
 function git-config()
 {
     _log_verbose "Configuring git...";
-
+    ## Info...
     git config --global user.name         "stdmatt";
     git config --global user.email        "stdmatt@pixelwizards.io";
+
+    ## Normal stuff...
     git config --global core.excludesfile "~/.gitignore";            ## Set the gitignore globaly...
     git config --global core.editor       "nvim";                    ## Set nvim as default editor...
     git config --global core.autocrlf     false;
     git config --global core.filemode     false;
+
+    ## Aliases...
+    git config --global alias.c commit;
+    git config --global alias.s status;
+    git config --global alias.d diff  ;
 
     _log_verbose "Done... ;D";
 }
