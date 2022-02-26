@@ -800,7 +800,17 @@ function _make_git_prompt()
 {
     $git_line = (git branch 2> $null);
     if($git_line) {
-        $git_branch = $git_line.Split("*")[1].Trim();
+        if($git_line -is [array]) {
+            for($i = 0; $i -lt $git_line.Length; $i += 1) {
+                $str = $git_line[$i].Trim();
+                if($str.StartsWith("*")) {
+                    $git_line = $str;
+                    break;
+                }
+            }
+        }
+        $git_branch = $git_line.Trim().Substring(2, $git_line.Length-2);
+
         ## @todo(stdmatt): 30 Nov, 2021 at 12:40:48
         ## Check how we want the PS1 to display git info...
         # $user_name  = (git config user.name);
@@ -988,6 +998,7 @@ function kill-for-anvil()
 ##------------------------------------------------------------------------------
 function nuke-dir()
 {
+    ## @improve(stdmatt): [Handle multiple args]
     $path_to_remove = $args[0];
     if($path_to_remove -eq "") {
         _log_fatal "No directory path was given";
@@ -1017,6 +1028,22 @@ function http-server()
     python3 -m http.server $args[1];
 }
 
+##----------------------------------------------------------------------------##
+## macOS Hacks                                                                ##
+##----------------------------------------------------------------------------##
+function do_macOS_hacks()
+{
+    #disable special characters when holding keys
+    defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
+    # normal minimum is 15 (225 ms)
+    defaults write -g             InitialKeyRepeat -float 5.0
+    defaults write NSGlobalDomain InitialKeyRepeat -float 5.0
+
+    # normal minimum is 2 (30 ms)
+    defaults write -g             KeyRepeat -float 0.7
+    defaults write NSGlobalDomain KeyRepeat -float 0.7
+}
 
 ##----------------------------------------------------------------------------##
 ## Greeting                                                                   ##
