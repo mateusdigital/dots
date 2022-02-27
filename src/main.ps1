@@ -285,7 +285,7 @@ Set-PSReadLineOption -Colors @{
 ##------------------------------------------------------------------------------
 ## Other
 $WORKSTATION_PREFIX = "KIV-WKS"; ## My workstation prefix, so I can know that I'm working computer...
-$IS_WORK_COMPUTER   = (hostname).Contains($WORKSTATION_PREFIX);
+$IS_WORK_COMPUTER   = [Environment]::MachineName.Contains($WORKSTATION_PREFIX);
 
 ##------------------------------------------------------------------------------
 ## General Paths...

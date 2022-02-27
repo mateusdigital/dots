@@ -8,7 +8,7 @@ $measure_result_filename = (sh_join_path      `
 
 $measures   = @{};
 $acc_time   = 0.0;
-$runs_count = 1;
+$runs_count = 5;
 
 
 for($i = 0; $i -lt $runs_count; $i += 1) {
@@ -57,5 +57,5 @@ foreach($item in $measures.Values) {
 }
 
 ## Display table...
-$measures.Values | Sort-Object -Property "exec_time" -Descending;
-echo "Total time: $acc_time";
+($measures.Values | Sort-Object -Property "exec_time" -Descending) > $measure_result_filename;
+(echo "Total time: $acc_time") >> $measure_result_filename;
