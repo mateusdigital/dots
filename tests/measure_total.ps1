@@ -8,7 +8,7 @@ $measure_result_filename = (sh_join_path      `
 
 $measures   = @{};
 $acc_time   = 0.0;
-$runs_count = 5;
+$runs_count = 20;
 
 
 for($i = 0; $i -lt $runs_count; $i += 1) {

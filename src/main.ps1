@@ -27,7 +27,7 @@ $PROGRAM_LICENSE         = "GPLv3";
 ##
 
 ##------------------------------------------------------------------------------
-function _sh_check_wsl()
+function sh_is_wsl()
 {
     if($IsLinux) {
         $result = (uname -a);
@@ -85,7 +85,7 @@ function sh_get_home_dir()
 ##------------------------------------------------------------------------------
 function sh_get_os_name()
 {
-    if($sh_IsWsl) {
+    if((sh_is_wsl)) {
         return "WSL";
     } elseif($IsWindows) {
         return "Win32";
@@ -131,13 +131,7 @@ function sh_dir_exists()
 ##------------------------------------------------------------------------------
 function sh_join_path()
 {
-    ## @XXX(stdmatt): [Optimize] - 08 Feb, 2022
-    $fullpath = $args[0];
-    for($i = 1; $i -lt $args.Length; $i += 1) {
-        $item     = $args[$i]
-        $fullpath = (Join-Path $fullpath $item);
-    }
-    return (_sh_fwd_slash $fullpath);
+    return [IO.Path]::Combine($args -split " ");
 }
 
 ##------------------------------------------------------------------------------
@@ -158,7 +152,7 @@ function sh_to_os_path()
     $new_path              = $path;
     $looks_like_win32_path = ($path -match "([a-z]|[A-Z]):(\\|/)");
     if($looks_like_win32_path) {
-        if($sh_IsWsl) {
+        if((sh_is_wsl)) {
             $new_path = (wslpath -u $path);
         }
     } else {
@@ -215,15 +209,6 @@ function sh_ansi($color, $str)
 }
 
 
-##
-## Globals
-##
-
-##------------------------------------------------------------------------------
-$sh_IsWsl  = (_sh_check_wsl);
-$sh_OSName = (sh_get_os_name);
-
-
 ##----------------------------------------------------------------------------##
 ## PSReadLine                                                                 ##
 ##----------------------------------------------------------------------------##
@@ -237,19 +222,6 @@ function _on_vi_mode_change
     }
 }
 
-##------------------------------------------------------------------------------
-## Settings just for the pwsh.
-if($PSVersionTable.PSVersion.Major -ge 7) {
-    Set-PSReadLineOption            `
-        -ViModeIndicator     Script `
-        -ViModeChangeHandler $Function:_on_vi_mode_change;
-}
-
-##------------------------------------------------------------------------------
-Set-PSReadLineOption -EditMode Vi;
-
-## Directly from:
-##   https://github.com/tomasiser/vim-code-dark
 $_ps_color_black         = "#1E1E1E";  ##
 $_ps_color_gray          = "#808080";  ## #include
 $_ps_color_white         = "#D4D4D4";  ## normal text
@@ -265,7 +237,11 @@ $_ps_color_light_red     = "#D16969";  ## /[a-Z]/
 $_ps_color_red           = "#F44747";  ## error message
 $_ps_color_pink          = "#C586C0";  ## else if
 
-Set-PSReadLineOption -Colors @{
+Set-PSReadLineOption                                  `
+    -ViModeIndicator     Script                       `
+    -ViModeChangeHandler $Function:_on_vi_mode_change `
+    -EditMode            Vi                           `
+    -Colors @{
     Default            = $_ps_color_white
     Command            = $_ps_color_yellow
     ContinuationPrompt = "#FF00FF"
@@ -277,7 +253,6 @@ Set-PSReadLineOption -Colors @{
     String             = $_ps_color_orange
     Variable           = $_ps_color_light_blue
 }
-
 
 ##----------------------------------------------------------------------------##
 ## Constants                                                                  ##
@@ -751,7 +726,8 @@ function install-fonts()
     } else {
         ## @todo(stdmatt): _install_fonts_helper_unix should work in
         ## everything but windows... but i have no way to test it right now...
-        _log_fatal "Installing fonts not implemented for OS: ($sh_OSName)";
+        $os_name = sh_get_os_name;
+        _log_fatal "Installing fonts not implemented for OS: ($os_name)";
         return;
     }
 
@@ -835,8 +811,10 @@ function _make_git_prompt()
 
     $curr_path    = (Get-Location).Path;
     $prompt       = ":)";
+    $os_name      = (sh_get_os_name);
+
     $color_index  = (Get-Date -UFormat "%M") % 4;                    ## Makes the color cycle withing minutes
-    $os_name      = (sh_rgb_to_ansi 0x62 0x62 0x62 ":[${sh_OSName}]"); ## Dark gray
+    $os_name      = (sh_rgb_to_ansi 0x62 0x62 0x62 ":[${os_name}]"  ); ## Dark gray
     $git_line     = (sh_rgb_to_ansi 0x62 0x62 0x62 "${git_line}"    ); ## Dark gray
     $prompt       = (sh_rgb_to_ansi 0x9E 0x9E 0x9E "$prompt"        ); ## Light gray
     $colored_path = "";
@@ -924,7 +902,7 @@ function files()
 ##------------------------------------------------------------------------------
 function _host_get_file_manager()
 {
-    if($IsWindows -or $sh_IsWsl) {
+    if($IsWindows -or (sh_is_wsl)) {
         return "explorer.exe";
     } elseif($IsMacOS) {
         return "open";
