@@ -1,12 +1,15 @@
 . $profile
 
-$SCRIPT_DIR          = (sh_dirpath $MyInvocation.InvocationName)
-$MEASURE_OUTPUT_FILE = (sh_join_path $SCRIPT_DIR "result.txt");
+$script_to_measure       = $profile;
+$measure_result_filename = (sh_join_path      `
+    (sh_dirpath $MyInvocation.InvocationName) `
+    ("result_" + (Get-Date -UFormat "%F_%H-%M-%S") + ".txt")
+);
 
-$measures          = @{};
-$acc_time          = 0.0;
-$runs_count        = 10;
-$script_to_measure = $profile;
+$measures   = @{};
+$acc_time   = 0.0;
+$runs_count = 1;
+
 
 for($i = 0; $i -lt $runs_count; $i += 1) {
     Write-Progress                      `
@@ -22,9 +25,9 @@ for($i = 0; $i -lt $runs_count; $i += 1) {
         | grep  "00:"          `
         | tr -s " "               `
         | cut -d " " -f 3-1000    `
-        > $MEASURE_OUTPUT_FILE
+        > $measure_result_filename
 
-    $file = (Get-Content "$MEASURE_OUTPUT_FILE");
+    $file = (Get-Content "$measure_result_filename");
     foreach ($line in $file) {
         $comps = $line.Split(" ");
 
