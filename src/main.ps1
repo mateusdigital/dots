@@ -501,33 +501,7 @@ function reload-profile()
 
 
 ##----------------------------------------------------------------------------##
-## Sync...                                                                    ##
-##----------------------------------------------------------------------------##
-##------------------------------------------------------------------------------
-function sync-journal()
-{
-    if(!(sh_dir_exists $JOURNAL_DIR)) {
-        git clone "https://gitlab.com/stdmatt-private/journal" "$JOURNAL_DIR";
-        return;
-    }
-
-    cd $JOURNAL_DIR;
-    git add .
-
-    $current_pc_name = hostname;
-    $current_date    = date;
-    $commit_msg      = "[sync-journal] ($current_pc_name) - ($current_date)";
-
-    _log $commit_msg;
-    git commit -m "$commit_msg";
-
-    git pull
-    git push
-}
-
-
-##----------------------------------------------------------------------------##
-## Utils                                                                      ##
+## Journal                                                                    ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
 function journal()
@@ -556,6 +530,27 @@ function journal()
     _stdmatt_cd "-";
 }
 
+##------------------------------------------------------------------------------
+function sync-journal()
+{
+    if(!(sh_dir_exists $JOURNAL_DIR)) {
+        git clone "https://gitlab.com/stdmatt-private/journal" "$JOURNAL_DIR";
+        return;
+    }
+
+    cd $JOURNAL_DIR;
+    git add .
+
+    $current_pc_name = hostname;
+    $current_date    = date;
+    $commit_msg      = "[sync-journal] ($current_pc_name) - ($current_date)";
+
+    _log $commit_msg;
+    git commit -m "$commit_msg";
+
+    git pull
+    git push
+}
 
 ##----------------------------------------------------------------------------##
 ## Git                                                                        ##
@@ -611,6 +606,20 @@ function git-get-repo-url()
 }
 
 ##------------------------------------------------------------------------------
+function git-curr-branch-name()
+{
+    $result = (git branch);
+    foreach($item in $result) {
+        $name = $item.Trim();
+        if($name.StartsWith("*")) {
+            $clean_name = $name.Replace("*", "").Trim();
+            return $clean_name;
+        }
+    }
+    return "";
+}
+
+##------------------------------------------------------------------------------
 function git-delete-branch()
 {
     $branch_name = $args[0];
@@ -628,6 +637,18 @@ function git-delete-branch()
     _log "Deleted...";
 }
 
+##------------------------------------------------------------------------------
+function git-push-to-origin()
+{
+    $branch_name = (git-curr-branch-name);
+    if($branch_name -eq "") {
+        _log_fatal "Invalid name...";
+        return;
+    }
+
+    git push --set-upstream origin $branch_name;
+}
+
 
 ##----------------------------------------------------------------------------##
 ## Install                                                                    ##
@@ -638,6 +659,10 @@ function install-all()
     install-profile;
     install-binaries;
     install-fonts;
+
+    if($IsMacOS) {
+        _install_macOS_hacks;
+    }
 
     git-config;
 }
@@ -775,6 +800,21 @@ function _install_fonts_helper_win32()
     Copy-Item $font.fullname $font_install_path;
 }
 
+##------------------------------------------------------------------------------
+function _install_macOS_hacks()
+{
+    #disable special characters when holding keys
+    defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
+    # normal minimum is 15 (225 ms)
+    defaults write -g             InitialKeyRepeat -float 5.0
+    defaults write NSGlobalDomain InitialKeyRepeat -float 5.0
+
+    # normal minimum is 2 (30 ms)
+    defaults write -g             KeyRepeat -float 0.7
+    defaults write NSGlobalDomain KeyRepeat -float 0.7
+}
+
 ##----------------------------------------------------------------------------##
 ## Shell                                                                      ##
 ##----------------------------------------------------------------------------##
@@ -843,7 +883,7 @@ function global:prompt
 
 
 ##----------------------------------------------------------------------------##
-## Aliases                                                                    ##
+## Aliases / Commands                                                         ##
 ##----------------------------------------------------------------------------##
 ## cd
 ##------------------------------------------------------------------------------
@@ -874,6 +914,9 @@ function _stdmatt_cd()
 Remove-Item -Path Alias:cd
 Set-Alias -Name cd -Value _stdmatt_cd -Force -Option AllScope
 
+##
+## Files
+##
 ##------------------------------------------------------------------------------
 function files()
 {
@@ -908,9 +951,13 @@ function _host_get_file_manager()
         return "open";
     }
 
+    ## @todo(stdmatt): Add for linux someday... at 2022-03-04, 15:54
     return "";
 }
 
+##
+## Create Link
+##
 ##------------------------------------------------------------------------------
 function create-link()
 {
@@ -926,7 +973,10 @@ function create-link()
     $null = (New-Item -ItemType HardLink -Target $src_path -Path $dst_path -Force);
 }
 
-## vim
+
+##
+## Vim
+##
 ##------------------------------------------------------------------------------
 ## Remove-Alias -Path Alias:nv -Force -Option AllScope
 $_nv = if($IsWindows) { "nvim.exe" }  else { "nvim" }
@@ -935,7 +985,9 @@ Set-Alias -Name vim -Value $_nv -Force -Option AllScope
 Set-Alias -Name nv  -Value $_nv -Force -Option AllScope
 
 
+##
 ## kill
+##
 ##------------------------------------------------------------------------------
 function kill-process()
 {
@@ -979,7 +1031,9 @@ function kill-for-anvil()
     kill-process Phoenix.Studio
 }
 
-## rm
+##
+## Delete (rm)
+##
 ##------------------------------------------------------------------------------
 function nuke-dir()
 {
@@ -1003,32 +1057,20 @@ function nuke-dir()
     }
 }
 
-
-##----------------------------------------------------------------------------##
-## HTTP Server                                                                ##
-##----------------------------------------------------------------------------##
+##
+## HTTP Server
+##
 ##------------------------------------------------------------------------------
 function http-server()
 {
     python3 -m http.server $args[1];
 }
 
-##----------------------------------------------------------------------------##
-## macOS Hacks                                                                ##
-##----------------------------------------------------------------------------##
-function do_macOS_hacks()
-{
-    #disable special characters when holding keys
-    defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
-    # normal minimum is 15 (225 ms)
-    defaults write -g             InitialKeyRepeat -float 5.0
-    defaults write NSGlobalDomain InitialKeyRepeat -float 5.0
 
-    # normal minimum is 2 (30 ms)
-    defaults write -g             KeyRepeat -float 0.7
-    defaults write NSGlobalDomain KeyRepeat -float 0.7
-}
+##----------------------------------------------------------------------------##
+## OS Hacks                                                                   ##
+##----------------------------------------------------------------------------##
 
 ##----------------------------------------------------------------------------##
 ## Greeting                                                                   ##
