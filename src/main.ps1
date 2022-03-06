@@ -53,6 +53,36 @@ function _sh_fwd_slash()
 ##
 
 ##------------------------------------------------------------------------------
+function sh_add_quotes()
+{
+    ## @improve: [Add single quotes] - 22-03-06
+    ## if $args[1] is == "single" add single quotes...
+    $value = $args[0];
+    return "`"${value}`"";
+}
+
+##------------------------------------------------------------------------------
+function sh_get_temp_filename()
+{
+    $random    = (Get-Random);
+    $date_time = (sh_date_time_for_filenames $args);
+
+    return "${random}_$date_time";
+}
+
+##------------------------------------------------------------------------------
+function sh_date_time_for_filenames()
+{
+    $fmt = "%Y-%m-%d %H:%M:%S";
+    if($args[0] -eq "safe") {
+        $fmt = "%Y-%m-%d_%H-%M-%S";
+    }
+
+    $str = (Get-Date -UFormat $fmt);
+    return $str;
+}
+
+##------------------------------------------------------------------------------
 function sh_basepath()
 {
     $arg = $args[0];
