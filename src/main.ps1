@@ -484,9 +484,9 @@ function _log_verbose()
 ##------------------------------------------------------------------------------
 function _log()
 {
-    $function_name = _log_get_call_function_name;
+    $function_name = (_log_get_call_function_name);
 
-    $output  = sh_hex_to_ansi $SH_HEX_GRAY "[$function_name] ";
+    $output  = (sh_hex_to_ansi $SH_HEX_GRAY "[$function_name] ");
     $output += $args;
 
     Write-Output $output;
@@ -739,6 +739,7 @@ function git-get-repo-root()
     $result = (git rev-parse --show-toplevel);
     return $result;
 }
+
 
 ##------------------------------------------------------------------------------
 function git-curr-branch-name()
