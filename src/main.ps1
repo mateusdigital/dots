@@ -21,6 +21,7 @@ $PROGRAM_LICENSE         = "GPLv3";
 ##----------------------------------------------------------------------------##
 ## Library Code                                                               ##
 ##----------------------------------------------------------------------------##
+$SH_NEW_LINE     = "`n";
 
 ##
 ## Private Functions
@@ -142,6 +143,86 @@ function sh_mkdir()
 }
 
 ##------------------------------------------------------------------------------
+## Thanks to: Artem Tikhomirov - https://stackoverflow.com/a/422529
+function sh_parse_ini_file($file)
+{
+    $ini = @{}
+
+    # Create a default section if none exist in the file. Like a java prop file.
+    $section = "NO_SECTION"
+    $ini[$section] = @{}
+
+    switch -regex -file $file {
+        "^\[(.+)\]$" {
+            $section = $matches[1].Trim()
+            $ini[$section] = @{}
+        }
+        "^\s*([^#].+?)\s*=\s*(.*)" {
+            $name, $value = $matches[1..2]
+            # skip comments that start with semicolon:
+            if (!($name.StartsWith(";"))) {
+                $ini[$section][$name] = $value.Trim()
+            }
+        }
+    }
+    return $ini;
+}
+
+##------------------------------------------------------------------------------
+function sh_print_ini($ini)
+{
+    $str = "";
+    foreach($section_name in $ini.Keys) {
+        $section = $ini[$section_name];
+        if($section.Count -eq 0) {
+            continue;
+        }
+
+        $str += "[$section_name] $SH_NEW_LINE";
+        foreach($item_name in $section.Keys) {
+            $item_value = $section[$item_name];
+            $str += "   $item_name = $item_value $SH_NEW_LINE";
+        }
+    }
+
+    Write-Output $str;
+}
+
+##------------------------------------------------------------------------------
+function sh_write_ini_to_file($ini, $filename)
+{
+    $str = (sh_print_ini $ini);
+    (sh_write_file $filename $str);
+}
+
+## @todo(stdmatt): [Incomplete ini functions] at 22-03-06
+##   - Add    value / section
+##   - Modify value / section
+##   - Create bare ini.
+##------------------------------------------------------------------------------
+function sh_ini_delete_section()
+{
+    $ini     = $args[0];
+    $section = $args[1];
+    $ini.Remove($section);
+
+    return $ini;
+}
+
+##------------------------------------------------------------------------------
+function sh_ini_delete_value_on_section()
+{
+    $ini     = $args[0];
+    $section = $args[1];
+    $value   = $args[2];
+
+    $ini[$section].Remove($value);
+    return $ini;
+}
+
+
+
+##------------------------------------------------------------------------------
 function sh_to_os_path()
 {
     $path = $args[0];
@@ -164,6 +245,7 @@ function sh_to_os_path()
     return $new_path;
 }
 
+##------------------------------------------------------------------------------
 ## Colors
 $SH_HEX_RED   = "#FF0000";
 $SH_HEX_GREEN = "#00FF00";
@@ -193,7 +275,6 @@ function sh_hex_to_ansi($hex, $str)
     }
 
     $esc = [char]27;
-
     $r = [uint32]("#" + $hex[1] + $hex[2]);
     $g = [uint32]("#" + $hex[3] + $hex[4]);
     $b = [uint32]("#" + $hex[5] + $hex[6]);
@@ -207,6 +288,15 @@ function sh_ansi($color, $str)
     ## @todo(stdmatt): Implement....
     return $str;
 }
+
+function sh_write_file()
+{
+    $filename = $args[0];
+    $content  = $args[1];
+
+    Out-File -Filepath $filename -Encoding utf8 -Force -InputObject $content;
+}
+
 
 
 ##----------------------------------------------------------------------------##
@@ -389,7 +479,6 @@ function _get_file_time()
 function _copy_newer_file()
 {
     $INDENT = "   ";
-    $NL     = "`n";
 
     $repo_file    = $args[0];
     $fs_file      = $args[1];
@@ -413,8 +502,8 @@ function _copy_newer_file()
     }
 
     if(-not $repo_exists -and -not $fs_exists) {
-        _log_fatal "Both paths are invalid..." $NL `
-                "$INDENT FS   : ($fs_file)"    $NL `
+        _log_fatal "Both paths are invalid..." $SH_NEW_LINE `
+                "$INDENT FS   : ($fs_file)"    $SH_NEW_LINE `
                 "$INDENT Repo : ($repo_file)"  ;
         return;
     }
@@ -433,8 +522,8 @@ function _copy_newer_file()
         $colored_repo = (sh_hex_to_ansi $SH_HEX_GREEN  $repo_file);
         $colored_fs   = (sh_hex_to_ansi $SH_HEX_YELLOW $fs_file);
 
-        _log "Syncing Repo -> FS"             $NL `
-             "$INDENT Repo : ($colored_repo)" $NL `
+        _log "Syncing Repo -> FS"             $SH_NEW_LINE `
+             "$INDENT Repo : ($colored_repo)" $SH_NEW_LINE `
              "$INDENT FS   : ($colored_fs)"       ;
 
         $fs_dir_path = (sh_dirpath $fs_file);
@@ -446,8 +535,8 @@ function _copy_newer_file()
         $colored_repo = (sh_hex_to_ansi $SH_HEX_YELLOW $repo_file);
         $colored_fs   = (sh_hex_to_ansi $SH_HEX_FS     $fs_file);
 
-        _log "Syncing FS -> Repo"             $NL `
-             "$INDENT FS   : ($colored_fs)"   $NL `
+        _log "Syncing FS -> Repo"             $SH_NEW_LINE `
+             "$INDENT FS   : ($colored_fs)"   $SH_NEW_LINE `
              "$INDENT Repo : ($colored_repo)" ;
 
         Copy-Item $fs_file $repo_file -Force;
@@ -456,8 +545,8 @@ function _copy_newer_file()
         $colored_repo = (sh_hex_to_ansi $SH_HEX_BLUE $repo_file);
         $colored_fs   = (sh_hex_to_ansi $SH_HEX_BLUE $fs_file);
 
-        _log_verbose "Files are equal..."     $NL `
-             "$INDENT FS   : ($colored_fs)"   $NL `
+        _log_verbose "Files are equal..."     $SH_NEW_LINE `
+             "$INDENT FS   : ($colored_fs)"   $SH_NEW_LINE `
              "$INDENT Repo : ($colored_repo)" ;
     }
 }
@@ -556,6 +645,7 @@ function sync-journal()
 ##----------------------------------------------------------------------------##
 ## Git                                                                        ##
 ##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
 function g()
 {
     git $args;
@@ -1073,7 +1163,6 @@ function http-server()
 }
 
 
-
 ##----------------------------------------------------------------------------##
 ## OS Hacks                                                                   ##
 ##----------------------------------------------------------------------------##
@@ -1083,3 +1172,10 @@ function http-server()
 ##----------------------------------------------------------------------------##
 ## @hack: Make a way to append to the paths...
 $env:PATH = $env:PATH + ":" + "/Users/stdmatt/.stdmatt/bin";
+
+
+#####################
+## Nice to pipe stuff and calculate things....
+# PS> $ageList.values | Measure-Object -Average
+# Count   : 2
+# Average : 22.5
