@@ -797,6 +797,95 @@ function git-push-to-origin()
 }
 
 
+##------------------------------------------------------------------------------
+## Thanks to: John Douthat - https://stackoverflow.com/a/1260982
+function git-remove-submodule()
+{
+    $submodule_name = $args[0];
+    $repo_root      = (git-get-repo-root);
+
+    if($repo_root -eq $null) {
+        _log_fatal "Not in a git repo...";
+        return $false;
+    }
+
+    $quoted_name = (sh_add_quotes $submodule_name);
+
+    $modules_filename = "${repo_root}/.gitmodules";
+    $config_filename  = "${repo_root}/.git/config";
+    $modules_ini      = (sh_parse_ini_file $modules_filename);
+    $config_ini       = (sh_parse_ini_file $config_filename);
+
+    $modules_temp_input  = (sh_get_temp_filename "safe");
+    $modules_temp_output = (sh_get_temp_filename "safe");
+    $config_temp_input   = (sh_get_temp_filename "safe");
+    $config_temp_output  = (sh_get_temp_filename "safe");
+
+    _log "Removing submodule: ${submodule_name}";
+
+    ##
+    ## Change the entry in modules.
+    ##
+    sh_write_ini_to_file  $modules_ini $modules_temp_input;
+    sh_ini_delete_section $modules_ini "submodule ${quoted_name}";
+    sh_write_ini_to_file  $modules_ini $modules_temp_output;
+
+    _git_remove_submodule_diff $modules_temp_input $modules_temp_output;
+
+    ##
+    ## Change the entyr in config.
+    ##
+    sh_write_ini_to_file  $config_ini $config_temp_input;
+    sh_ini_delete_section $config_ini "submodule ${quoted_name}";
+    sh_write_ini_to_file  $config_ini $config_temp_output;
+
+    _git_remove_submodule_diff $config_temp_input $config_temp_output;
+
+    ##
+    ## Make sure that things looks fine...
+    ##
+    sh_ask_confirm "Looks ok?"
+    if(-not $SH_ASK_CONFIRM_RESULT) {
+        _log "Ok - Aborting..."
+        return;
+    };
+
+    ## 1 - Delete the relevant section from the .gitmodules file.
+    sh_write_ini_to_file $modules_ini $modules_filename;
+    ## 2 - Stage the .gitmodules changes:
+    git add $modules_filename;
+    ## 3 - Delete the relevant section from .git/config.
+    git rm --cached $submodule_name;
+    ## 4 - Remove the submodule files from the working tree and index:
+    nuke-dir $submodule_name;
+    ## 5 - Remove the submodule's .git directory:
+    nuke-dir ".git/modules/${submodule_name}";
+    ## 6 - Commit the changes:
+    git commit -m "[REMOVE-SUBMODULE] ${submodule_name}";
+    ## 7 - rm -rf path_to_submodule
+    nuke-dir $submodule_name
+}
+
+
+##------------------------------------------------------------------------------
+function _git_remove_submodule_diff()
+{
+    $file_a = $args[0];
+    $file_b = $args[1];
+
+    diff --color                `
+         --text                 `
+         --ignore-case          `
+         --ignore-tab-expansion `
+         --ignore-space-change  `
+         --ignore-all-space     `
+         --ignore-blank-lines   `
+         --strip-trailing-cr    `
+         --side-by-side         `
+        $file_a                 `
+        $file_b;
+}
+
 ##----------------------------------------------------------------------------##
 ## Install                                                                    ##
 ##----------------------------------------------------------------------------##
