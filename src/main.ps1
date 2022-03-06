@@ -733,6 +733,13 @@ function git-get-repo-url()
     Write-Output $url;
 }
 
+function git-get-repo-root()
+{
+    ## @improve: make the git error not in the output...
+    $result = (git rev-parse --show-toplevel);
+    return $result;
+}
+
 ##------------------------------------------------------------------------------
 function git-curr-branch-name()
 {
