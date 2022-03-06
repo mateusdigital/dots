@@ -180,12 +180,12 @@ function sh_parse_ini_file($file)
 
     # Create a default section if none exist in the file. Like a java prop file.
     $section = "NO_SECTION"
-    $ini[$section] = @{}
+    $ini[$section] = [ordered]@{}
     try {
         switch -regex -file $file {
             "^\[(.+)\]$" {
                 $section = $matches[1].Trim()
-                $ini[$section] = @{}
+                $ini[$section] = [ordered]@{}
             }
             "^\s*([^#].+?)\s*=\s*(.*)" {
                 $name, $value = $matches[1..2]
