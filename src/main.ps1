@@ -1192,6 +1192,7 @@ function nuke-dir()
     }
 }
 
+
 ##
 ## HTTP Server
 ##
@@ -1203,13 +1204,24 @@ function http-server()
 
 
 ##----------------------------------------------------------------------------##
-## OS Hacks                                                                   ##
+## PATH                                                                       ##
 ##----------------------------------------------------------------------------##
+##----------------------------------------------------------------------------##
+if($IsMacOS) {
+    $paths = @(
+        "/usr/local/opt/coreutils/libexec/gnubin",
+        "/usr/local/opt/gnu-tar/libexec/gnubin",
+        "/usr/local/opt/ed/libexec/gnubin",
+        "/usr/local/opt/grep/libexec/gnubin",
+        "/usr/local/opt/gnu-sed/libexec/gnubin",
+        "/usr/local/opt/gsed/libexec/gnubin",
+        "/usr/local/opt/gawk/libexec/gnubin",
+        "/usr/local/opt/make/libexec/gnubin",
+        "/usr/local/opt/findutils/libexec/gnubin"
+    )
+    $env:PATH = $env:PATH + ":" + (Join-String -Separator ":" -InputObject $paths);
+}
 
-##----------------------------------------------------------------------------##
-## Greeting                                                                   ##
-##----------------------------------------------------------------------------##
-## @hack: Make a way to append to the paths...
 $env:PATH = $env:PATH + ":" + "/Users/stdmatt/.stdmatt/bin";
 
 
