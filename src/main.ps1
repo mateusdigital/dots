@@ -52,6 +52,17 @@ function _sh_fwd_slash()
 ## Public Function
 ##
 
+$script:SH_ASK_CONFIRM_RESULT = $null;
+
+function sh_ask_confirm()
+{
+    $script:SH_ASK_CONFIRM_RESULT = $null;
+
+    Write-Output $args[0];
+    $key = [Console]::ReadKey($true);
+    $script:SH_ASK_CONFIRM_RESULT = ($key.Key -eq "Y");
+}
+
 ##------------------------------------------------------------------------------
 function sh_add_quotes()
 {
