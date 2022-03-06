@@ -58,7 +58,7 @@ function sh_ask_confirm()
 {
     $script:SH_ASK_CONFIRM_RESULT = $null;
 
-    Write-Output $args[0];
+    writeline $args[0];
     $key = [Console]::ReadKey($true);
     $script:SH_ASK_CONFIRM_RESULT = ($key.Key -eq "Y");
 }
@@ -224,14 +224,14 @@ function sh_print_ini($ini)
             continue;
         }
 
-        $str += "[$section_name] $SH_NEW_LINE";
+        $str += "[$section_name]" + $SH_NEW_LINE;
         foreach($item_name in $section.Keys) {
             $item_value = $section[$item_name];
-            $str += "   $item_name = $item_value $SH_NEW_LINE";
+            $str += "   $item_name = $item_value".TrimEnd() + $SH_NEW_LINE;
         }
     }
 
-    Write-Output $str;
+    writeline $str;
 }
 
 ##------------------------------------------------------------------------------
@@ -333,6 +333,7 @@ function sh_ansi($color, $str)
     return $str;
 }
 
+##------------------------------------------------------------------------------
 function sh_write_file()
 {
     $filename = $args[0];
@@ -342,6 +343,11 @@ function sh_write_file()
 }
 
 
+##------------------------------------------------------------------------------
+function writeline()
+{
+    Write-Output $args;
+}
 
 ##----------------------------------------------------------------------------##
 ## PSReadLine                                                                 ##
@@ -482,7 +488,7 @@ function _log_fatal()
     $output += sh_hex_to_ansi $SH_HEX_GRAY "[$function_name] ";
     $output += $args;
 
-    Write-Output $output;
+    writeline $output;
 }
 
 ##------------------------------------------------------------------------------
@@ -501,7 +507,7 @@ function _log()
     $output  = (sh_hex_to_ansi $SH_HEX_GRAY "[$function_name] ");
     $output += $args;
 
-    Write-Output $output;
+    writeline $output;
 }
 
 ##------------------------------------------------------------------------------
@@ -612,7 +618,7 @@ Check http://stdmatt.com for more :)",
         $PROGRAM_LICENSE
     );
 
-    Write-Output $value;
+    writeline $value;
 }
 
 ##----------------------------------------------------------------------------##
@@ -709,6 +715,8 @@ function git-config()
     git config --global core.autocrlf     false;
     git config --global core.filemode     false;
 
+    git config --global init.defaultBranch "main";
+
     ## Aliases...
     git config --global alias.c commit;
     git config --global alias.s status;
@@ -728,7 +736,7 @@ function git-first-date-of()
 
     $date_format = "%d %b, %Y";
     $lines       = (git log --diff-filter=A --follow --format=%ad  --date=format:$date_format --reverse -- "${filename}");
-    Write-Output $lines;
+    writeline $lines;
 }
 
 ##------------------------------------------------------------------------------
@@ -742,7 +750,7 @@ function git-get-repo-url()
     $components = $remote.Replace("`t", " ").Split(" ");
     $url        = $components[1];
 
-    Write-Output $url;
+    writeline $url;
 }
 
 function git-get-repo-root()
@@ -797,21 +805,56 @@ function git-push-to-origin()
     git push --set-upstream origin $branch_name;
 }
 
+##------------------------------------------------------------------------------
+function git-get-submodules()
+{
+    $result = (git submodule status);
+    foreach($item in $result) {
+        $comps = $item.Split();
+        writeline $comps[2];
+    }
+}
+
+function bare()
+{
+    rm -rf ./test;
+    mkdir test;
+    cd test;
+    git init
+    mkdir libs
+    cd libs
+    git submodule add https://gitlab.com/stdmatt-libs/js/demolib
+    git submodule add https://gitlab.com/stdmatt-libs/js/demolib_loader;
+}
 
 ##------------------------------------------------------------------------------
 ## Thanks to: John Douthat - https://stackoverflow.com/a/1260982
 function git-remove-submodule()
 {
-    $submodule_name = $args[0];
-    $repo_root      = (git-get-repo-root);
-
+    $repo_root = (git-get-repo-root);
     if($repo_root -eq $null) {
         _log_fatal "Not in a git repo...";
         return $false;
     }
 
+    $submodule_name   = $args[0];
+    $submodules_names = (git-get-submodules);
+    $is_valid         = $submodules_names.Contains($submodule_name);
+
+    if(-not $is_valid) {
+        _log_fatal "Invalid submodule name ${submodule_name}";
+        return;
+    }
+
     $quoted_name = (sh_add_quotes $submodule_name);
 
+    ## @improve: [Creating to much files...] at 22-03-06, 17:44
+    ##   Creating this amount of files just to make the diff works.
+    ##   Make a way to the ini file to be stable (read order) that
+    ##   it would not be needed...
+    ##   - Here in Brazil, at mom's house with my Mariia, my wife, our baby
+    ##     waiting to grow, super hot weather and pingo!
+    ##     Super sad with what's happening at our home ukraine :`(
     $modules_filename = "${repo_root}/.gitmodules";
     $config_filename  = "${repo_root}/.git/config";
     $modules_ini      = (sh_parse_ini_file $modules_filename);
@@ -845,26 +888,27 @@ function git-remove-submodule()
     ##
     ## Make sure that things looks fine...
     ##
-    sh_ask_confirm "Looks ok?"
-    if(-not $SH_ASK_CONFIRM_RESULT) {
-        _log "Ok - Aborting..."
-        return;
-    };
+    # sh_ask_confirm "Looks ok?"
+    # if(-not $SH_ASK_CONFIRM_RESULT) {
+    #     _log "Ok - Aborting..."
+    #     return;
+    # };
 
-    ## 1 - Delete the relevant section from the .gitmodules file.
+    ## Delete the relevant section from the .gitmodules file.
     sh_write_ini_to_file $modules_ini $modules_filename;
-    ## 2 - Stage the .gitmodules changes:
+    ## Stage the .gitmodules changes git add .gitmodules
     git add $modules_filename;
-    ## 3 - Delete the relevant section from .git/config.
+    ## Delete the relevant section from .git/config.
+    sh_write_ini_to_file $config_ini $config_filename;
+    ## Run git rm --cached path_to_submodule (no trailing slash).
     git rm --cached $submodule_name;
-    ## 4 - Remove the submodule files from the working tree and index:
-    nuke-dir $submodule_name;
-    ## 5 - Remove the submodule's .git directory:
+    ## Run rm -rf .git/modules/path_to_submodule
     nuke-dir ".git/modules/${submodule_name}";
-    ## 6 - Commit the changes:
+    ## Commit git commit -m "Removed submodule <name>"
     git commit -m "[REMOVE-SUBMODULE] ${submodule_name}";
-    ## 7 - rm -rf path_to_submodule
-    nuke-dir $submodule_name
+    ## Delete the now untracked submodule files
+    ## rm -rf path_to_submodule
+    nuke-dir $submodule_name;
 }
 
 ##------------------------------------------------------------------------------
@@ -885,6 +929,9 @@ function _git_remove_submodule_diff()
         $file_a                 `
         $file_b;
 }
+
+git-remove-submodule "libs/demolib"
+# git-remove-submodule "libs/demolib_loader"
 
 ##----------------------------------------------------------------------------##
 ## Install                                                                    ##
