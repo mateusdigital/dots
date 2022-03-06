@@ -75,10 +75,11 @@ function sh_add_quotes()
 ##------------------------------------------------------------------------------
 function sh_get_temp_filename()
 {
-    $random    = (Get-Random);
-    $date_time = (sh_date_time_for_filenames $args);
+    # $random    = (Get-Random);
+    # $date_time = (sh_date_time_for_filenames $args);
 
-    return "${random}_$date_time";
+    # return "${random}_$date_time";
+    return [System.IO.Path]::GetTempFileName();
 }
 
 ##------------------------------------------------------------------------------
@@ -866,7 +867,6 @@ function git-remove-submodule()
     nuke-dir $submodule_name
 }
 
-
 ##------------------------------------------------------------------------------
 function _git_remove_submodule_diff()
 {
@@ -1039,6 +1039,13 @@ function _install_fonts_helper_win32()
 ##------------------------------------------------------------------------------
 function _install_macOS_hacks()
 {
+    # $macos_packages = @(
+    #     "atool", "coreutils", "ed", "findutils", "gawk",
+    #     "gnu-sed", "gnu-tar", "grep", "lynx", "make",
+    #     "neovim", "node", "openssl", "pandoc", "python",
+    #     "tree", "vifm"
+    # );
+
     #disable special characters when holding keys
     defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
