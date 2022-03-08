@@ -930,8 +930,50 @@ function _git_remove_submodule_diff()
         $file_b;
 }
 
-git-remove-submodule "libs/demolib"
-# git-remove-submodule "libs/demolib_loader"
+##------------------------------------------------------------------------------
+function git-update-submodule()
+{
+    git submodule update --init --recursive;
+}
+
+##
+## New Branch
+##
+##------------------------------------------------------------------------------
+function git-new-branch()
+{
+    $prefix = $args[0];
+    $values = (sh_expand_array $args 1).ForEach({echo $_.Trim()});
+    $name   = (sh_join_string "-" $values).Replace(" ", "-");
+    writeline "${prefix}${name}";
+
+    git checkout -b $name;
+}
+
+##------------------------------------------------------------------------------
+function git-new-bugfix()
+{
+    git-new-branch "bugfix/" $args;
+}
+
+##------------------------------------------------------------------------------
+function git-new-feature()
+{
+    git-new-branch "feature/" $args;
+}
+
+
+##------------------------------------------------------------------------------
+function git-clone-full()
+{
+    $url = $args[0];
+    git clone $url;
+
+    $clean_name = (sh_basepath $arg).Remove(".git");
+    cd $clean_name;
+
+    git-update-submodule;
+}
 
 ##----------------------------------------------------------------------------##
 ## Install                                                                    ##
@@ -1374,7 +1416,8 @@ if($IsMacOS) {
         "/usr/local/opt/make/libexec/gnubin",
         "/usr/local/opt/findutils/libexec/gnubin"
     )
-    $env:PATH = $env:PATH + ":" + (Join-String -Separator ":" -InputObject $paths);
+
+    $env:PATH = $env:PATH + ":" + (sh_join_string ":" $paths);
 }
 
 $env:PATH = $env:PATH + ":" + "/Users/stdmatt/.stdmatt/bin";
