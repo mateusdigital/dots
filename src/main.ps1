@@ -1,9 +1,16 @@
 ##----------------------------------------------------------------------------##
+## Imports                                                                    ##
+##----------------------------------------------------------------------------##
+. "${HOME}/.stdmatt/lib/shlib/main.ps1";
+
+
+##----------------------------------------------------------------------------##
 ## Configure powershell stuff...                                              ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
 $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
 $env:DOTS_IS_VERSBOSE            = 1;
+
 
 ##----------------------------------------------------------------------------##
 ## Info                                                                       ##
@@ -16,12 +23,6 @@ $PROGRAM_COPYRIGHT_YEARS = "2021, 2022";
 $PROGRAM_DATE            = "30 Nov, 2021";
 $PROGRAM_LICENSE         = "GPLv3";
 
-
-##------------------------------------------------------------------------------
-function writeline()
-{
-    Write-Output $args;
-}
 
 ##----------------------------------------------------------------------------##
 ## PSReadLine                                                                 ##
@@ -55,18 +56,21 @@ Set-PSReadLineOption                                  `
     -ViModeIndicator     Script                       `
     -ViModeChangeHandler $Function:_on_vi_mode_change `
     -EditMode            Vi                           `
-    -Colors @{
-    Default            = $_ps_color_white
-    Command            = $_ps_color_yellow
-    ContinuationPrompt = "#FF00FF"
-    Number             = $_ps_color_light_yellow
-    Member             = $_ps_color_white
-    Operator           = $_ps_color_white
-    Type               = $_ps_color_light_blue
-    Parameter          = $_ps_color_pink
-    String             = $_ps_color_orange
-    Variable           = $_ps_color_light_blue
-}
+    -PredictionSource    History                      `
+    -Colors              @{
+        Default            = $_ps_color_white
+        Comment            = $_ps_color_green
+        Command            = $_ps_color_yellow
+        Keyword            = $_ps_color_pink
+        ContinuationPrompt = "#FF00FF"
+        Number             = $_ps_color_light_yellow
+        Member             = $_ps_color_white
+        Operator           = $_ps_color_white
+        Type               = $_ps_color_light_blue
+        Parameter          = $_ps_color_pink
+        String             = $_ps_color_orange
+        Variable           = $_ps_color_light_blue
+    }
 
 ##----------------------------------------------------------------------------##
 ## Constants                                                                  ##
@@ -162,7 +166,7 @@ function _log_fatal()
     $output += sh_hex_to_ansi $SH_HEX_GRAY "[$function_name] ";
     $output += $args;
 
-    writeline $output;
+    sh_writeline $output;
 }
 
 ##------------------------------------------------------------------------------
@@ -181,7 +185,7 @@ function _log()
     $output  = (sh_hex_to_ansi $SH_HEX_GRAY "[$function_name] ");
     $output += $args;
 
-    writeline $output;
+    sh_writeline $output;
 }
 
 ##------------------------------------------------------------------------------
@@ -292,7 +296,7 @@ Check http://stdmatt.com for more :)",
         $PROGRAM_LICENSE
     );
 
-    writeline $value;
+    sh_writeline $value;
 }
 
 ##----------------------------------------------------------------------------##
@@ -410,7 +414,7 @@ function git-first-date-of()
 
     $date_format = "%d %b, %Y";
     $lines       = (git log --diff-filter=A --follow --format=%ad  --date=format:$date_format --reverse -- "${filename}");
-    writeline $lines;
+    sh_writeline $lines;
 }
 
 ##------------------------------------------------------------------------------
@@ -424,7 +428,7 @@ function git-get-repo-url()
     $components = $remote.Replace("`t", " ").Split(" ");
     $url        = $components[1];
 
-    writeline $url;
+    sh_writeline $url;
 }
 
 function git-get-repo-root()
@@ -485,7 +489,7 @@ function git-get-submodules()
     $result = (git submodule status);
     foreach($item in $result) {
         $comps = $item.Split();
-        writeline $comps[2];
+        sh_writeline $comps[2];
     }
 }
 
@@ -619,7 +623,7 @@ function git-new-branch()
     $prefix = $args[0];
     $values = (sh_expand_array $args 1).ForEach({echo $_.Trim()});
     $name   = (sh_join_string "-" $values).Replace(" ", "-");
-    writeline "${prefix}${name}";
+    sh_writeline "${prefix}${name}";
 
     git checkout -b $name;
 }
