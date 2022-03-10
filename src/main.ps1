@@ -566,11 +566,6 @@ function git-remove-submodule()
     ##
     ## Make sure that things looks fine...
     ##
-    # sh_ask_confirm "Looks ok?"
-    # if(-not $SH_ASK_CONFIRM_RESULT) {
-    #     _log "Ok - Aborting..."
-    #     return;
-    # };
 
     ## Delete the relevant section from the .gitmodules file.
     sh_write_ini_to_file $modules_ini $modules_filename;
