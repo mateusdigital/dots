@@ -9,7 +9,6 @@
             "type": "PowerShell",
             "request": "launch",
             "script": "${file}",
-            "cwd": "/Users/stdmatt/Projects/stdmatt/personal/test"
         }
     ]
 }

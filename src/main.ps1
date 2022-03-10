@@ -1,20 +1,17 @@
 ##----------------------------------------------------------------------------##
 ## Imports                                                                    ##
 ##----------------------------------------------------------------------------##
-. "${HOME}/.stdmatt/lib/shlib/main.ps1";
+. "${HOME}/.stdmatt/lib/shlib/shlib.ps1";
 
-
-##----------------------------------------------------------------------------##
-## Configure powershell stuff...                                              ##
-##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
 $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
-$env:DOTS_IS_VERSBOSE            = 1;
+$env:SHLIB_IS_VERSBOSE           = 1;
 
 
 ##----------------------------------------------------------------------------##
 ## Info                                                                       ##
 ##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
 $PROGRAM_NAME            = "dots";
 $PROGRAM_VERSION         = "3.0.0";
 $PROGRAM_AUTHOR          = "stdmatt - <stdmatt@pixelwizads.io>";
@@ -28,6 +25,45 @@ $PROGRAM_LICENSE         = "GPLv3";
 ## PSReadLine                                                                 ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
+function _configure_PSReadLine()
+{
+    $_ps_color_black         = "#1E1E1E";  ##
+    $_ps_color_gray          = "#808080";  ## #include
+    $_ps_color_white         = "#D4D4D4";  ## normal text
+    $_ps_color_light_blue    = "#9CDCFE";  ## my_variable
+    $_ps_color_blue          = "#569CD6";  ## public static void
+    $_ps_color_blue_green    = "#4EC9B0";  ## Class_Type
+    $_ps_color_green         = "#608B4E";  ## /* comment */
+    $_ps_color_light_yellow  = "#B5CEA8";  ## 3.14f
+    $_ps_color_yellow        = "#DCDCAA";  ## my_function()
+    $_ps_color_yellow_orange = "#D7BA7D";  ## #selector
+    $_ps_color_orange        = "#CE9178";  ## "string"
+    $_ps_color_light_red     = "#D16969";  ## /[a-Z]/
+    $_ps_color_red           = "#F44747";  ## error message
+    $_ps_color_pink          = "#C586C0";  ## else if
+
+    Set-PSReadLineOption                                  `
+        -ViModeIndicator     Script                       `
+        -ViModeChangeHandler $Function:_on_vi_mode_change `
+        -EditMode            Vi                           `
+        -PredictionSource    History                      `
+        -Colors              @{
+            Default            = $_ps_color_white
+            Comment            = $_ps_color_green
+            Command            = $_ps_color_yellow
+            Keyword            = $_ps_color_pink
+            ContinuationPrompt = "#FF00FF"
+            Number             = $_ps_color_light_yellow
+            Member             = $_ps_color_white
+            Operator           = $_ps_color_white
+            Type               = $_ps_color_light_blue
+            Parameter          = $_ps_color_pink
+            String             = $_ps_color_orange
+            Variable           = $_ps_color_light_blue
+        }
+}
+
+##------------------------------------------------------------------------------
 function _on_vi_mode_change
 {
     if ($args[0] -eq 'Command') {
@@ -37,248 +73,30 @@ function _on_vi_mode_change
     }
 }
 
-$_ps_color_black         = "#1E1E1E";  ##
-$_ps_color_gray          = "#808080";  ## #include
-$_ps_color_white         = "#D4D4D4";  ## normal text
-$_ps_color_light_blue    = "#9CDCFE";  ## my_variable
-$_ps_color_blue          = "#569CD6";  ## public static void
-$_ps_color_blue_green    = "#4EC9B0";  ## Class_Type
-$_ps_color_green         = "#608B4E";  ## /* comment */
-$_ps_color_light_yellow  = "#B5CEA8";  ## 3.14f
-$_ps_color_yellow        = "#DCDCAA";  ## my_function()
-$_ps_color_yellow_orange = "#D7BA7D";  ## #selector
-$_ps_color_orange        = "#CE9178";  ## "string"
-$_ps_color_light_red     = "#D16969";  ## /[a-Z]/
-$_ps_color_red           = "#F44747";  ## error message
-$_ps_color_pink          = "#C586C0";  ## else if
-
-Set-PSReadLineOption                                  `
-    -ViModeIndicator     Script                       `
-    -ViModeChangeHandler $Function:_on_vi_mode_change `
-    -EditMode            Vi                           `
-    -PredictionSource    History                      `
-    -Colors              @{
-        Default            = $_ps_color_white
-        Comment            = $_ps_color_green
-        Command            = $_ps_color_yellow
-        Keyword            = $_ps_color_pink
-        ContinuationPrompt = "#FF00FF"
-        Number             = $_ps_color_light_yellow
-        Member             = $_ps_color_white
-        Operator           = $_ps_color_white
-        Type               = $_ps_color_light_blue
-        Parameter          = $_ps_color_pink
-        String             = $_ps_color_orange
-        Variable           = $_ps_color_light_blue
-    }
-
 ##----------------------------------------------------------------------------##
-## Constants                                                                  ##
+## PATH                                                                       ##
 ##----------------------------------------------------------------------------##
-##------------------------------------------------------------------------------
-## Other
-$WORKSTATION_PREFIX = "KIV-WKS"; ## My workstation prefix, so I can know that I'm working computer...
-$IS_WORK_COMPUTER   = [Environment]::MachineName.Contains($WORKSTATION_PREFIX);
-
-##------------------------------------------------------------------------------
-## General Paths...
-$HOME_DIR        = (sh_get_home_dir);
-$DOWNLOADS_DIR   = (sh_join_path "$HOME_DIR" "Downloads");
-$DOCUMENTS_DIR   = (sh_join_path "$HOME_DIR" "Documents");
-$DESKTOP_DIR     = (sh_join_path "$HOME_DIR" "Desktop");
-$STDMATT_BIN_DIR = (sh_join_path "$HOME_DIR" ".stdmatt/bin"); ## My binaries that I don't wanna on system folder...
-$PROJECTS_DIR    = (sh_join_path "$HOME_DIR" "Projects");
-
-## Dealing with workstation, needs to adjust some paths...
-if($IS_WORK_COMPUTER) {
-    $PROJECTS_DIR = sh_to_os_path("E:/Projects");
-}
-
-$DOTS_DIR = "$PROJECTS_DIR/stdmatt/personal/dots";
-
-##------------------------------------------------------------------------------
-## Sync Paths...
-##  Fonts
-$FONTS_SOURCE_DIR             = "$DOTS_DIR/extras/fonts";
-$FONTS_WIN32_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/Microsoft/Windows/Fonts";## @XXX(stdmatt): Just a hack to check if thing will work... but if it will I'll not change it today 11/11/2021, 2:03:40 PM
-$FONTS_MACOS_INSTALL_FULLPATH = "$HOME_DIR/Library/Fonts";
-$FONTS_GNU_INSTALL_FULLPATH   = "$HOME_DIR/.local/share/fonts";
-##  GIT
-$GIT_SOURCE_DIR              = "$DOTS_DIR/extras/git";
-$GIT_IGNORE_INSTALL_FULLPATH = "$HOME_DIR/.gitignore";
-##  Powershell Profile
-$PROFILE_SOURCE_DIR                  = "$DOTS_DIR/src";
-$PWSH_WIN32_PROFILE_INSTALL_FULLPATH = "$HOME_DIR/Documents/PowerShell/Microsoft.PowerShell_profile.ps1";        ## pwsh profile in Windows.
-$PWSH_UNIX_PROFILE_INSTALL_FULLPATH  = "$HOME_DIR/.config/powershell/Microsoft.PowerShell_profile.ps1";          ## pwsh profile in Unix.
-$WINDOWS_PROFILE_INSTALL_FULLPATH    = "$HOME_DIR/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"; ## Default Windows Powershell.
-## Terminal
-$TERMINAL_SOURCE_DIR                      = "$DOTS_DIR/extras/terminal";
-$TERMINAL_WIN32_SETTINGS_INSTALL_FULLPATH = "%APPDATA%\alacritty\alacritty.yml"
-$TERMINAL_UNIX_SETTINGS_INSTALL_FULLPATH  = "$HOME_DIR/.config/alacritty/alacritty.yml"
-##  Vim
-$VIM_SOURCE_DIR                     = "$DOTS_DIR/extras/vim";
-$VIMRC_INSTALL_FULLPATH             = "$HOME_DIR/.vimrc";
-$NEOVIM_WIN32_INIT_INSTALL_FULLPATH = "$HOME_DIR/AppData/Local/nvim/init.vim";
-$NEOVIM_UNIX_INIT_INSTALL_FULLPATH  = "$HOME_DIR/.config/nvim/init.vim";
-##  Binaries
-$BINARIES_SOURCE_DIR       = "$DOTS_DIR/extras/bin/win32";
-$BINARIES_INSTALL_FULLPATH = "$STDMATT_BIN_DIR";
-
-##------------------------------------------------------------------------------
-## Journal things...
-$JOURNAL_DIR       = "$HOME_DIR/Desktop/Journal";
-$JOURNAL_GIT_URL   = "https://gitlab.com/stdmatt-private/journal";
-$JOURNAL_FILE_EXT = ".info";
-
-
 ##----------------------------------------------------------------------------##
-## Helper Functions                                                           ##
-##----------------------------------------------------------------------------##
-##------------------------------------------------------------------------------
-function _string_is_null_or_whitespace()
+function _configure_PATH()
 {
-    return [string]::IsNullOrWhiteSpace($args[0]);
+    if($IsMacOS) {
+        $paths = @(
+            "/usr/local/opt/coreutils/libexec/gnubin",
+            "/usr/local/opt/gnu-tar/libexec/gnubin",
+            "/usr/local/opt/ed/libexec/gnubin",
+            "/usr/local/opt/grep/libexec/gnubin",
+            "/usr/local/opt/gnu-sed/libexec/gnubin",
+            "/usr/local/opt/gsed/libexec/gnubin",
+            "/usr/local/opt/gawk/libexec/gnubin",
+            "/usr/local/opt/make/libexec/gnubin",
+            "/usr/local/opt/findutils/libexec/gnubin"
+        )
+
+        $env:PATH = $env:PATH + ":" + (sh_join_string ":" $paths);
+    }
+
+    $env:PATH = $env:PATH + ":" + "/Users/stdmatt/.stdmatt/bin";
 }
-
-
-
-##------------------------------------------------------------------------------
-function _log_get_call_function_name()
-{
-    $callstack = Get-PSCallStack;
-    foreach($command in $callstack) {
-        $function_name = $command.FunctionName;
-        if($function_name.StartsWith("_")) {
-            continue;
-        }
-        return $function_name;
-   }
-
-    return $function_name;
-}
-
-##------------------------------------------------------------------------------
-function _log_fatal()
-{
-    $function_name = _log_get_call_function_name;
-
-    $output =  sh_hex_to_ansi $SH_HEX_RED  "[FATAL]";
-    $output += sh_hex_to_ansi $SH_HEX_GRAY "[$function_name] ";
-    $output += $args;
-
-    sh_writeline $output;
-}
-
-##------------------------------------------------------------------------------
-function _log_verbose()
-{
-    if($env:DOTS_IS_VERSBOSE -eq 1) {
-        _log "$args";
-    }
-}
-
-##------------------------------------------------------------------------------
-function _log()
-{
-    $function_name = (_log_get_call_function_name);
-
-    $output  = (sh_hex_to_ansi $SH_HEX_GRAY "[$function_name] ");
-    $output += $args;
-
-    sh_writeline $output;
-}
-
-##------------------------------------------------------------------------------
-$INVALID_FILE_TIME = -1;
-function _get_file_time()
-{
-    $filename      = $args[0];
-    $is_valid_file = sh_file_exists($filename);
-
-    if($is_valid_file) {
-        $file_info  = (Get-Item -Force $filename);
-        $file_ticks = $file_info.LastAccessTimeUtc.Ticks;
-        return $file_ticks;
-    }
-    return $INVALID_FILE_TIME;
-}
-
-##------------------------------------------------------------------------------
-function _copy_newer_file()
-{
-    $INDENT = "   ";
-
-    $repo_file    = $args[0];
-    $fs_file      = $args[1];
-
-    ## Repo file info.
-    $repo_exists = (sh_file_exists "$repo_file");
-    $repo_hash   = $null;
-    $repo_time   = 0;
-    if($repo_exists) {
-        $repo_hash = $(Get-FileHash $repo_file).hash;
-        $repo_time = (_get_file_time $repo_file);
-    }
-
-    ## Fs file info.
-    $fs_exists = (sh_file_exists "$fs_file");
-    $fs_hash   = $null;
-    $fs_time   = 0;
-    if($fs_exists) {
-        $fs_hash = $(Get-FileHash $fs_file).hash;
-        $fs_time = (_get_file_time $fs_file);
-    }
-
-    if(-not $repo_exists -and -not $fs_exists) {
-        _log_fatal "Both paths are invalid..." $SH_NEW_LINE `
-                "$INDENT FS   : ($fs_file)"    $SH_NEW_LINE `
-                "$INDENT Repo : ($repo_file)"  ;
-        return;
-    }
-
-    ## Files are equal...
-    if($repo_hash -eq $fs_hash) {
-        $sync_to = $null;
-    } elseif($fs_time -gt $repo_time) {
-        $sync_to = "repo";
-    } elseif($repo_time -gt $fs_time) {
-        $sync_to = "fs";
-    }
-
-    ## Copy if needed..
-    if($sync_to -eq "fs") {
-        $colored_repo = (sh_hex_to_ansi $SH_HEX_GREEN  $repo_file);
-        $colored_fs   = (sh_hex_to_ansi $SH_HEX_YELLOW $fs_file);
-
-        _log "Syncing Repo -> FS"             $SH_NEW_LINE `
-             "$INDENT Repo : ($colored_repo)" $SH_NEW_LINE `
-             "$INDENT FS   : ($colored_fs)"       ;
-
-        $fs_dir_path = (sh_dirpath $fs_file);
-        $null        = (sh_mkdir   $fs_dir_path);
-
-        Copy-Item $repo_file $fs_file -Force;
-    }
-    elseif($sync_to -eq "repo") {
-        $colored_repo = (sh_hex_to_ansi $SH_HEX_YELLOW $repo_file);
-        $colored_fs   = (sh_hex_to_ansi $SH_HEX_FS     $fs_file);
-
-        _log "Syncing FS -> Repo"             $SH_NEW_LINE `
-             "$INDENT FS   : ($colored_fs)"   $SH_NEW_LINE `
-             "$INDENT Repo : ($colored_repo)" ;
-
-        Copy-Item $fs_file $repo_file -Force;
-    }
-    else {
-        $colored_repo = (sh_hex_to_ansi $SH_HEX_BLUE $repo_file);
-        $colored_fs   = (sh_hex_to_ansi $SH_HEX_BLUE $fs_file);
-
-        _log_verbose "Files are equal..."     $SH_NEW_LINE `
-             "$INDENT FS   : ($colored_fs)"   $SH_NEW_LINE `
-             "$INDENT Repo : ($colored_repo)" ;
-    }
-}
-
 
 ##------------------------------------------------------------------------------
 function show_version()
@@ -313,7 +131,7 @@ function edit-profile()
 ##------------------------------------------------------------------------------
 function reload-profile()
 {
-    & $profile
+    . $profile;
 }
 
 
@@ -323,6 +141,10 @@ function reload-profile()
 ##------------------------------------------------------------------------------
 function journal()
 {
+    $JOURNAL_DIR       = "$HOME_DIR/Desktop/Journal";
+    $JOURNAL_GIT_URL   = "https://gitlab.com/stdmatt-private/journal";
+    $JOURNAL_FILE_EXT = ".info";
+
     ## @todo(stdmatt): Would be nice to actually make the function to write
     ## the header automatically with the start and end dates of the week - 3/15/2021, 10:27:14 AM
     $cultureInfo = [System.Globalization.CultureInfo]::CurrentCulture;
@@ -362,7 +184,7 @@ function sync-journal()
     $current_date    = date;
     $commit_msg      = "[sync-journal] ($current_pc_name) - ($current_date)";
 
-    _log $commit_msg;
+    sh_log $commit_msg;
     git commit -m "$commit_msg";
 
     git pull
@@ -384,8 +206,8 @@ function git-config()
 {
     _log_verbose "Configuring git...";
     ## Info...
-    git config --global user.name         "stdmatt";
-    git config --global user.email        "stdmatt@pixelwizards.io";
+    git config --global user.name  "stdmatt";
+    git config --global user.email "stdmatt@pixelwizards.io";
 
     ## Normal stuff...
     git config --global core.excludesfile "~/.gitignore";            ## Set the gitignore globaly...
@@ -431,6 +253,7 @@ function git-get-repo-url()
     sh_writeline $url;
 }
 
+##------------------------------------------------------------------------------
 function git-get-repo-root()
 {
     ## @improve: make the git error not in the output...
@@ -464,11 +287,11 @@ function git-delete-branch()
         return;
     }
 
-    _log "Deleting branch: ($branch_name)";
+    sh_log "Deleting branch: ($branch_name)";
     git branch      --delete $branch_name;
     git push origin --delete $branch_name;
 
-    _log "Deleted...";
+    sh_log "Deleted...";
 }
 
 ##------------------------------------------------------------------------------
@@ -491,18 +314,6 @@ function git-get-submodules()
         $comps = $item.Split();
         sh_writeline $comps[2];
     }
-}
-
-function bare()
-{
-    rm -rf ./test;
-    mkdir test;
-    cd test;
-    git init
-    mkdir libs
-    cd libs
-    git submodule add https://gitlab.com/stdmatt-libs/js/demolib
-    git submodule add https://gitlab.com/stdmatt-libs/js/demolib_loader;
 }
 
 ##------------------------------------------------------------------------------
@@ -543,7 +354,7 @@ function git-remove-submodule()
     $config_temp_input   = (sh_get_temp_filename "safe");
     $config_temp_output  = (sh_get_temp_filename "safe");
 
-    _log "Removing submodule: ${submodule_name}";
+    sh_log "Removing submodule: ${submodule_name}";
 
     ##
     ## Change the entry in modules.
@@ -648,177 +459,6 @@ function git-clone-full()
     git-update-submodule;
 }
 
-##----------------------------------------------------------------------------##
-## Install                                                                    ##
-##----------------------------------------------------------------------------##
-##------------------------------------------------------------------------------
-function install-all()
-{
-    install-profile;
-    install-binaries;
-    install-fonts;
-
-    if($IsMacOS) {
-        _install_macOS_hacks;
-    }
-
-    git-config;
-}
-
-##------------------------------------------------------------------------------
-function install-profile()
-{
-    ## @notice(stdmatt): [Copy vs Link] - 08 Feb, 2022
-    ##   We have the following scenario:
-    ##     - Multiple platforms to support
-    ##       (Win32, WSL, GNU, etc...)
-    ##     - Multiple locations for the same file
-    ##       pwsh loads in different place, nvim as well, etc...
-    ##   So the approach that we are using are:
-    ##     - We have one authorative file.
-    ##       This file is a copy from / to the repo.
-    ##     - All other "copies" of this file are actually hardlinks
-    ##       to the authorative one. This way we can edit just in one place
-    ##       and have only one point of sync.
-    ##   Example:
-    ##      copy /repo/important_file.ps1  -> /filesystem/import_file.ps1 (Authorative)
-    ##      link /filesytem/import_file.ps -> /filesystem/another/file2.ps1 (Hardlink)
-    ##      ...
-    ##      link /filesytem/import_file.ps -> /filesystem/another/fileN.ps1 (Hardlink)
-
-    ## Git
-    _copy_newer_file "$GIT_SOURCE_DIR/.gitignore" "$GIT_IGNORE_INSTALL_FULLPATH";
-
-    ## Profile
-    if($IsWindows) {
-        _copy_newer_file "$PROFILE_SOURCE_DIR/main.ps1"        $PWSH_WIN32_PROFILE_INSTALL_FULLPATH;
-        create-link       $PWSH_WIN32_PROFILE_INSTALL_FULLPATH $WINDOWS_PROFILE_INSTALL_FULLPATH;
-    } else {
-        _copy_newer_file "$PROFILE_SOURCE_DIR/main.ps1" $PWSH_UNIX_PROFILE_INSTALL_FULLPATH;
-    }
-
-    ## Terminal
-    if($IsWindows) {
-        _copy_newer_file "$TERMINAL_SOURCE_DIR/alacritty.yml" "$TERMINAL_WIN32_SETTINGS_INSTALL_FULLPATH";
-    } else {
-        _copy_newer_file "$TERMINAL_SOURCE_DIR/alacritty.yml" "$TERMINAL_UNIX_SETTINGS_INSTALL_FULLPATH";
-    }
-
-    ## Vim
-    _copy_newer_file "$VIM_SOURCE_DIR/.vimrc"  "$VIMRC_INSTALL_FULLPATH";
-
-    if($IsWindows) {
-        _copy_newer_file "$VIM_SOURCE_DIR/init.vim"          $NEOVIM_WIN32_INIT_INSTALL_FULLPATH;
-        create-link      $NEOVIM_WIN32_INIT_INSTALL_FULLPATH $NEOVIM_UNIX_INIT_INSTALL_FULLPATH;
-        ## @todo(stdmatt): Add the install of vim-plug...
-    } else {
-        _copy_newer_file "$VIM_SOURCE_DIR/init.vim"          $NEOVIM_UNIX_INIT_INSTALL_FULLPATH;
-        sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim';
-    }
-}
-
-##------------------------------------------------------------------------------
-function install-binaries()
-{
-    if(-not $IsWindows) {
-        _log_verbose "Not on Windows - Just ignoring...";
-        return;
-    }
-
-    $null = (sh_mkdir $BINARIES_INSTALL_FULLPATH);
-
-    $folder_contents = (Get-ChildItem -Path $BINARIES_SOURCE_DIR);
-    foreach($filename in $folder_contents) {
-        $filename = $filename.Name;
-        $src_path = (sh_join_path $BINARIES_SOURCE_DIR       $filename);
-        $dst_path = (sh_join_path $BINARIES_INSTALL_FULLPATH $filename);
-
-        _log_verbose "Copying binary: ($src_path) to ($dst_path)";
-        cp -R $src_path $dst_path;
-    }
-}
-
-##------------------------------------------------------------------------------
-function install-fonts()
-{
-    $where_the_fonts_are_installed = "";
-    if($IsWindows) {
-        $where_the_fonts_are_installed = $FONTS_WIN32_INSTALL_FULLPATH;
-    } elseif($IsMacOS) {
-        $where_the_fonts_are_installed = $FONTS_MACOS_INSTALL_FULLPATH;
-    } else {
-        ## @todo(stdmatt): _install_fonts_helper_unix should work in
-        ## everything but windows... but i have no way to test it right now...
-        $os_name = sh_get_os_name;
-        _log_fatal "Installing fonts not implemented for OS: ($os_name)";
-        return;
-    }
-
-    $folder_contents = (Get-ChildItem -Recurse -File -Path $FONTS_SOURCE_DIR);
-    foreach($font in $folder_contents) {
-        $font_name     = (sh_basepath $font.FullName);
-        $font_fullpath = "$where_the_fonts_are_installed/$font_name";
-
-        if((sh_file_exists $font_fullpath)) {
-            _log_verbose "Font ($font) already installed.";
-            continue;
-        }
-
-        _log_verbose "Installing ($font)...";
-        if($IsWindows) {
-            _install_fonts_helper_win32 $font $font_fullpath;
-        } else{
-            Copy-Item -Force $font.FullName $font_fullpath;
-        }
-    }
-
-    if(-not $IsWindows) {
-        _log_verbose "Flushing fonts cache...";
-        fc-cache -f $where_the_fonts_are_installed;
-    }
-
-    _log_verbose "Fonts were installed...";
-}
-
-##------------------------------------------------------------------------------
-function _install_fonts_helper_win32()
-{
-    ## @XXX(stdmatt): [macos_port] NOT TESTED on win32...
-    $font              = $args[0];
-    $font_install_path = $args[1];
-
-    ## Thanks to:Arkady Karasin - https://stackoverflow.com/a/61035940
-    $FONTS       = 0x14
-    $COPYOPTIONS = 4 + 16;
-    $OBJ_SHELL   = New-Object -ComObject Shell.Application;
-    $OBJ_FOLDER  = $OBJ_SHELL.Namespace($FONTS);
-    $COPY_FLAG   = [String]::Format("{0:x}", $COPYOPTIONS);
-
-    $OBJ_FOLDER.CopyHere($font.fullname, $COPY_FLAG);
-    Copy-Item $font.fullname $font_install_path;
-}
-
-##------------------------------------------------------------------------------
-function _install_macOS_hacks()
-{
-    # $macos_packages = @(
-    #     "atool", "coreutils", "ed", "findutils", "gawk",
-    #     "gnu-sed", "gnu-tar", "grep", "lynx", "make",
-    #     "neovim", "node", "openssl", "pandoc", "python",
-    #     "tree", "vifm"
-    # );
-
-    #disable special characters when holding keys
-    defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
-
-    # normal minimum is 15 (225 ms)
-    defaults write -g             InitialKeyRepeat -float 5.0
-    defaults write NSGlobalDomain InitialKeyRepeat -float 5.0
-
-    # normal minimum is 2 (30 ms)
-    defaults write -g             KeyRepeat -float 0.7
-    defaults write NSGlobalDomain KeyRepeat -float 0.7
-}
 
 ##----------------------------------------------------------------------------##
 ## Shell                                                                      ##
@@ -857,25 +497,14 @@ function _make_git_prompt()
     $curr_path    = (Get-Location).Path;
     $prompt       = ":)";
     $os_name      = (sh_get_os_name);
+    $hash         = (echo $curr_path | md5);
 
-    $color_index  = (Get-Date -UFormat "%M") % 4;                    ## Makes the color cycle withing minutes
-    $os_name      = (sh_rgb_to_ansi 0x62 0x62 0x62 ":[${os_name}]"  ); ## Dark gray
-    $git_line     = (sh_rgb_to_ansi 0x62 0x62 0x62 "${git_line}"    ); ## Dark gray
-    $prompt       = (sh_rgb_to_ansi 0x9E 0x9E 0x9E "$prompt"        ); ## Light gray
-    $colored_path = "";
+    $colored_os_name  = (sh_ansi_color    ":[${os_name}]" $SH_ANSI_BRIGHT_BLACK_FG);
+    $colored_git_line = (sh_ansi_color     "${git_line}"  $SH_ANSI_BRIGHT_BLACK_FG);
+    $colored_prompt   = (sh_ansi_hex_color "$prompt"      "9E9E9E");
+    $colored_path     = (sh_ansi_hex_color  $curr_path $hash[2..7]);
 
-    if($color_index -eq 0) {
-        $hex = $_ps_color_blue;
-    } elseif($color_index -eq 1) {
-        $hex = $_ps_color_pink;
-    } elseif($color_index -eq 2) {
-        $hex = $_ps_color_blue_green;
-    } else {
-        $hex = $_ps_color_yellow_orange;
-    }
-
-    $colored_path  = (sh_hex_to_ansi $hex $curr_path);
-    $output        = "${colored_path}${os_name}${git_line}`n${prompt} ";
+    $output = "${colored_path}${colored_os_name}${colored_git_line}`n${colored_prompt} ";
 
     return $output;
 }
@@ -890,7 +519,6 @@ function global:prompt
 ##----------------------------------------------------------------------------##
 ## Aliases / Commands                                                         ##
 ##----------------------------------------------------------------------------##
-## cd
 ##------------------------------------------------------------------------------
 ## @notice(stdmatt): This is pretty cool - It makes the cd to behave like
 ## the bash one that i can cd - and it goes to the OLDPWD.
@@ -900,6 +528,11 @@ function global:prompt
 ## Kinda the first thing that I write in my standing desk here in kyiv.
 ## I mean, this is pretty cool, just could imagine when I get my new keychron!
 ## March 12, 2021!!
+
+##
+## cd
+##
+
 $global:OLDPWD="";
 function _stdmatt_cd()
 {
@@ -919,9 +552,11 @@ function _stdmatt_cd()
 Remove-Item -Path Alias:cd
 Set-Alias -Name cd -Value _stdmatt_cd -Force -Option AllScope
 
+
 ##
 ## Files
 ##
+
 ##------------------------------------------------------------------------------
 function files()
 {
@@ -960,28 +595,35 @@ function _host_get_file_manager()
     return "";
 }
 
+
 ##
-## Create Link
+## Make Link
 ##
+
 ##------------------------------------------------------------------------------
-function create-link()
+function make-link()
 {
     $src_path = $args[0];
     $dst_path = $args[1];
 
-    if ( _string_is_null_or_whitespace($src_path) ) {
+    if (-not $src_path) {
         _log_fatal("Missing source path - Aborting...");
         return;
     }
 
-    ## @todo(stdmatt): Should we check errors???
-    $null = (New-Item -ItemType HardLink -Target $src_path -Path $dst_path -Force);
+    if((sh_is_unix_like)) {
+        ln $src_path $dst_path;
+    } else {
+        ## @todo(stdmatt): Should we check errors???
+        $null = (New-Item -ItemType HardLink -Target $src_path -Path $dst_path -Force);
+    }
 }
 
 
 ##
 ## Vim
 ##
+
 ##------------------------------------------------------------------------------
 ## Remove-Alias -Path Alias:nv -Force -Option AllScope
 $_nv = if($IsWindows) { "nvim.exe" }  else { "nvim" }
@@ -993,6 +635,7 @@ Set-Alias -Name nv  -Value $_nv -Force -Option AllScope
 ##
 ## kill
 ##
+
 ##------------------------------------------------------------------------------
 function kill-process()
 {
@@ -1023,7 +666,7 @@ function kill-process()
     $PROCESS_ID_INDEX_IN_PS_OUTPUT = 4;
     $process_id                    = $comps_clean[$PROCESS_ID_INDEX_IN_PS_OUTPUT];
 
-    _log "Killing proccess: ($process_name id: ${process_id})";
+    sh_log "Killing proccess: ($process_name id: ${process_id})";
     kill $process_id -Force
 }
 
@@ -1039,6 +682,7 @@ function kill-for-anvil()
 ##
 ## Delete (rm)
 ##
+
 ##------------------------------------------------------------------------------
 function nuke-dir()
 {
@@ -1066,35 +710,15 @@ function nuke-dir()
 ##
 ## HTTP Server
 ##
+
 ##------------------------------------------------------------------------------
 function http-server()
 {
     python3 -m http.server $args[1];
 }
 
-
-##----------------------------------------------------------------------------##
-## PATH                                                                       ##
-##----------------------------------------------------------------------------##
-##----------------------------------------------------------------------------##
-if($IsMacOS) {
-    $paths = @(
-        "/usr/local/opt/coreutils/libexec/gnubin",
-        "/usr/local/opt/gnu-tar/libexec/gnubin",
-        "/usr/local/opt/ed/libexec/gnubin",
-        "/usr/local/opt/grep/libexec/gnubin",
-        "/usr/local/opt/gnu-sed/libexec/gnubin",
-        "/usr/local/opt/gsed/libexec/gnubin",
-        "/usr/local/opt/gawk/libexec/gnubin",
-        "/usr/local/opt/make/libexec/gnubin",
-        "/usr/local/opt/findutils/libexec/gnubin"
-    )
-
-    $env:PATH = $env:PATH + ":" + (sh_join_string ":" $paths);
-}
-
-$env:PATH = $env:PATH + ":" + "/Users/stdmatt/.stdmatt/bin";
-
+_configure_PATH
+_configure_PSReadLine
 
 #####################
 ## Nice to pipe stuff and calculate things....
