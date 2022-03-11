@@ -67,11 +67,12 @@ function _configure_PSReadLine()
 function _on_vi_mode_change
 {
     if ($args[0] -eq 'Command') {
-        Write-Host -NoNewLine "`e[1 q"
+        Write-Host -NoNewLine "`e[1 q *"
     } else {
-        Write-Host -NoNewLine "`e[5 q"
+        Write-Host -NoNewLine "`e[5 q -"
     }
 }
+
 
 ##----------------------------------------------------------------------------##
 ## PATH                                                                       ##
@@ -204,7 +205,7 @@ function g()
 ##------------------------------------------------------------------------------
 function git-config()
 {
-    _log_verbose "Configuring git...";
+    sh_log_verbose "Configuring git...";
     ## Info...
     git config --global user.name  "stdmatt";
     git config --global user.email "stdmatt@pixelwizards.io";
@@ -222,7 +223,7 @@ function git-config()
     git config --global alias.s status;
     git config --global alias.d diff  ;
 
-    _log_verbose "Done... ;D";
+    sh_log_verbose "Done... ;D";
 }
 
 ##------------------------------------------------------------------------------
@@ -230,7 +231,7 @@ function git-first-date-of()
 {
     $filename = $args[0];
     if(-not (sh_file_exists($filename))) {
-        _log_fatal "Missing ($filename)";
+        sh_log_fatal "Missing ($filename)";
         return;
     }
 
@@ -283,7 +284,7 @@ function git-delete-branch()
     $grep_result = (git branch --all | grep $branch_name);
 
     if($grep_result.Length -eq 0) {
-        _log_fatal "Invalid branch ($branch_name)";
+        sh_log_fatal "Invalid branch ($branch_name)";
         return;
     }
 
@@ -299,7 +300,7 @@ function git-push-to-origin()
 {
     $branch_name = (git-curr-branch-name);
     if($branch_name -eq "") {
-        _log_fatal "Invalid name...";
+        sh_log_fatal "Invalid name...";
         return;
     }
 
@@ -322,7 +323,7 @@ function git-remove-submodule()
 {
     $repo_root = (git-get-repo-root);
     if($repo_root -eq $null) {
-        _log_fatal "Not in a git repo...";
+        sh_log_fatal "Not in a git repo...";
         return $false;
     }
 
@@ -331,7 +332,7 @@ function git-remove-submodule()
     $is_valid         = $submodules_names.Contains($submodule_name);
 
     if(-not $is_valid) {
-        _log_fatal "Invalid submodule name ${submodule_name}";
+        sh_log_fatal "Invalid submodule name ${submodule_name}";
         return;
     }
 
@@ -569,12 +570,12 @@ function files()
 
     $file_manager = (_host_get_file_manager);
     if($file_manager -eq "") {
-        _log_fatal("No file manager was found - Aborting...");
+        sh_log_fatal("No file manager was found - Aborting...");
         return;
     }
 
     if(-not (sh_dir_exists $target_path)) {
-        _log_fatal("Invalid path - Aborting...");
+        sh_log_fatal("Invalid path - Aborting...");
         return;
     }
 
@@ -607,7 +608,7 @@ function make-link()
     $dst_path = $args[1];
 
     if (-not $src_path) {
-        _log_fatal("Missing source path - Aborting...");
+        sh_log_fatal("Missing source path - Aborting...");
         return;
     }
 
@@ -643,12 +644,12 @@ function kill-process()
     $line         = (ps | grep $process_name);
 
     if($line.Length -eq 0) {
-        _log_fatal "No process with name: (${process_name})";
+        sh_log_fatal "No process with name: (${process_name})";
         return;
     } elseif($line.Length -gt 1 -and $line.GetType().FullName -ne "System.String") {
         ## @todo(stdmatt): [Pretty Print] 09 Dec, 2021 at 00:58:30
         ## Print each process in a different line.
-        _log_fatal "More than one process were found: (`n${line}`n)";
+        sh_log_fatal "More than one process were found: (`n${line}`n)";
         return;
     }
 
@@ -689,13 +690,13 @@ function nuke-dir()
     ## @improve(stdmatt): [Handle multiple args]
     $path_to_remove = $args[0];
     if($path_to_remove -eq "") {
-        _log_fatal "No directory path was given";
+        sh_log_fatal "No directory path was given";
         return;
     }
 
     $dir_is_valid = (sh_dir_exists $path_to_remove);
     if(-not $dir_is_valid) {
-        _log_fatal "Path isn't a valid directory...";
+        sh_log_fatal "Path isn't a valid directory...";
         return;
     }
 
@@ -717,8 +718,18 @@ function http-server()
     python3 -m http.server $args[1];
 }
 
+
+
+
+##----------------------------------------------------------------------------##
+## Entry Point 								      ##
+##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
 _configure_PATH
 _configure_PSReadLine
+
+
+$shlib = "$HOME/.stdmatt/lib/shlib/shlib.ps1"
 
 #####################
 ## Nice to pipe stuff and calculate things....
