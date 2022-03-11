@@ -159,7 +159,7 @@ function _copy()
     if((sh_file_exists $src)) {
         sh_log "Linking: ${src} -> ${dst}";
 
-        sh_mkdir  (sh_basepath $dst);
+        sh_mkdir  (sh_dirpath $dst);
         sh_mklink $src $dst;
 
         return;
