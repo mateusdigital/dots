@@ -3,6 +3,7 @@
 ##
 if(-not $env:SHLIB) { . "$HOME/.stdmatt/lib/shlib/shlib.ps1" }
 
+
 ##----------------------------------------------------------------------------##
 ## Constants                                                                  ##
 ##----------------------------------------------------------------------------##
@@ -11,13 +12,6 @@ $DOTS_DIR = (sh_get_script_dir);
 $HOME_DIR = (sh_get_home_dir);
 
 ##------------------------------------------------------------------------------
-$FONTS_INFO =  @{
-    src = "$DOTS_DIR/extras/fonts";
-    win = "$HOME_DIR/AppData/Local/Microsoft/Windows/Fonts";
-    mac = "$HOME_DIR/Library/Fonts";
-    gnu = "$HOME_DIR/.local/share/fonts";
-}
-
 $GIT_INFO = @{
     src = "$DOTS_DIR/extras/git";
     all = "$HOME_DIR";
@@ -48,51 +42,50 @@ $VIM_INFO = @{
 ##------------------------------------------------------------------------------
 function _install_fonts()
 {
-    # $where_the_fonts_are_installed = "";
-    # if($IsWindows) {
-    #     $where_the_fonts_are_installed = $FONTS_WIN32_INSTALL_FULLPATH;
-    # } elseif($IsMacOS) {
-    #     $where_the_fonts_are_installed = $FONTS_MACOS_INSTALL_FULLPATH;
-    # } else {
-    #     ## @todo(stdmatt): _install_fonts_helper_unix should work in
-    #     ## everything but windows... but i have no way to test it right now...
-    #     $os_name = sh_get_os_name;
-    #     sh_log_fatal "Installing fonts not implemented for OS: ($os_name)";
-    #     return;
-    # }
+    $FONTS_INFO =  @{
+        src = "$DOTS_DIR/extras/fonts";
+        win = "$HOME_DIR/AppData/Local/Microsoft/Windows/Fonts";
+        mac = "$HOME_DIR/Library/Fonts";
+        gnu = "$HOME_DIR/.local/share/fonts";
+    }
 
-    # $folder_contents = (Get-ChildItem -Recurse -File -Path $FONTS_SOURCE_DIR);
-    # foreach($font in $folder_contents) {
-    #     $font_name     = (sh_basepath $font.FullName);
-    #     $font_fullpath = "$where_the_fonts_are_installed/$font_name";
+    $os_name                       = (sh_get_os_name);
+    $where_the_fonts_are_installed = $FONTS_INFO[$os_name];
+    $any_font_was_installed        = $false;
 
-    #     if((sh_file_exists $font_fullpath)) {
-    #         sh_log_verbose "Font ($font) already installed.";
-    #         continue;
-    #     }
+    $folder_contents = (Get-ChildItem -Recurse -File -Path $FONTS_INFO.src);
+    foreach($font in $folder_contents) {
+        $font_name     = (sh_basepath $font.FullName);
+        $font_fullpath = "$where_the_fonts_are_installed/$font_name";
 
-    #     sh_log_verbose "Installing ($font)...";
-    #     if($IsWindows) {
-    #         ## @XXX(stdmatt): [macos_port] NOT TESTED on win32...
-    #                  ## Thanks to:Arkady Karasin - https://stackoverflow.com/a/61035940
-    #         $FONTS       = 0x14
-    #         $COPYOPTIONS = 4 + 16;
-    #         $OBJ_SHELL   = New-Object -ComObject Shell.Application;
-    #         $OBJ_FOLDER  = $OBJ_SHELL.Namespace($FONTS);
-    #         $COPY_FLAG   = [String]::Format("{0:x}", $COPYOPTIONS);
+        if((sh_file_exists $font_fullpath)) {
+            sh_log_verbose "Font ($font) already installed.";
+            continue;
+        }
 
-    #         $OBJ_FOLDER.CopyHere($font.fullname, $COPY_FLAG);
-    #     }
+        sh_log_verbose "Installing ($font)...";
+        if($IsWindows) {
+            ## @XXX(stdmatt): [macos_port] NOT TESTED on win32...
+            ## Thanks to:Arkady Karasin - https://stackoverflow.com/a/61035940
+            $FONTS       = 0x14
+            $COPYOPTIONS = (4 + 16);
+            $OBJ_SHELL   = New-Object -ComObject Shell.Application;
+            $OBJ_FOLDER  = $OBJ_SHELL.Namespace($FONTS);
+            $COPY_FLAG   = [String]::Format("{0:x}", $COPYOPTIONS);
 
-    #     Copy-Item -Force $font.FullName $font_fullpath;
-    # }
+            $OBJ_FOLDER.CopyHere($font.fullname, $COPY_FLAG);
+        }
 
-    # if(-not $IsWindows) {
-    #     sh_log_verbose "Flushing fonts cache...";
-    #     fc-cache -f $where_the_fonts_are_installed;
-    # }
+        Copy-Item -Force -Verbose $font.FullName $font_fullpath;
+        $any_font_was_installed = $true;
+    }
 
-    # sh_log_verbose "Fonts were installed...";
+    if(-not $IsWindows -and $any_font_was_installed) {
+        sh_log_verbose "Flushing fonts cache...";
+        fc-cache -f $where_the_fonts_are_installed;
+    }
+
+    sh_log_verbose "Fonts were installed...";
 }
 
 ##------------------------------------------------------------------------------
@@ -126,7 +119,7 @@ function _install_macOS_hacks()
         sh_log_verbose "Not on macOS - Just ignoring...";
         return;
     }
-
+    ## @todo: Install pacakges on macos ???
     # $macos_packages = @(
     #     "atool", "coreutils", "ed", "findutils", "gawk",
     #     "gnu-sed", "gnu-tar", "grep", "lynx", "make",
@@ -146,8 +139,17 @@ function _install_macOS_hacks()
     defaults write NSGlobalDomain KeyRepeat -float 0.7
 }
 
+##------------------------------------------------------------------------------
+function _link_config_files()
+{
+    _link_config_helper $GIT_INFO
+    _link_config_helper $PWSH_PROFILE
+    _link_config_helper $TERM_INFO
+    _link_config_helper $VIM_INFO
+}
 
-function _copy()
+##------------------------------------------------------------------------------
+function _link_config_helper()
 {
     $info = $args[0];
     $src  = $info.src;
@@ -177,7 +179,11 @@ function _copy()
     }
 }
 
-_copy $GIT_INFO
-_copy $PWSH_PROFILE
-_copy $TERM_INFO
-_copy $VIM_INFO
+##----------------------------------------------------------------------------##
+## Entry Point                                                                ##
+##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
+_link_config_files
+_install_win32_hacks
+_install_macOS_hacks
+_install_fonts
