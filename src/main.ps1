@@ -118,23 +118,6 @@ Check http://stdmatt.com for more :)",
     sh_writeline $value;
 }
 
-##----------------------------------------------------------------------------##
-## Profile                                                                    ##
-##----------------------------------------------------------------------------##
-##------------------------------------------------------------------------------
-function edit-profile()
-{
-    nvim                                     `
-        $profile                             `
-    install-profile;
-}
-
-##------------------------------------------------------------------------------
-function reload-profile()
-{
-    . $profile;
-}
-
 
 ##----------------------------------------------------------------------------##
 ## Journal                                                                    ##
@@ -520,15 +503,7 @@ function global:prompt
 ##----------------------------------------------------------------------------##
 ## Aliases / Commands                                                         ##
 ##----------------------------------------------------------------------------##
-##------------------------------------------------------------------------------
-## @notice(stdmatt): This is pretty cool - It makes the cd to behave like
-## the bash one that i can cd - and it goes to the OLDPWD.
-## I mean, this thing is neat, probably PS has some sort of this like that
-## but honestly, not in the kinda mood to start to look to all the crap
-## microsoft documentation. But had quite fun time doing this silly thing!
-## Kinda the first thing that I write in my standing desk here in kyiv.
-## I mean, this is pretty cool, just could imagine when I get my new keychron!
-## March 12, 2021!!
+
 
 ##
 ## cd
@@ -537,6 +512,16 @@ function global:prompt
 $global:OLDPWD="";
 function _stdmatt_cd()
 {
+    ## @notice(stdmatt): This is pretty cool - It makes the cd to behave like
+    ## the bash one that i can cd - and it goes to the OLDPWD.
+    ## I mean, this thing is neat, probably PS has some sort of this like that
+    ## but honestly, not in the kinda mood to start to look to all the crap
+    ## microsoft documentation. But had quite fun time doing this silly thing!
+    ## Kinda the first thing that I write in my standing desk here in kyiv.
+    ## I mean, this is pretty cool, just could imagine when I get my new keychron!
+    ## March 12, 2021!!
+
+
     $target_path = $args[0];
     if($target_path -eq "") {
         $target_path = "$HOME_DIR";
@@ -730,6 +715,10 @@ _configure_PSReadLine
 
 
 $shlib = "$HOME/.stdmatt/lib/shlib/shlib.ps1"
+$dots  = (sh_get_script_dir);
+
+$env:EDITOR = "lvim";
+$env:VISUAL = "lvim";
 
 #####################
 ## Nice to pipe stuff and calculate things....
