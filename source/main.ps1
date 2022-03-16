@@ -612,7 +612,7 @@ function make-link()
 
 ##------------------------------------------------------------------------------
 ## Remove-Alias -Path Alias:nv -Force -Option AllScope
-$_nv = if($IsWindows) { "nvim.exe" }  else { "lvim" }
+$_nv = if($IsWindows) { "nvim.exe" }  else { "nvim" }
 
 Set-Alias -Name vi  -Value $_nv -Force -Option AllScope
 Set-Alias -Name vim -Value $_nv -Force -Option AllScope
