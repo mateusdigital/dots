@@ -430,16 +430,43 @@ function git-new-feature()
 }
 
 
+##
+## Clone
+##
+
 ##------------------------------------------------------------------------------
 function git-clone-full()
 {
     $url = $args[0];
     git clone $url;
 
-    $clean_name = (sh_basepath $arg).Remove(".git");
-    cd $clean_name;
+    $clean_name = (sh_basepath $url);
+    if($clean_name.Contains(".git")) {
+        $clean_name = $clean_name.Replace(".git", "");
+    }
 
-    git-update-submodule;
+    sh_push_dir $clean_name;
+        (git-update-submodule);
+    sh_pop_dir;
+}
+
+
+##------------------------------------------------------------------------------
+function git-clone-github()
+{
+    $url = $args[0].Trim();
+
+    $repo      = (sh_basepath $url);
+    $user      = (sh_basepath (sh_dirpath $url));
+    $clone_url = "https://github.com/${user}/${repo}";
+    $clone_dir = "${HOME}/Projects/github"; ## @todo: Bulletproof this path...
+
+    sh_log "Cloning form: ${clone_url}";
+
+    sh_mkdir $clone_dir;
+    sh_push_dir $clone_dir;
+        (git-clone-full $clone_url);
+    sh_pop_dir;
 }
 
 
