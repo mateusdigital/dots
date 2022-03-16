@@ -119,24 +119,6 @@ function _install_macOS_hacks()
         sh_log_verbose "Not on macOS - Just ignoring...";
         return;
     }
-    ## @todo: Install pacakges on macos ???
-    # $macos_packages = @(
-    #     "atool", "coreutils", "ed", "findutils", "gawk",
-    #     "gnu-sed", "gnu-tar", "grep", "lynx", "make",
-    #     "neovim", "node", "openssl", "pandoc", "python",
-    #     "tree", "vifm"
-    # );
-
-    #disable special characters when holding keys
-    defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
-
-    # normal minimum is 15 (225 ms)
-    defaults write -g             InitialKeyRepeat -float 5.0
-    defaults write NSGlobalDomain InitialKeyRepeat -float 5.0
-
-    # normal minimum is 2 (30 ms)
-    defaults write -g             KeyRepeat -float 0.7
-    defaults write NSGlobalDomain KeyRepeat -float 0.7
 }
 
 ##------------------------------------------------------------------------------
