@@ -243,9 +243,10 @@ function git-get-repo-root()
 
 
 ##------------------------------------------------------------------------------
-function git-curr-branch-name()
+function git-get-branch-name()
 {
     $result = (git branch);
+
     foreach($item in $result) {
         $name = $item.Trim();
         if($name.StartsWith("*")) {
@@ -253,6 +254,7 @@ function git-curr-branch-name()
             return $clean_name;
         }
     }
+
     return "";
 }
 
@@ -404,14 +406,15 @@ function git-update-submodule()
 ## New Branch
 ##
 ##------------------------------------------------------------------------------
-function git-new-branch()
+function git-create-branch()
 {
-    $prefix = $args[0];
-    $values = (sh_expand_array $args 1).ForEach({echo $_.Trim()});
-    $name   = (sh_join_string "-" $values).Replace(" ", "-");
-    sh_writeline "${prefix}${name}";
+    $prefix   = $args[0];
+    $values   = (sh_expand_array $args 1).ForEach({echo $_.Trim()});
+    $name     = (sh_join_string "-" $values).Replace(" ", "-");
+    $fullname = "${prefix}${name}";
 
-    git checkout -b $name;
+    sh_writeline $fullname;
+    git checkout -b $fullname;
 }
 
 ##------------------------------------------------------------------------------
