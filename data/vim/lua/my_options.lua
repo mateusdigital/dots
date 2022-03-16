@@ -1,13 +1,13 @@
+
+vim.o.hidden          = true
+vim.o.mouse           = 'a'
+vim.o.expandtab       = true
+vim.o.ignorecase      = true
 vim.o.clipboard       = "unnamedplus"
 vim.o.cmdheight       = 1
 vim.o.conceallevel    = 0
-vim.o.expandtab       = true
 vim.o.fileencoding    = "utf-8"
-vim.o.hidden          = true
 vim.o.hlsearch        = false
-vim.o.ignorecase      = true
-vim.o.mouse           = 'a'
-vim.o.scrolloff       = 12
 vim.o.shiftwidth      = 2
 vim.o.showmode        = false
 vim.o.showtabline     = 2
@@ -24,7 +24,16 @@ vim.o.tabstop         = 2
 vim.o.termguicolors   = true
 vim.o.title           = true
 vim.o.updatetime      = 300
-vim.wo.cursorline     = false
+vim.o.timeoutlen      = 300
+vim.wo.cursorline     = true
 vim.wo.number         = true
 vim.wo.relativenumber = false
+vim.opt.numberwidth   = 3
 vim.wo.signcolumn     = 'yes'
+vim.o.wrap            = false
+-- Backup
+vim.o.undodir         = vim.fn.stdpath "cache" .. "/undo"
+vim.opt.undofile      = true
+vim.opt.swapfile      = false
+vim.opt.backup        = false
+vim.opt.writebackup   = false
