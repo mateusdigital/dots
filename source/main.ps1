@@ -185,6 +185,7 @@ function g()
 function git-config()
 {
     sh_log_verbose "Configuring git...";
+
     ## Info...
     git config --global user.name  "stdmatt";
     git config --global user.email "stdmatt@pixelwizards.io";
@@ -216,6 +217,7 @@ function git-first-date-of()
 
     $date_format = "%d %b, %Y";
     $lines       = (git log --diff-filter=A --follow --format=%ad  --date=format:$date_format --reverse -- "${filename}");
+
     sh_writeline $lines;
 }
 
@@ -280,6 +282,7 @@ function git-delete-branch()
 function git-push-to-origin()
 {
     $branch_name = (git-curr-branch-name);
+
     if($branch_name -eq "") {
         sh_log_fatal "Invalid name...";
         return;
@@ -292,6 +295,7 @@ function git-push-to-origin()
 function git-get-submodules()
 {
     $result = (git submodule status);
+
     foreach($item in $result) {
         $comps = $item.Split();
         sh_writeline $comps[2];
@@ -303,6 +307,7 @@ function git-get-submodules()
 function git-remove-submodule()
 {
     $repo_root = (git-get-repo-root);
+
     if($repo_root -eq $null) {
         sh_log_fatal "Not in a git repo...";
         return $false;
@@ -405,6 +410,7 @@ function git-update-submodule()
 ##
 ## New Branch
 ##
+
 ##------------------------------------------------------------------------------
 function git-create-branch()
 {
@@ -546,7 +552,6 @@ function _stdmatt_cd()
     ## Kinda the first thing that I write in my standing desk here in kyiv.
     ## I mean, this is pretty cool, just could imagine when I get my new keychron!
     ## March 12, 2021!!
-
 
     $target_path = $args[0];
     if($target_path -eq "") {
