@@ -143,9 +143,9 @@ function journal()
     } catch {
     }
 
-    _stdmatt_cd $JOURNAL_DIR;
-    nvim .
-    _stdmatt_cd "-";
+    sh_push_dir $JOURNAL_DIR;
+        nvim .
+    sh_pop_dir;
 }
 
 ##------------------------------------------------------------------------------
@@ -156,18 +156,19 @@ function sync-journal()
         return;
     }
 
-    cd $JOURNAL_DIR;
-    git add .
+    sh_push_dir $JOURNAL_DIR;
+        git add .
 
-    $current_pc_name = hostname;
-    $current_date    = date;
-    $commit_msg      = "[sync-journal] ($current_pc_name) - ($current_date)";
+        $current_pc_name = hostname;
+        $current_date    = date;
+        $commit_msg      = "[sync-journal] ($current_pc_name) - ($current_date)";
 
-    sh_log $commit_msg;
-    git commit -m "$commit_msg";
+        sh_log $commit_msg;
+        git commit -m "$commit_msg";
 
-    git pull
-    git push
+        git pull;
+        git push;
+    sh_pop_dir
 }
 
 
