@@ -18,7 +18,7 @@ $GIT_INFO = @{
 }
 
 $PWSH_PROFILE = @{
-    src = "$DOTS_DIR/src/main.ps1";
+    src = "$DOTS_DIR/source/main.ps1";
     win = "$HOME_DIR/Documents/PowerShell/Microsoft.PowerShell_profile.ps1";
     all = "$HOME_DIR/.config/powershell/Microsoft.PowerShell_profile.ps1";
 }
