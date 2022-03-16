@@ -31,5 +31,6 @@ return require("packer").startup(function()
   use { "romgrk/barbar.nvim" }
   -- Treesitter
   use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate all" }
-
+  -- Lualine
+  use { 'nvim-lualine/lualine.nvim' }
 end);

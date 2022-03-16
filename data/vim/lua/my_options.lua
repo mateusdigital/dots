@@ -1,6 +1,6 @@
 
 vim.o.hidden          = true
-vim.o.mouse           = 'a'
+vim.o.mouse           = "a"
 vim.o.expandtab       = true
 vim.o.ignorecase      = true
 vim.o.clipboard       = "unnamedplus"
@@ -29,7 +29,7 @@ vim.wo.cursorline     = true
 vim.wo.number         = true
 vim.wo.relativenumber = false
 vim.opt.numberwidth   = 3
-vim.wo.signcolumn     = 'yes'
+vim.wo.signcolumn     = "yes"
 vim.o.wrap            = false
 -- Backup
 vim.o.undodir         = vim.fn.stdpath "cache" .. "/undo"
