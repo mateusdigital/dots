@@ -202,6 +202,7 @@ function git-config()
     git config --global alias.c commit;
     git config --global alias.s status;
     git config --global alias.d diff  ;
+    git config --global alias.a add   ;
 
     sh_log_verbose "Done... ;D";
 }
@@ -281,7 +282,7 @@ function git-delete-branch()
 ##------------------------------------------------------------------------------
 function git-push-to-origin()
 {
-    $branch_name = (git-curr-branch-name);
+    $branch_name = (git-get-branch-name);
 
     if($branch_name -eq "") {
         sh_log_fatal "Invalid name...";
@@ -426,13 +427,13 @@ function git-create-branch()
 ##------------------------------------------------------------------------------
 function git-new-bugfix()
 {
-    git-new-branch "bugfix/" $args;
+    git-create-branch "bugfix/" $args;
 }
 
 ##------------------------------------------------------------------------------
 function git-new-feature()
 {
-    git-new-branch "feature/" $args;
+    git-create-branch "feature/" $args;
 }
 
 
