@@ -33,4 +33,6 @@ return require("packer").startup(function()
     use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate all" }
     -- Lualine
     use { 'nvim-lualine/lualine.nvim' }
+    -- Easy Align
+    use { "junegunn/vim-easy-align" }
 end);
