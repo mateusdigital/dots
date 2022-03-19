@@ -1,24 +1,11 @@
 ##----------------------------------------------------------------------------##
 ## Imports                                                                    ##
 ##----------------------------------------------------------------------------##
-. "${HOME}/.stdmatt/lib/shlib/shlib.ps1";
+. "${HOME}/.stdmatt/lib/shlib/shlib.ps1"; ## @todo: Bulletproof this path...
 
 ##------------------------------------------------------------------------------
 $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
 $env:SHLIB_IS_VERSBOSE           = 1;
-
-
-##----------------------------------------------------------------------------##
-## Info                                                                       ##
-##----------------------------------------------------------------------------##
-##------------------------------------------------------------------------------
-$PROGRAM_NAME            = "dots";
-$PROGRAM_VERSION         = "3.0.0";
-$PROGRAM_AUTHOR          = "stdmatt - <stdmatt@pixelwizads.io>";
-$PROGRAM_COPYRIGHT_OWNER = "stdmatt";
-$PROGRAM_COPYRIGHT_YEARS = "2021, 2022";
-$PROGRAM_DATE            = "30 Nov, 2021";
-$PROGRAM_LICENSE         = "GPLv3";
 
 
 ##----------------------------------------------------------------------------##
@@ -102,6 +89,14 @@ function _configure_PATH()
 ##------------------------------------------------------------------------------
 function show_version()
 {
+    $PROGRAM_NAME            = "dots";
+    $PROGRAM_VERSION         = "3.0.0";
+    $PROGRAM_AUTHOR          = "stdmatt - <stdmatt@pixelwizads.io>";
+    $PROGRAM_COPYRIGHT_OWNER = "stdmatt";
+    $PROGRAM_COPYRIGHT_YEARS = "2021, 2022";
+    $PROGRAM_DATE            = "30 Nov, 2021";
+    $PROGRAM_LICENSE         = "GPLv3";
+
     $value = [string]::Format(
 "{0} - {1} - {2}                                      `
 Copyright (c) {3} - {4}                               `
@@ -148,9 +143,9 @@ function journal()
     } catch {
     }
 
-    _stdmatt_cd $JOURNAL_DIR;
-    nvim .
-    _stdmatt_cd "-";
+    sh_push_dir $JOURNAL_DIR;
+        nvim .
+    sh_pop_dir;
 }
 
 ##------------------------------------------------------------------------------
@@ -161,18 +156,19 @@ function sync-journal()
         return;
     }
 
-    cd $JOURNAL_DIR;
-    git add .
+    sh_push_dir $JOURNAL_DIR;
+        git add .
 
-    $current_pc_name = hostname;
-    $current_date    = date;
-    $commit_msg      = "[sync-journal] ($current_pc_name) - ($current_date)";
+        $current_pc_name = hostname;
+        $current_date    = date;
+        $commit_msg      = "[sync-journal] ($current_pc_name) - ($current_date)";
 
-    sh_log $commit_msg;
-    git commit -m "$commit_msg";
+        sh_log $commit_msg;
+        git commit -m "$commit_msg";
 
-    git pull
-    git push
+        git pull;
+        git push;
+    sh_pop_dir
 }
 
 
@@ -180,15 +176,13 @@ function sync-journal()
 ## Git                                                                        ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
-function g()
-{
-    git $args;
-}
+function g() { git $args; }
 
 ##------------------------------------------------------------------------------
 function git-config()
 {
     sh_log_verbose "Configuring git...";
+
     ## Info...
     git config --global user.name  "stdmatt";
     git config --global user.email "stdmatt@pixelwizards.io";
@@ -202,9 +196,11 @@ function git-config()
     git config --global init.defaultBranch "main";
 
     ## Aliases...
-    git config --global alias.c commit;
-    git config --global alias.s status;
-    git config --global alias.d diff  ;
+    git config --global alias.c    commit
+    git config --global alias.s    status
+    git config --global alias.d    diff
+    git config --global alias.a    add
+    git config --global alias.t    log --oneline --decorate --graph --all
 
     sh_log_verbose "Done... ;D";
 }
@@ -220,6 +216,7 @@ function git-first-date-of()
 
     $date_format = "%d %b, %Y";
     $lines       = (git log --diff-filter=A --follow --format=%ad  --date=format:$date_format --reverse -- "${filename}");
+
     sh_writeline $lines;
 }
 
@@ -247,9 +244,10 @@ function git-get-repo-root()
 
 
 ##------------------------------------------------------------------------------
-function git-curr-branch-name()
+function git-get-branch-name()
 {
     $result = (git branch);
+
     foreach($item in $result) {
         $name = $item.Trim();
         if($name.StartsWith("*")) {
@@ -257,6 +255,7 @@ function git-curr-branch-name()
             return $clean_name;
         }
     }
+
     return "";
 }
 
@@ -272,16 +271,16 @@ function git-delete-branch()
     }
 
     sh_log "Deleting branch: ($branch_name)";
-    git branch      --delete $branch_name;
-    git push origin --delete $branch_name;
-
+        git branch      --delete $branch_name;
+        git push origin --delete $branch_name;
     sh_log "Deleted...";
 }
 
 ##------------------------------------------------------------------------------
 function git-push-to-origin()
 {
-    $branch_name = (git-curr-branch-name);
+    $branch_name = (git-get-branch-name);
+
     if($branch_name -eq "") {
         sh_log_fatal "Invalid name...";
         return;
@@ -294,6 +293,7 @@ function git-push-to-origin()
 function git-get-submodules()
 {
     $result = (git submodule status);
+
     foreach($item in $result) {
         $comps = $item.Split();
         sh_writeline $comps[2];
@@ -305,6 +305,7 @@ function git-get-submodules()
 function git-remove-submodule()
 {
     $repo_root = (git-get-repo-root);
+
     if($repo_root -eq $null) {
         sh_log_fatal "Not in a git repo...";
         return $false;
@@ -407,29 +408,35 @@ function git-update-submodule()
 ##
 ## New Branch
 ##
-##------------------------------------------------------------------------------
-function git-new-branch()
-{
-    $prefix = $args[0];
-    $values = (sh_expand_array $args 1).ForEach({echo $_.Trim()});
-    $name   = (sh_join_string "-" $values).Replace(" ", "-");
-    sh_writeline "${prefix}${name}";
 
-    git checkout -b $name;
+##------------------------------------------------------------------------------
+function git-create-branch()
+{
+    $prefix   = $args[0];
+    $values   = (sh_expand_array $args 1).ForEach({echo $_.Trim()});
+    $name     = (sh_join_string "-" $values).Replace(" ", "-");
+    $fullname = "${prefix}${name}";
+
+    sh_writeline $fullname;
+    git checkout -b $fullname;
 }
 
 ##------------------------------------------------------------------------------
 function git-new-bugfix()
 {
-    git-new-branch "bugfix/" $args;
+    git-create-branch "bugfix/" $args;
 }
 
 ##------------------------------------------------------------------------------
 function git-new-feature()
 {
-    git-new-branch "feature/" $args;
+    git-create-branch "feature/" $args;
 }
 
+
+##
+## Clone
+##
 
 ##------------------------------------------------------------------------------
 function git-clone-full()
@@ -437,10 +444,33 @@ function git-clone-full()
     $url = $args[0];
     git clone $url;
 
-    $clean_name = (sh_basepath $arg).Remove(".git");
-    cd $clean_name;
+    $clean_name = (sh_basepath $url);
+    if($clean_name.Contains(".git")) {
+        $clean_name = $clean_name.Replace(".git", "");
+    }
 
-    git-update-submodule;
+    sh_push_dir $clean_name;
+        (git-update-submodule);
+    sh_pop_dir;
+}
+
+
+##------------------------------------------------------------------------------
+function git-clone-github()
+{
+    $url = $args[0].Trim();
+
+    $repo      = (sh_basepath $url);
+    $user      = (sh_basepath (sh_dirpath $url));
+    $clone_url = "https://github.com/${user}/${repo}";
+    $clone_dir = "${HOME}/Projects/github"; ## @todo: Bulletproof this path...
+
+    sh_log "Cloning form: ${clone_url}";
+
+    sh_mkdir $clone_dir;
+    sh_push_dir $clone_dir;
+        (git-clone-full $clone_url);
+    sh_pop_dir;
 }
 
 
@@ -461,6 +491,7 @@ function _make_git_prompt()
                 }
             }
         }
+
         $git_branch = $git_line.Trim().Substring(2, $git_line.Length-2);
 
         ## @todo(stdmatt): 30 Nov, 2021 at 12:40:48
@@ -481,12 +512,11 @@ function _make_git_prompt()
     $curr_path    = (Get-Location).Path;
     $prompt       = ":)";
     $os_name      = (sh_get_os_name);
-    $hash         = (echo $curr_path | md5);
 
     $colored_os_name  = (sh_ansi_color    ":[${os_name}]" $SH_ANSI_BRIGHT_BLACK_FG);
     $colored_git_line = (sh_ansi_color     "${git_line}"  $SH_ANSI_BRIGHT_BLACK_FG);
     $colored_prompt   = (sh_ansi_hex_color "$prompt"      "9E9E9E");
-    $colored_path     = (sh_ansi_hex_color  $curr_path $hash[2..7]);
+    $colored_path     = (sh_ansi_hex_color  $curr_path    "AEAEAE");
 
     $output = "${colored_path}${colored_os_name}${colored_git_line}`n${colored_prompt} ";
 
@@ -520,7 +550,6 @@ function _stdmatt_cd()
     ## Kinda the first thing that I write in my standing desk here in kyiv.
     ## I mean, this is pretty cool, just could imagine when I get my new keychron!
     ## March 12, 2021!!
-
 
     $target_path = $args[0];
     if($target_path -eq "") {
@@ -612,7 +641,7 @@ function make-link()
 
 ##------------------------------------------------------------------------------
 ## Remove-Alias -Path Alias:nv -Force -Option AllScope
-$_nv = if($IsWindows) { "nvim.exe" }  else { "lvim" }
+$_nv = if($IsWindows) { "nvim.exe" }  else { "nvim" }
 
 Set-Alias -Name vi  -Value $_nv -Force -Option AllScope
 Set-Alias -Name vim -Value $_nv -Force -Option AllScope
@@ -708,10 +737,8 @@ function http-server()
 }
 
 
-
-
 ##----------------------------------------------------------------------------##
-## Entry Point 								      ##
+## Entry Point                                                                ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
 _configure_PATH

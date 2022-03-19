@@ -1,7 +1,8 @@
-##
-## Import
-##
-if(-not $env:SHLIB) { . "$HOME/.stdmatt/lib/shlib/shlib.ps1" }
+##----------------------------------------------------------------------------##
+## Import                                                                     ##
+##----------------------------------------------------------------------------##
+##------------------------------------------------------------------------------
+if(-not $env:SHLIB) { . "$HOME/.stdmatt/lib/shlib/shlib.ps1" } ## @XXX: $HOME on windows...
 
 
 ##----------------------------------------------------------------------------##
@@ -13,7 +14,7 @@ $HOME_DIR = (sh_get_home_dir);
 
 ##------------------------------------------------------------------------------
 $GIT_INFO = @{
-    src = "$DOTS_DIR/extras/git";
+    src = "$DOTS_DIR/data/git";
     all = "$HOME_DIR";
 }
 
@@ -24,15 +25,15 @@ $PWSH_PROFILE = @{
 }
 
 $TERM_INFO = @{
-    src = "$DOTS_DIR/extras/terminal/alacritty.yml";
-    win = "%APPDATA%\alacritty\alacritty.yml";
-    all = "$HOME_DIR/.config/alacritty/alacritty.yml";
+    src = "$DOTS_DIR/data/terminal";
+    win = "%APPDATA%\alacritty";
+    all = "$HOME_DIR/.config/alacritty";
 }
 
 $VIM_INFO = @{
-    src = "$DOTS_DIR/extras/vim/init.vim";
-    win = "$HOME_DIR/AppData/Local/nvim/init.vim";
-    all = "$HOME_DIR/.config/nvim/init.vim";
+    src = "$DOTS_DIR/data/vim";
+    win = "$HOME_DIR/AppData/Local/nvim";
+    all = "$HOME_DIR/.config/nvim";
 }
 
 
@@ -43,7 +44,7 @@ $VIM_INFO = @{
 function _install_fonts()
 {
     $FONTS_INFO =  @{
-        src = "$DOTS_DIR/extras/fonts";
+        src = "$DOTS_DIR/data/fonts";
         win = "$HOME_DIR/AppData/Local/Microsoft/Windows/Fonts";
         mac = "$HOME_DIR/Library/Fonts";
         gnu = "$HOME_DIR/.local/share/fonts";
@@ -96,7 +97,7 @@ function _install_win32_hacks()
         return;
     }
 
-    $BINARIES_SOURCE_DIR       = "$DOTS_DIR/extras/bin/win32";
+    $BINARIES_SOURCE_DIR       = "$DOTS_DIR/data/bin/win32";
     $BINARIES_INSTALL_FULLPATH = "$HOME_DIR/.stdmatt/bin";
 
     $null = (sh_mkdir $BINARIES_INSTALL_FULLPATH);
@@ -134,30 +135,19 @@ function _link_config_files()
 function _link_config_helper()
 {
     $info = $args[0];
-    $src  = $info.src;
-
     $os_name = (sh_get_os_name);
-    $dst     = if($info[$os_name]) { $info[$os_name] } else { $info["all"]; }
 
-    ## File...
-    if((sh_file_exists $src)) {
-        sh_log "Linking: ${src} -> ${dst}";
+    $src_path = $info.src;
+    $dst_path = if($info[$os_name]) { $info[$os_name] } else { $info["all"]; }
 
-        sh_mkdir  (sh_dirpath $dst);
-        sh_mklink $src $dst;
+    $src_files = (find $src_path -type f);
+    foreach($src_file in $src_files) {
+        $dst_file = $src_file.Replace($src_path, $dst_path);
+        $dst_dir  = (sh_dirpath $dst_file);
 
-        return;
-    }
-
-    sh_mkdir $dst;
-    $filenames = (Get-ChildItem -Path $src -Force);
-    foreach($item in $filenames) {
-        $name = $item.Name;
-        $full_src = "${src}/${name}";
-        $full_dst = "${dst}/${name}";
-
-        sh_log "Linking: ${full_src} -> ${full_dst}";
-        sh_mklink $full_src $full_dst;
+        Write-Output "${src_file} -> ${dst_file}";
+        sh_mkdir  $dst_dir;
+        sh_mklink $src_file $dst_file;
     }
 }
 
@@ -166,6 +156,6 @@ function _link_config_helper()
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
 _link_config_files
-_install_win32_hacks
-_install_macOS_hacks
-_install_fonts
+# _install_win32_hacks
+# _install_macOS_hacks
+# _install_fonts
