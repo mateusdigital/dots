@@ -35,4 +35,6 @@ return require("packer").startup(function()
     use { 'nvim-lualine/lualine.nvim' }
     -- Easy Align
     use { "junegunn/vim-easy-align" }
+    -- CoC
+    use {'neoclide/coc.nvim', branch = 'release'}
 end);
