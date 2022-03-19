@@ -176,10 +176,7 @@ function sync-journal()
 ## Git                                                                        ##
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
-function g()
-{
-    git $args;
-}
+function g() { git $args; }
 
 ##------------------------------------------------------------------------------
 function git-config()
@@ -199,10 +196,11 @@ function git-config()
     git config --global init.defaultBranch "main";
 
     ## Aliases...
-    git config --global alias.c commit;
-    git config --global alias.s status;
-    git config --global alias.d diff  ;
-    git config --global alias.a add   ;
+    git config --global alias.c    commit
+    git config --global alias.s    status
+    git config --global alias.d    diff
+    git config --global alias.a    add
+    git config --global alias.t    log --oneline --decorate --graph --all
 
     sh_log_verbose "Done... ;D";
 }
@@ -273,9 +271,8 @@ function git-delete-branch()
     }
 
     sh_log "Deleting branch: ($branch_name)";
-    git branch      --delete $branch_name;
-    git push origin --delete $branch_name;
-
+        git branch      --delete $branch_name;
+        git push origin --delete $branch_name;
     sh_log "Deleted...";
 }
 
@@ -494,6 +491,7 @@ function _make_git_prompt()
                 }
             }
         }
+
         $git_branch = $git_line.Trim().Substring(2, $git_line.Length-2);
 
         ## @todo(stdmatt): 30 Nov, 2021 at 12:40:48
@@ -514,12 +512,11 @@ function _make_git_prompt()
     $curr_path    = (Get-Location).Path;
     $prompt       = ":)";
     $os_name      = (sh_get_os_name);
-    $hash         = (echo $curr_path | md5);
 
     $colored_os_name  = (sh_ansi_color    ":[${os_name}]" $SH_ANSI_BRIGHT_BLACK_FG);
     $colored_git_line = (sh_ansi_color     "${git_line}"  $SH_ANSI_BRIGHT_BLACK_FG);
     $colored_prompt   = (sh_ansi_hex_color "$prompt"      "9E9E9E");
-    $colored_path     = (sh_ansi_hex_color  $curr_path $hash[2..7]);
+    $colored_path     = (sh_ansi_hex_color  $curr_path    "AEAEAE");
 
     $output = "${colored_path}${colored_os_name}${colored_git_line}`n${colored_prompt} ";
 
