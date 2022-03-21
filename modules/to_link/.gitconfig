@@ -5,6 +5,7 @@
     ## Info
     ##--------------------------------------------------------------------------
     aliases      = config --get-regexp alias
+    list-alias   = config --get-regexp alias
 	contributors = shortlog --summary --numbered
 	whoami       = config user.email
 
@@ -48,7 +49,7 @@
 
 
 	# Remove branches that have already been merged with main.
-	# a.k.a. Ôdelete mergedÕ
+	# a.k.a. ï¿½delete mergedï¿½
 	dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
 
 [apply]
@@ -122,4 +123,4 @@
 	added     = green
     changed   = yellow
     deleted   = red
-	untracked = gray
+	untracked = white

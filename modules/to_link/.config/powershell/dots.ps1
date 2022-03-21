@@ -9,9 +9,15 @@ $env:SHLIB_IS_VERSBOSE           = 1;
 
 ## Load everything under the dots dir...
 $DOTS = (sh_get_script_dir);
-foreach($item in (Get-Items $DOTS)) {
-    if($item -ne "dots.ps1") {
-        . $DOTS/$item;
+foreach($item in (Get-ChildItem $DOTS)) {
+    $name = $item.Name;
+    if($name -eq "dots.ps1"                          -or `
+       $name -eq "Microsoft.PowerShell_profile.ps1"  -or `
+       $name -eq "Microsoft.VSCode_profile.ps1")
+    {
+        continue;
     }
-}
 
+    sh_log_verbose "Loading: $name";
+    . $item.FullName;
+}

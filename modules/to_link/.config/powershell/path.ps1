@@ -33,7 +33,7 @@ function _configure_PATH()
             "/usr/local/Cellar/make/4.3/libexec/gnubin"
         );
     }
-    else if($IsWindows) {
+    elseif($IsWindows) {
 
     }
 

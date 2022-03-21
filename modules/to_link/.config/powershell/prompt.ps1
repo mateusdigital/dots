@@ -24,7 +24,7 @@ function _make_prompt()
     return (sh_join_string "" @(
         $(sh_ansi_hex_color ""             "FF00FF"), ## actually is fg
         (sh_ansi_hex_color "$cwd" "000000"  "FF00FF"),
-        $(sh_ansi_hex_color ""             "FF00FF"), ## actually is fg
+        $(sh_ansi_hex_color ""             "FF00FF")  ## actually is fg
     ))
 }
 
