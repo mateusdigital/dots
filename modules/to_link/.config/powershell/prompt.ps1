@@ -1,3 +1,5 @@
+# . "$HOME/.stdmatt/lib/shlib/shlib.ps1"
+## . "$HOME/.config/powershell/git.ps1"
 
 ##
 ## Public Functions
@@ -21,25 +23,31 @@ function _make_prompt()
     $prompt       = ":)";
     $os_name      = (sh_get_os_name);
 
+
+    $git = _make_git;
     return (sh_join_string "" @(
         $(sh_ansi_hex_color ""             "FF00FF"), ## actually is fg
-        (sh_ansi_hex_color "$cwd" "000000"  "FF00FF"),
+        (sh_ansi_hex_color "$git" "000000"  "FF00FF"),
         $(sh_ansi_hex_color ""             "FF00FF")  ## actually is fg
     ))
 }
 
 function _make_git()
 {
-    $branch_name = (git-get-branch-name);
-    if(-not $branch_name) {
-        return "";
+    $git_result = (git status -sb 2> /dev/null);
+    if(-not $?) {
+        return;
     }
+
+    $names  = $git_result[0].Replace("#", "").Replace("...", ";").Split(";");
+    $local  = $names[0].Trim();
+    $remote = $names[1].Trim();
 
     ##
     ## Branch
     ##
 
-    $branch = " $branch_name";
+    $local_str = " $local";
 
     ##
     ## Collect status info
@@ -55,38 +63,32 @@ function _make_git()
         if($line[0] -eq "D") { $D += 1; }
     }
 
-    $suno += if($A) { "都${A} " };
+    $suno += if($A) { "都 ${A} " };
     $suno += if($M) { " ${M} " };
-    $suno += if($D) { "逸${D} " };
+    $suno += if($D) { "逸 ${D} " };
+
+    $suno = $suno.Trim();
 
     ##
     ## Ahead / Behind
     ##
 
-    $names = (git branch --all | grep "macos_port");
-    if($names.Count -eq 2) {
-        ## @notice(git): git in my setup always give the output of
-        ##   branch/name
-        ##   remotes/origin/branch/name
-        ## But I don't know if this origin is some convetion that might
-        ## change and break the script - Which I assume that is, because
-        ## when you add upstream it becomes another "remote"
-        ##
-        ## Well, I need to study it more, but no matter what this will
-        ## bulletproof it anyways
-        ##
-        ##      - stdmatt - 22-03-19 at 22:34
-        $names = $names.Remove($branc_name);
-        $remote_clean_name = $names[0];
+    $ahead_behind = "";
+    if($remote) {
+        $git_result = (git rev-list --left-right --count ${local}...${remote});
+        if($?) {
+            $split  =  $git_result.Split("`t");
+            $ahead  = $split[0];
+            $behind = $split[1];
 
-        $result = (git rev-list --left-right --count ${branch_name}...${remote_clean_name})
-
-        $result = $result.Trim();
+            $ahead_behind = "摒 $ahead/$behind";
+        }
     }
 
     ##
     ## Tags
     ##
     $tag  = (git describe --tags (git rev-list --tags --max-count=1) 2> $null);
-    $git_line = "${branch} ${suno}";
+
+    return "${local} ${suno} ${ahead_behind}";
 }
