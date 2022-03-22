@@ -14,6 +14,7 @@
 ## "#F44747"  ## error message
 ## "#C586C0"  ## else if
 
+
 ##------------------------------------------------------------------------------
 $THEME_PS_READLINE = @{
     Command            = "#DCDCAA";
@@ -36,28 +37,65 @@ $THEME_PS_READLINE = @{
 
 $DEFAULT_THEME = @{
     background = "#1E1E1E";
+    foreground = "#D4D4D4";
+
+    normal = @{
+        black   = "#1E1E1E"
+        red     = "#D16969"
+        green   = "#608B4E"
+        yellow  = "#D7BA7D"
+        blue    = "#569CD6"
+        magenta = "#C586C0"
+        cyan    = "#9CDCFE"
+        white   = "#D4D4D4"
+    };
+
+    bright = @{
+        black   = '#000000'
+        red     = '#FF0000'
+        green   = '#00FF00'
+        yellow  = '#FFFF00'
+        blue    = '#0000FF'
+        magenta = '#FF00FF'
+        cyan    = '#00FFFF'
+        white   = '#FFFFFF'
+    };
 }
 
 $PROMPT_THEME = @{
+
+    div = @{
+        icon = " • ";
+        fg = "#808080";
+    };
+
     cwd = @{
         icon = " ";
-        fg   = "#C586C0";
+        fg   = $DEFAULT_THEME.normal.magenta;
         bg   = $DEFAULT_THEME.background;
+    }
+
+    git = @{
+        icon         = " ";
+        add_icon     = " ";
+        delete_icon  = " ";
+        modify_icon  = " ";
+        untrack_icon = " ";
     }
 
     status = @{
         bg = $DEFAULT_THEME.background;
 
         cmd_icon = " ";
-        cmd_fg   = "#569CD6";
+        cmd_fg   = $DEFAULT_THEME.normal.cyan;
 
-        last_exit_icon       = "";
-        last_exit_fg_success = "#B5CEA8";
-        last_exit_fg_failure = "#D16969";
+        last_exit_icon       = " ";
+        last_exit_fg_success = $DEFAULT_THEME.normal.green;
+        last_exit_fg_failure = $DEFAULT_THEME.normal.red;
 
         duration_icon = " ";
-        duration_fg_fast   = "#B5CEA8";
-        duration_fg_medium = "#D7BA7D";
-        duration_fg_slow   = "#D16969";
+        duration_fg_fast   = $DEFAULT_THEME.normal.green;
+        duration_fg_medium = $DEFAULT_THEME.normal.yellow;
+        duration_fg_slow   = $DEFAULT_THEME.normal.red;
     }
 };
