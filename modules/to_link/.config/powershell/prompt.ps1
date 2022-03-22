@@ -1,3 +1,5 @@
+. "$HOME/.stdmatt/lib/rainbow/rainbow.ps1"
+. "$HOME/.config/powershell/themes.ps1"
 
 ##
 ## Public Functions
@@ -6,55 +8,77 @@
 ##------------------------------------------------------------------------------
 function global:prompt
 {
-   return _make_prompt;
+    try {
+
+        $history = (_make_history $LASTEXITCODE);
+        # $git     = (_make_git);
+        $path    = (_make_cwd);
+        $os_name = (sh_get_os_name);
+
+        return "${path} ${git} ${history}`n:) ";
+    } catch {
+        return ":) ";
+    }
 }
-$FG = "#FFFFFF";
-$BG = "#007ACC";
-$BG = "#6A9955"
-##
-## Private Functions
-##
 
 ##------------------------------------------------------------------------------
-function _make_prompt()
+function _make_cwd()
 {
-    $history = (_make_history_status $LASTEXITCODE);
-    $git     = (_make_git);
-    $path    = (_make_path);
-    $os_name      = (sh_get_os_name);
+    $full_cwd = (Get-Location).Path;
 
-    return "${path} ${git} ${history}`n:) ";
+    $cwd  = (sh_basepath $full_cwd);
+
+    $icon = $PROMPT_THEME.cwd.icon;
+    $fg   = $PROMPT_THEME.cwd.fg;
+    $bg   = $PROMPT_THEME.cwd.bg;
+
+    return (rbow "r[$fg,$bg]${icon}r[$fg,$bg] ${cwd}");
 }
 
-function _make_path()
-{
-    $cwd = (Get-Location).Path;
-    $cwd = (sh_basepath $cwd)
-
-    return (sh_ansi_hex_color " $cwd" $FG $BG);
-}
-
-function _make_history_status()
+##------------------------------------------------------------------------------
+function _make_history()
 {
     $history = (Get-History);
     if(-not $history.Count) {
         return "";
     }
 
+    $b = $PROMPT_THEME.status.bg;
     $last_history = $history[-1];
 
-    $cmd       = $last_history.CommandLine.Trim();
+    ## CMD
+    $cmd  = $last_history.CommandLine.Trim();
+
+    $i = $PROMPT_THEME.status.cmd_icon;
+    $f = $PROMPT_THEME.status.cmd_fg;
+
+    $result = (rbow "r[$f,$b]$i" "(${cmd} ");
+
+    ## Last Exit
     $last_exit = $args[0];
-    $duration  = $last_history.Duration.TotalMilliseconds;
 
-    $result = " (${cmd} ";
-    if($last_exit) { $result += " ${last_exit}"; }
-    if($duration ) { $result += "  ${duration}";  }
+    $i = $PROMPT_THEME.status.last_exit_icon;
+    $f = if($last_exit -eq 0) { $PROMPT_THEME.status.last_exit_fg_success }
+         else                 { $PROMPT_THEME.status.last_exit_fg_failure }
+
+    $result += (rbow "r[$f,$b]${i}${last_exit}");
+
+    ## Duration
+    $duration = $last_history.Duration.TotalMilliseconds;
+
+    $i = $PROMPT_THEME.status.duration_icon;
+    $f = if    ($duration -lt 100) { $PROMPT_THEME.status.duration_fg_fast   }
+         elseif($duration -lt 500) { $PROMPT_THEME.status.duration_fg_medium }
+         else                      { $PROMPT_THEME.status.duration_fg_slow   }
+
+    $result += (rbow "r[$f,$b]${i}${duration}");
+
+    ## Done...
     $result = $result.Trim() + ")";
-
-    return (sh_ansi_hex_color "$result" $FG $BG);
+    return $result;
 }
 
+##------------------------------------------------------------------------------
 function _make_git()
 {
     $git_result = (git status -sb 2> /dev/null);
@@ -69,8 +93,14 @@ function _make_git()
     ##
     ## Branch
     ##
+    $local_color = $null;
+    if($local.Contains("feature/")) {
+    }
 
-    $local_str = " $local";
+    $bg = "#FF0000";
+    $fg="$(pastel textcolor "$bg")"
+    ## 
+    $local_str = (pastel paint "$fg" --on "$bg" "well readable text") ;
 
     ##
     ## Collect status info
@@ -118,7 +148,7 @@ function _make_git()
 }
 
 
-# . "$HOME/.stdmatt/lib/shlib/shlib.ps1"
-# . "$HOME/.config/powershell/git.ps1"
+. "$HOME/.stdmatt/lib/shlib/shlib.ps1"
+. "$HOME/.config/powershell/git.ps1"
 
-# _make_prompt
+prompt;

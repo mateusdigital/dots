@@ -27,14 +27,13 @@ return require("packer").startup(function()
     use { "kyazdani42/nvim-web-devicons" }
     use { "MunifTanjim/nui.nvim" }
     use { "nvim-neo-tree/neo-tree.nvim", branch = "v1.x" }
-    -- Barbar
+    -- UI
     use { "romgrk/barbar.nvim" }
-    -- Treesitter
-    use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate all" }
-    -- Lualine
     use { 'nvim-lualine/lualine.nvim' }
-    -- Easy Align
+    -- Code Utils
     use { "junegunn/vim-easy-align" }
-    -- CoC
-    use {'neoclide/coc.nvim', branch = 'release'}
+    use { 'norcalli/nvim-colorizer.lua' }
+    -- Language Providers / Debug
+    use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate all" }
+    use { 'neoclide/coc.nvim', branch = 'release'}
 end);

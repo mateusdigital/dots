@@ -72,7 +72,7 @@ sudo defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool fals
 sudo defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 sudo defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 sudo defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
-sudo defaults write NSGlobalDomain KeyRepeat -int 1
+sudo defaults write NSGlobalDomain KeyRepeat        -int 2
 sudo defaults write NSGlobalDomain InitialKeyRepeat -int 10
 # Set language and text formats
 sudo defaults write NSGlobalDomain AppleLanguages -array "en"
