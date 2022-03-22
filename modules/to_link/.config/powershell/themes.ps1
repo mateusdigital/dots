@@ -77,10 +77,14 @@ $PROMPT_THEME = @{
 
     git = @{
         icon         = " ";
-        add_icon     = " ";
-        delete_icon  = " ";
-        modify_icon  = " ";
-        untrack_icon = " ";
+        add_icon     = " ";
+        delete_icon  = " ";
+        modify_icon  = " ";
+        untrack_icon = "";
+        remote_icon  = " ";
+        push_icon    = "";
+        pull_icon    = "";
+        tag_icon     = " ";
     }
 
     status = @{
@@ -94,8 +98,8 @@ $PROMPT_THEME = @{
         last_exit_fg_failure = $DEFAULT_THEME.normal.red;
 
         duration_icon = " ";
-        duration_fg_fast   = $DEFAULT_THEME.normal.green;
-        duration_fg_medium = $DEFAULT_THEME.normal.yellow;
-        duration_fg_slow   = $DEFAULT_THEME.normal.red;
+        duration_fg_fast   = "#B5CEA8"; ## $DEFAULT_THEME.normal.green;
+        duration_fg_medium = "#D7BA7D"; ## $DEFAULT_THEME.normal.yellow;
+        duration_fg_slow   = "#D16969"  ## $DEFAULT_THEME.normal.red;
     }
 };

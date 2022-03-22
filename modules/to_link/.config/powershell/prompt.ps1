@@ -12,12 +12,12 @@ $PT = $PROMPT_THEME;
 function global:prompt
 {
     # return "$ "
-    _make_prompt
+    return _make_prompt
 }
 
 function _make_prompt()
 {
-    $history = (_make_history $LASTEXITCODE);
+    $status  = (_make_history $LASTEXITCODE);
     $git     = (_make_git);
     $cwd     = (_make_cwd);
     $os_name = (sh_get_os_name);
@@ -26,8 +26,8 @@ function _make_prompt()
     $i = $PT.div.icon;
     $div = "r[$f]${i}";
 
-    $line = (sh_join_string $div @($cwd, $git, $history));
-    return (rbow "$line");
+    $line = (sh_join_string $div @($cwd, $git, $status));
+    return (rbow "${line}`nr[$f]:) ");
 }
 
 ##------------------------------------------------------------------------------
@@ -35,18 +35,17 @@ function _make_cwd()
 {
     $full_cwd = (Get-Location).Path;
 
-    $cwd  = (sh_basepath $full_cwd).Trim();
+    $cwd  = $full_cwd; # (sh_basepath $full_cwd).Trim();
 
     $i = $PT.cwd.icon;
     $f = $PT.cwd.fg;
-    $b = $PT.cwd.bg;
-    return "r[$f,$b]${i}r[]${cwd}";
+    return "r[$f]${i}r[]${cwd}";
 }
 
 ##------------------------------------------------------------------------------
 function _make_git()
 {
-    $git_result = (git status -sbu 2> /dev/null);
+    $git_result = ,(git status -sbu 2> /dev/null);
     if(-not $git_result) {
         return;
     }
@@ -58,13 +57,14 @@ function _make_git()
     ## @notice:(git -sbu info)
     ##   feature/Major-Restructure...origin/feature/Major-Restructure [ahead 3]
 
-    $line_comps = $git_result[0].Replace("]", "").Replace("[", "").Split(" ")[1..1000];
-
+    ## Branch Names
+    $line_comps = $git_result[0].Replace("]", "").Replace("[", "").Split(" ")[1..1000]
     $branches = $line_comps[0].Trim().Split("...");
 
     $local    = $branches[0].Trim();
-    $remote   = if($branches[1]) { $branches[1].Trim() };
+    $remote   = if($branches.Count -gt 1) { $branches[1].Trim() };
 
+    ## Ahead / Behind
     $ahead  = 0;
     $behind = 0;
 
@@ -79,6 +79,7 @@ function _make_git()
         }
     }
 
+    ## Suno
     $A = 0; $D = 0; $M = 0; $U = 0;
     for($i = 1; $i -lt $git_result.Count; $i += 1) {
         $line = $git_result[$i].Trim();
@@ -88,30 +89,38 @@ function _make_git()
         if($line[0] -eq "?") { $U += 1; }
     }
 
+    $tag = (git describe --tags --abbrev=0);
+
     ##
     ## Color the things...
     ##
 
-    $b = $PT.background;
-
     ## Local Branch
     $i = $PT.git.icon;
     $f = $DT.normal.blue;
-    $local = "r[$f,$b]${i}r[]${local}";
+    $local = "r[$f]${i}r[](${local}";
 
     ## Status
+    $i = $PT.git.add_icon;     $f = $DT.normal.green;  $A = "r[$f]${i}r[]${A}";
+    $i = $PT.git.delete_icon;  $f = $DT.normal.red;    $D = "r[$f]${i}r[]${D}";
+    $i = $PT.git.modify_icon;  $f = $DT.normal.yellow; $M = "r[$f]${i}r[]${M}";
+    # $i = $PT.git.untrack_icon; $f = $DT.normal.white;  $U = "r[$f]${i}r[]${U}";
+    $suno = "${A} ${M} ${D})";
 
-    $i = $PT.git.add_icon;     $f = $DT.normal.green;  $A = "r[$f,$b]${i}r[]${A}";
-    $i = $PT.git.delete_icon;  $f = $DT.normal.red;    $D = "r[$f,$b]${i}r[]${D}";
-    $i = $PT.git.modify_icon;  $f = $DT.normal.yellow; $M = "r[$f,$b]${i}r[]${M}";
-    $i = $PT.git.untrack_icon; $f = $DT.normal.white;  $U = "r[$f,$b]${i}r[]${U}";
+    ## Tag
+    $i = $PT.git.tag_icon;
+    $f = "#CE9178";
+    $tag = "r[$f]${i}r[](${tag})";
 
-    ##
-    ## Tags
-    ##
-    $tag  = (git describe --tags (git rev-list --tags --max-count=1) 2> $null);
+    ## Remote
+    if($remote) {
+        $i = $PT.git.remote_icon; $f = $DT.normal.cyan;  $remote = "r[$f]${i}r[]";
+        $i = $PT.git.push_icon;   $f = $DT.normal.green; $ahead  = "r[$f]${i}r[]${ahead}";
+        $i = $PT.git.pull_icon;   $f = $DT.normal.red;   $behind = "r[$f]${i}r[]${behind}";
+        $remote = "${remote}(${ahead} ${behind})"
+    }
 
-    return "${local} ${A} ${M} ${D} ${U}";
+    return "${local} $suno ${tag} ${remote}";
 }
 
 
@@ -130,9 +139,8 @@ function _make_history()
 
     $i = $PT.status.cmd_icon;
     $f = $PT.status.cmd_fg;
-    $b = $PT.status.bg;
 
-    $cwd = "r[$f,$b]${i}r[/](${cmd})";
+    $cwd = "r[$f]${i}r[/](${cmd})";
 
     ## Last Exit
     $last_exit = $args[0];
@@ -144,7 +152,7 @@ function _make_history()
     $f = if($last_exit -eq 0) { $PT.status.last_exit_fg_success }
          else                 { $PT.status.last_exit_fg_failure }
 
-    $last_exit = "r[$f,$b]${i}r[](${last_exit})";
+    $last_exit = "r[$f]${i}r[](${last_exit})";
 
     ## Duration
     $duration = $last_history.Duration.TotalMilliseconds;
@@ -154,7 +162,7 @@ function _make_history()
          elseif($duration -lt 500) { $PT.status.duration_fg_medium }
          else                      { $PT.status.duration_fg_slow   }
 
-    $duration = "r[$f,$b]${i}r[](${duration})";
+    $duration = "r[$f]${i}r[](${duration})";
 
     ## Done...
     return "${cwd} ${last_exit} ${duration}";
