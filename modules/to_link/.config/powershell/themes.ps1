@@ -63,28 +63,37 @@ $DEFAULT_THEME = @{
 }
 
 $PROMPT_THEME = @{
-
     div = @{
         icon = " • ";
-        fg = "#808080";
+        fg   = "#808080";
+        bg   = $DEFAULT_THEME.background;
     };
 
     cwd = @{
-        icon = " ";
-        fg   = $DEFAULT_THEME.normal.magenta;
-        bg   = $DEFAULT_THEME.background;
+        icon       = " ";
+        icon_color = $DEFAULT_THEME.normal.magenta;
+        text_color = $DEFAULT_THEME.foreground;
     }
 
     git = @{
-        icon         = " ";
-        add_icon     = " ";
-        delete_icon  = " ";
-        modify_icon  = " ";
-        untrack_icon = "";
-        remote_icon  = " ";
-        push_icon    = "";
-        pull_icon    = "";
-        tag_icon     = " ";
+        local_icon         = " ";
+        local_icon_color   = $DEFAULT_THEME.normal.blue;
+        add_icon           = " ";
+        add_icon_color     =  $DEFAULT_THEME.normal.green;
+        delete_icon        = " ";
+        delete_icon_color  = $DEFAULT_THEME.normal.red;
+        modify_icon        = " ";
+        modify_icon_color  = $DEFAULT_THEME.normal.yellow;
+        untrack_icon       = "";
+        untrack_icon_color = $DEFAULT_THEME.normal.white;
+        remote_icon        = " ";
+        remote_icon_color  = $DEFAULT_THEME.normal.cyan;
+        push_icon          = "";
+        push_icon_color    = $DEFAULT_THEME.normal.green;
+        pull_icon          = "";
+        pull_icon_color    = $DEFAULT_THEME.normal.red;
+        tag_icon           = " ";
+        tag_icon_color     = "#FF00FF";
     }
 
     status = @{

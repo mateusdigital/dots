@@ -3,7 +3,7 @@
 ##----------------------------------------------------------------------------##
 ##------------------------------------------------------------------------------
 . "$HOME/.stdmatt/lib/shlib/shlib.ps1"
-. "$HOME/.stdmatt/lib/shlib/rbow.ps1"
+. "$HOME/.stdmatt/lib/rainbow/rainbow.ps1"
 
 ##----------------------------------------------------------------------------##
 ## Helper Functions                                                           ##
@@ -70,7 +70,7 @@ $dst_path = $HOME; ## @xxx(win32): $HOME on win32....
 ## Link: this way we can edit in both places...
 ##
 
-rbow_log "[\action]Linking files...";
+sh_log "Linking files...";
 $src_path = "${script_dir}/modules/to_link";
 $files    = (Get-ChildItem -Recurse -Force -Attributes Hidden+Normal,!Directory $src_path);
 foreach($src_file in $files) {
@@ -78,18 +78,18 @@ foreach($src_file in $files) {
     $dst_file = sh_join_path ${dst_dir} $src_file.Name;
 
     $log_file = $src_file.FullName.Replace($src_path, "").Trim("/");
-    rbow_log "[\path1]${log_file}" "->" "[\path2]${dst_file}";
+    sh_log "${log_file} -> ${dst_file}";
 
     sh_mkdir  $dst_dir;
     sh_mklink $src_file $dst_file;
 }
-rbow_log "[\done]Done...";
+sh_log "Done...";
 
 ##
 ## Copy: Honestly don't care about the getting nothing from there...
 ##
 
-rbow_log "[\action]Copying files...";
+sh_log "Copying files...";
 $src_path = "${script_dir}/modules/to_copy/*";
 Copy-Item -Force -Path "$src_path" -Destination $dst_path;
-rbow_log "[\done]Done...";
+sh_log "Done...";

@@ -4,6 +4,17 @@
 - Add a project page for the website. - 10/11/2021, 11:31:47 AM
 
 
+## - navigation with the keys
+## - show whitespce
+## - save with cmd s
+## - multiple blank buffers
+## - copy is not working with cmd c
+## - configure bottom bar
+## - maybe we don't want sugestings with enter
+## - configure tab bar to show current tab
+## - command to save all
+
+
 
 m3x_is_directory(CONFIG_FILE_DIR)
 m3x_make_dirs(CONFIG_FILE_DIR, M3X_CREATE_PARENTS);
@@ -56,5 +67,8 @@ M3X_NULL_CHAR
 
  גּ
 
+
+
 
 
+ $cwd
