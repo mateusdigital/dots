@@ -8,7 +8,8 @@
             "name": "PowerShell: Launch Current File",
             "type": "PowerShell",
             "request": "launch",
-            "script": "${file}",
+            // "script": "${file}",
+            "script": "${workspaceFolder}/modules/to_link/.config/powershell/prompt.ps1",
         }
     ]
 }

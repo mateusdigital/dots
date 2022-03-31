@@ -64,15 +64,21 @@ $DEFAULT_THEME = @{
 
 $PROMPT_THEME = @{
     div = @{
-        icon = " • ";
-        fg   = "#808080";
-        bg   = $DEFAULT_THEME.background;
+        icon        = " • ";
+        text_color  = "#808080";
+    };
+
+    ps1 = @{
+        icon        = ":) ";
+        text_color  = "#808080";
     };
 
     cwd = @{
-        icon       = " ";
-        icon_color = $DEFAULT_THEME.normal.magenta;
-        text_color = $DEFAULT_THEME.foreground;
+        icon        = " ";
+        icon_color  = $DEFAULT_THEME.normal.magenta;
+
+        text_color  = "D4D4D4";
+        paren_color = "808080";
     }
 
     git = @{
@@ -93,22 +99,32 @@ $PROMPT_THEME = @{
         pull_icon          = "";
         pull_icon_color    = $DEFAULT_THEME.normal.red;
         tag_icon           = " ";
-        tag_icon_color     = "#FF00FF";
+        tag_icon_color     = "B5CEA8";
+
+        text_color  = "D4D4D4";
+        paren_color = "808080";
     }
 
     status = @{
-        bg = $DEFAULT_THEME.background;
+        cmd = @{
+            icon       = " ";
+            text_color = $DEFAULT_THEME.normal.cyan;
+        };
 
-        cmd_icon = " ";
-        cmd_fg   = $DEFAULT_THEME.normal.cyan;
+        last_exit = @{
+            icon               = " ";
+            text_color_success = $DEFAULT_THEME.normal.green;
+            text_color_failure = $DEFAULT_THEME.normal.red;
+        }
 
-        last_exit_icon       = " ";
-        last_exit_fg_success = $DEFAULT_THEME.normal.green;
-        last_exit_fg_failure = $DEFAULT_THEME.normal.red;
+        duration = @{
+            icon              = " ";
+            text_color_fast   = "#B5CEA8"; ## $DEFAULT_THEME.normal.green;
+            text_color_medium = "#D7BA7D"; ## $DEFAULT_THEME.normal.yellow;
+            text_color_slow   = "#D16969"  ## $DEFAULT_THEME.normal.red;
+        }
 
-        duration_icon = " ";
-        duration_fg_fast   = "#B5CEA8"; ## $DEFAULT_THEME.normal.green;
-        duration_fg_medium = "#D7BA7D"; ## $DEFAULT_THEME.normal.yellow;
-        duration_fg_slow   = "#D16969"  ## $DEFAULT_THEME.normal.red;
+        text_color  = "D4D4D4";
+        paren_color = "808080";
     }
 };

@@ -14,12 +14,14 @@ function global:prompt
 
 function _make_prompt()
 {
-    $colored_cwd    = _make_cwd;
-    $colored_git    = _make_git;
-    $colored_status = _make_history;
+    $colored_cwd       = _make_cwd;
+    $colored_git       = _make_git;
+    $colored_status    = _make_history;
+    $colored_separator = (rbow_colored $PROMPT_THEME.div.icon -fg $PROMPT_THEME.div.text_color);
+    $colored_next_line = (rbow_colored $PROMPT_THEME.ps1.icon -fg $PROMPT_THEME.ps1.text_color);
 
-    $p = (sh_join_string " | " $colored_cwd $colored_git $colored_status);
-    $p += "`n:) ";
+    $p = (sh_join_string "$colored_separator" $colored_cwd $colored_git $colored_status);
+    $p += "`n$colored_next_line";
 
     return $p;
 }
@@ -31,15 +33,15 @@ function _make_cwd()
 
     return (rbow2 `
         "<icon>${cwd_icon}<paren>(<text>${cwd_text}<paren>)" `
-            -icon  $PROMPT_THEME.cwd.icon_color `
-            -paren $PROMPT_THEME.cwd.icon_color `
+            -icon  $PROMPT_THEME.cwd.icon_color  `
+            -paren $PROMPT_THEME.cwd.paren_color `
             -text  $PROMPT_THEME.cwd.text_color  `
     )
 }
 
 function _make_git()
 {
-    $git_result = ,(git status -sbu 2> /dev/null);
+    $git_result = (git status -sbu 2> /dev/null);
     if(-not $git_result) {
         return "";
     }
@@ -101,16 +103,17 @@ function _make_git()
         "<ai>${add_icon}<t>${A} <mi>${modify_icon}<t>${M} <di>${delete_icon}<t>${D}<p>) " `
         "<tag_icon>${tag_icon}<p>(<t>${tag}<p>) " `
         "<remote_icon>${remote_icon}<p>(<ahead_icon>${ahead_icon}${ahead} <behind_icon>${behind_icon}${behind}<p>)" `
-        -p "#FF00FF" `
-        -t "#FFFFFF" `
-        -local_icon  $PROMPT_THEME.git.local_icon_color `
-        -ai          $PROMPT_THEME.git.add_icon_color`
-        -mi          $PROMPT_THEME.git.modify_icon_color `
-        -di          $PROMPT_THEME.git.delete_icon_color `
-        -tag_icon    $PROMPT_THEME.git.tag_icon_color  `
+        -p           $PROMPT_THEME.git.paren_color        `
+        -t           $PROMPT_THEME.git.text_color         `
+        -local_icon  $PROMPT_THEME.git.local_icon_color   `
+        -ai          $PROMPT_THEME.git.add_icon_color     `
+        -mi          $PROMPT_THEME.git.modify_icon_color  `
+        -di          $PROMPT_THEME.git.delete_icon_color  `
+        -tag_icon    $PROMPT_THEME.git.tag_icon_color     `
         -remote_icon $PROMPT_THEME.git.remote_icon_color  `
-        -ahead_icon  $PROMPT_THEME.git.push_icon_color  `
-        -behind_icon $PROMPT_THEME.git.pull_icon_color );
+        -ahead_icon  $PROMPT_THEME.git.push_icon_color    `
+        -behind_icon $PROMPT_THEME.git.pull_icon_color    `
+    );
 }
 
 ##------------------------------------------------------------------------------
@@ -126,30 +129,30 @@ function _make_history()
     $cmd       = $last_history.CommandLine.Trim();
     $last_exit = (sh_value_or_default $args[0] 0);
 
-    $icon  = $PROMPT_THEME.status.last_exit_icon;
-    $color = if($last_exit -eq 0) { $PROMPT_THEME.status.last_exit_fg_success }
-             else                 { $PROMPT_THEME.status.last_exit_fg_failure }
+    $icon  = $PROMPT_THEME.status.last_exit.icon;
+    $color = if($last_exit -eq 0) { $PROMPT_THEME.status.last_exit.text_color_success }
+             else                 { $PROMPT_THEME.status.last_exit.text_color_failure }
 
     $colored_exit = (rbow2 `
         "<color>${icon}<p>(<t>${last_exit}<p>)"  `
         -color $color                            `
-        -p "#FF00FF"                             `
-        -t "#FFFFFF"                             `
+        -p $PROMPT_THEME.status.paren_color      `
+        -t $PROMPT_THEME.status.text_color       `
     );
 
     ## Duration
     $duration = $last_history.Duration.TotalMilliseconds;
 
-    $icon  = $PROMPT_THEME.status.duration_icon;
-    $color = if    ($duration -lt 100) { $PROMPT_THEME.status.duration_fg_fast   }
-             elseif($duration -lt 500) { $PROMPT_THEME.status.duration_fg_medium }
-             else                      { $PROMPT_THEME.status.duration_fg_slow   }
+    $icon  = $PROMPT_THEME.status.duration.icon;
+    $color = if    ($duration -lt 100) { $PROMPT_THEME.status.duration.text_color_fast   }
+             elseif($duration -lt 500) { $PROMPT_THEME.status.duration.text_color_medium }
+             else                      { $PROMPT_THEME.status.duration.text_color_slow   }
 
     $colored_duration = (rbow2 `
         "<color>${icon}<p>(<t>${duration}<p>)"  `
         -color $color                            `
-        -p "#FF00FF"                             `
-        -t "#FFFFFF"                             `
+        -p $PROMPT_THEME.status.paren_color      `
+        -t $PROMPT_THEME.status.text_color       `
     );
 
     return "$colored_exit $colored_duration"
