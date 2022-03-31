@@ -46,6 +46,10 @@ function _make_git()
         return "";
     }
 
+    if($git_result -is [string]) {
+        $git_result = @($git_result);
+    }
+
     ##
     ## Build info...
     ##
