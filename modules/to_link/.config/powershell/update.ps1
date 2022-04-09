@@ -1,5 +1,5 @@
 
-
+##------------------------------------------------------------------------------
 function update()
 {
     if($IsMacOS) {
@@ -10,7 +10,7 @@ function update()
         (brew cleanup);
 
         (npm install npm -g);
-        (npm update -g);
+        (npm update      -g);
     }
 }
 
