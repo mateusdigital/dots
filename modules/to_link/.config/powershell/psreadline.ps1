@@ -1,4 +1,7 @@
-. "$HOME/.config/powershell/themes.ps1"
+##------------------------------------------------------------------------------
+(sh_log_verbose (sh_get_script_filename))
+
+. "$HOME_DIR/.config/powershell/themes.ps1"
 
 ##------------------------------------------------------------------------------
 function _on_vi_mode_change

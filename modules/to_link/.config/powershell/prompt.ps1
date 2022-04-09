@@ -1,5 +1,8 @@
-. "$HOME/.stdmatt/lib/rainbow/rainbow.ps1"
-. "$HOME/.config/powershell/themes.ps1"
+##------------------------------------------------------------------------------
+(sh_log_verbose (sh_get_script_filename))
+
+. "$HOME_DIR/.stdmatt/lib/rainbow/rainbow.ps1"
+. "$HOME_DIR/.config/powershell/themes.ps1"
 
 ##
 ## Public Functions
@@ -8,10 +11,14 @@
 ##------------------------------------------------------------------------------
 function global:prompt
 {
-    # return "$ "
-    return _make_prompt
+    if($PROMPT_DEBUG) {
+        return "$ "
+    } else {
+        return _make_prompt;
+    }
 }
 
+##------------------------------------------------------------------------------
 function _make_prompt()
 {
     $colored_cwd       = _make_cwd;
@@ -26,6 +33,7 @@ function _make_prompt()
     return $p;
 }
 
+##------------------------------------------------------------------------------
 function _make_cwd()
 {
     $cwd_text = (Get-Location).Path;
@@ -39,6 +47,7 @@ function _make_cwd()
     )
 }
 
+##------------------------------------------------------------------------------
 function _make_git()
 {
     $git_result = (git status -sbu 2> /dev/null);
@@ -162,7 +171,9 @@ function _make_history()
     return "$colored_exit $colored_duration"
 }
 
-. "$HOME/.stdmatt/lib/shlib/shlib.ps1"
-. "$HOME/.config/powershell/git.ps1"
+if($PROMPT_DEBUG) {
+    . "$HOME/.stdmatt/lib/shlib/shlib.ps1"
+    . "$HOME/.config/powershell/git.ps1"
 
-_make_prompt;
+    _make_prompt;
+}

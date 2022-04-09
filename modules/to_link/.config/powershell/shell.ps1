@@ -1,8 +1,19 @@
+##------------------------------------------------------------------------------
+(sh_log_verbose (sh_get_script_filename))
+
+##
+## ALIAS
+##
+$CONFIG = "$HOME_DIR/.config";
+$PS     = "$CONFIG/powershell";
+$NV     = "$CONFIG/nvim";
+
 
 ##
 ## cd
 ##
 
+##------------------------------------------------------------------------------
 $global:OLDPWD="";
 function _stdmatt_cd()
 {
@@ -15,6 +26,8 @@ function _stdmatt_cd()
     ## I mean, this is pretty cool, just could imagine when I get my new keychron!
     ## March 12, 2021!!
 
+    ## @notice(stdmatt): This can be done just by calling sh_pushd and popd...
+    ## maybe one day I'll move it - 22-04-08 @ guaruja
     $target_path = $args[0];
     if($target_path -eq "") {
         $target_path = "$HOME_DIR";
@@ -137,14 +150,6 @@ function kill-process()
     kill $process_id -Force
 }
 
-##------------------------------------------------------------------------------
-function kill-for-anvil()
-{
-    kill-process guild
-    kill-process hoard
-    kill-process Phoenix.Module
-    kill-process Phoenix.Studio
-}
 
 ##
 ## Delete (rm)

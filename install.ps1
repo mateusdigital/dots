@@ -63,16 +63,17 @@ function _install_fonts()
 ##------------------------------------------------------------------------------
 $os_name    = (sh_get_os_name);
 $script_dir = (sh_get_script_dir);
-$dst_path = $HOME; ## @xxx(win32): $HOME on win32....
-
+$dst_path   = (sh_get_home_dir);
 
 ##
 ## Link: this way we can edit in both places...
 ##
 
 sh_log "Linking files...";
+
 $src_path = "${script_dir}/modules/to_link";
 $files    = (Get-ChildItem -Recurse -Force -Attributes Hidden+Normal,!Directory $src_path);
+
 foreach($src_file in $files) {
     $dst_dir  = $src_file.DirectoryName.Replace($src_path, $dst_path);
     $dst_file = sh_join_path ${dst_dir} $src_file.Name;

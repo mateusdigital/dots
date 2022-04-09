@@ -1,6 +1,8 @@
+##------------------------------------------------------------------------------
+(sh_log_verbose (sh_get_script_filename))
 
 ##------------------------------------------------------------------------------
-function show_version()
+function version()
 {
     $PROGRAM_NAME            = "dots";
     $PROGRAM_VERSION         = "3.0.0";
@@ -25,4 +27,3 @@ Check http://stdmatt.com for more :)",
 
     sh_writeline $value;
 }
-

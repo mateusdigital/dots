@@ -41,9 +41,6 @@ shell:
     - -l
     - -nol
 
-
-
-
 ##------------------------------------------------------------------------------
 key_bindings:
   - { key: A, mods: Alt, chars: "\ea" }
@@ -152,13 +149,13 @@ colors:
     white:   "#D4D4D4"
 
   bright:
-    black:   '#000000'
-    red:     '#FF0000'
-    green:   '#00FF00'
-    yellow:  '#FFFF00'
-    blue:    '#0000FF'
-    magenta: '#FF00FF'
-    cyan:    '#00FFFF'
-    white:   '#FFFFFF'
+    black:   "#1E1E1E"
+    red:     "#D16969"
+    green:   "#608B4E"
+    yellow:  "#D7BA7D"
+    blue:    "#569CD6"
+    magenta: "#C586C0"
+    cyan:    "#9CDCFE"
+    white:   "#D4D4D4"
 
 theme: "vscode-color-mesquita"
