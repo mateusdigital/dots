@@ -139,7 +139,7 @@ colors:
     foreground: "#D4D4D4"
 
   normal:
-    black:   "#1E1E1E"
+    black:   "#4E4E4E"
     red:     "#D16969"
     green:   "#608B4E"
     yellow:  "#D7BA7D"
@@ -149,7 +149,7 @@ colors:
     white:   "#D4D4D4"
 
   bright:
-    black:   "#1E1E1E"
+    black:   "#4E4E4E"
     red:     "#D16969"
     green:   "#608B4E"
     yellow:  "#D7BA7D"
