@@ -4,8 +4,8 @@ $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
 $env:SHLIB_IS_VERSBOSE           = 1;
 
 ## Load shlib
-. "${HOME}/.stdmatt/lib/shlib/shlib.ps1"; ## @todo: Bulletproof this path...
-
+$HOME_DIR = if ($HOME -eq "") { "$env:USERPROFILE" } else { $HOME };
+. "${HOME_DIR}/.stdmatt/lib/shlib/shlib.ps1";
 
 ## Load everything under the dots dir...
 $DOTS = (sh_get_script_dir);
@@ -18,6 +18,6 @@ foreach($item in (Get-ChildItem $DOTS)) {
         continue;
     }
 
-    sh_log_verbose "Loading: $name";
+    # sh_log_verbose "Loading: $name";
     . $item.FullName;
 }

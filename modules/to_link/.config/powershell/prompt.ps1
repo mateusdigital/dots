@@ -1,5 +1,8 @@
-. "$HOME/.stdmatt/lib/rainbow/rainbow.ps1"
-. "$HOME/.config/powershell/themes.ps1"
+##------------------------------------------------------------------------------
+(sh_log_verbose (sh_get_script_filename))
+
+. "$HOME_DIR/.stdmatt/lib/rainbow/rainbow.ps1"
+. "$HOME_DIR/.config/powershell/themes.ps1"
 
 ##
 ## Public Functions
