@@ -1,5 +1,5 @@
-$PROMPT_DEBUG = $false;
-
+# $PROMPT_DEBUG = $false;
+$PROMPT_DEBUG = $true;
 
 ##
 ## Public Functions
@@ -21,7 +21,7 @@ function _make_prompt()
     $ps1 = (_ps1);
 
     $v = $ps1.ForEach({$_.text});
-    $v = (sh_join_string " | " $v);
+    $v = (sh_join_string " " $v);
     $v = "$v`n:) ";
 
     return $v;
@@ -104,42 +104,60 @@ function _ps1()
         $git_remote_pull = 1;
     }
 
-
+    $Gray         = sh_make_ansi_hex_color '#808080'
+    $Violet       = sh_make_ansi_hex_color '#646695'
+    $Blue         = sh_make_ansi_hex_color '#569CD6'
+    $DarkBlue     = sh_make_ansi_hex_color '#223E55'
+    $LightBlue    = sh_make_ansi_hex_color '#9CDCFEd'
+    $Green        = sh_make_ansi_hex_color '#6A9955'
+    $BlueGreen    = sh_make_ansi_hex_color '#4EC9B0'
+    $LightGreen   = sh_make_ansi_hex_color '#B5CEA8'
+    $Red          = sh_make_ansi_hex_color '#F44747'
+    $Orange       = sh_make_ansi_hex_color '#CE9178'
+    $LightRed     = sh_make_ansi_hex_color '#D16969'
+    $YellowOrange = sh_make_ansi_hex_color '#D7BA7D'
+    $Yellow       = sh_make_ansi_hex_color '#DCDCAA'
+    $Pink         = sh_make_ansi_hex_color '#C586C0'
+    $Silver       = sh_make_ansi_hex_color '#C0C0C0'
+    $reset        = sh_make_ansi_color '0'
     return @(
         @{
-            text = " ($cwd)";
+            text = if($cwd) {
+                "${Pink} ${Silver}(${cwd})";
+            }
         },
         @{
             text = if($git) {
                 $v = "$git_local_Branch ";
-                $v += if($git_suno_added) {
-                    " $git_suno_added "
+                $v += if($true -or $git_suno_added) {
+                    "${Green} $git_suno_added "
                 }
-                $v += if($git_suno_edited) {
-                    " $git_suno_edited "
+                $v += if($true -or $git_suno_edited) {
+                    "${YellowOrange} $git_suno_edited "
                 }
-                $v += if($git_suno_deleted) {
-                    " $git_suno_deleted "
+                $v += if($true -or $git_suno_deleted) {
+                    "${LightRed} $git_suno_deleted "
                 }
 
                 $v = $v.Trim();
-                " ($v)";
+
+               (rbow_colored "${Blue} ${Silver}(${v}${Silver})");
             }
         },
         @{
             text = if($git_tag) {
-                " ($git_tag)"
+                "${Violet} ${Silver}($git_tag)"
             }
         },
         @{
             text = if($git) {
                 $v = "";
-                $v += if($git_remote_push) { "$git_remote_push " }
-                $v += if($git_remote_pull) { "$git_remote_pull " }
+                $v += if($git_remote_push) { "${Green}${Silver}$git_remote_push " }
+                $v += if($git_remote_pull) { "${Red}${Silver}$git_remote_pull " }
                 $v = $v.Trim();
 
                 if($v) {
-                    " ($v)";
+                    "${LightBlue} $Silver($v)";
                 }
             }
         },
@@ -150,7 +168,10 @@ function _ps1()
                     $v += " ($status_last_exit) "
                 }
                 if($status_duration -ne 0) {
-                    $v += " ($status_duration) "
+                    $c =     if($status_duration -lt 300) { $LightGreen }
+                         elseif($status_duration -lt 600) { $Yellow     }
+                           else                           { $LightRed   }
+                    $v += "${c} ${Silver}($status_duration) "
                 }
 
                 $v.Trim();
@@ -162,6 +183,7 @@ function _ps1()
 ##------------------------------------------------------------------------------
 if($PROMPT_DEBUG) {
     . "$HOME/.stdmatt/lib/shlib/shlib.ps1"
+    . "$HOME/.stdmatt/lib/rainbow/rainbow.ps1"
     . "$HOME/.config/powershell/git.ps1"
 
     _make_prompt;

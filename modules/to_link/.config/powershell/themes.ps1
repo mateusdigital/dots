@@ -36,3 +36,14 @@ $THEME_PS_READLINE = @{
     Type               = "#569CD6";
     Variable           = "#9CDCFE";
 };
+
+function print_theme($theme)
+{
+    foreach($key in $theme.Keys) {
+        $value = $theme[$key];
+        $color = (sh_make_ansi_hex_color -fg $value)
+        $reset = (sh_make_ansi 0);
+
+        echo "${key}: ${color}$value${reset}";
+    }
+}
