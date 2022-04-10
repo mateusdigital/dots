@@ -100,8 +100,6 @@ function _ps1()
 
         ## Tag
         $git_tag = (git describe --tags --abbrev=0);
-        $git_remote_push = 1;
-        $git_remote_pull = 1;
     }
 
     $Gray         = sh_make_ansi_hex_color '#808080'
@@ -129,13 +127,13 @@ function _ps1()
         @{
             text = if($git) {
                 $v = "$git_local_Branch ";
-                $v += if($true -or $git_suno_added) {
+                $v += if($true -and $git_suno_added) {
                     "${Green} $git_suno_added "
                 }
-                $v += if($true -or $git_suno_edited) {
+                $v += if($true -and $git_suno_edited) {
                     "${YellowOrange} $git_suno_edited "
                 }
-                $v += if($true -or $git_suno_deleted) {
+                $v += if($true -and $git_suno_deleted) {
                     "${LightRed} $git_suno_deleted "
                 }
 
