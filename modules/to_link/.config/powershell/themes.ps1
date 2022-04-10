@@ -1,3 +1,5 @@
+##------------------------------------------------------------------------------
+(sh_log_verbose (sh_get_script_filename))
 
 ## "#1E1E1E"  ##
 ## "#808080"  ## #include
@@ -33,98 +35,4 @@ $THEME_PS_READLINE = @{
     String             = "#CE9178";
     Type               = "#569CD6";
     Variable           = "#9CDCFE";
-};
-
-$DEFAULT_THEME = @{
-    background = "#1E1E1E";
-    foreground = "#D4D4D4";
-
-    normal = @{
-        black   = "#1E1E1E"
-        red     = "#D16969"
-        green   = "#608B4E"
-        yellow  = "#D7BA7D"
-        blue    = "#569CD6"
-        magenta = "#C586C0"
-        cyan    = "#9CDCFE"
-        white   = "#D4D4D4"
-    };
-
-    bright = @{
-        black   = '#000000'
-        red     = '#FF0000'
-        green   = '#00FF00'
-        yellow  = '#FFFF00'
-        blue    = '#0000FF'
-        magenta = '#FF00FF'
-        cyan    = '#00FFFF'
-        white   = '#FFFFFF'
-    };
-}
-
-$PROMPT_THEME = @{
-    div = @{
-        icon        = " • ";
-        text_color  = "#808080";
-    };
-
-    ps1 = @{
-        icon        = ":) ";
-        text_color  = "#808080";
-    };
-
-    cwd = @{
-        icon        = " ";
-        icon_color  = $DEFAULT_THEME.normal.magenta;
-
-        text_color  = "D4D4D4";
-        paren_color = "808080";
-    }
-
-    git = @{
-        local_icon         = " ";
-        local_icon_color   = $DEFAULT_THEME.normal.blue;
-        add_icon           = " ";
-        add_icon_color     =  $DEFAULT_THEME.normal.green;
-        delete_icon        = " ";
-        delete_icon_color  = $DEFAULT_THEME.normal.red;
-        modify_icon        = " ";
-        modify_icon_color  = $DEFAULT_THEME.normal.yellow;
-        untrack_icon       = "";
-        untrack_icon_color = $DEFAULT_THEME.normal.white;
-        remote_icon        = " ";
-        remote_icon_color  = $DEFAULT_THEME.normal.cyan;
-        push_icon          = "";
-        push_icon_color    = $DEFAULT_THEME.normal.green;
-        pull_icon          = "";
-        pull_icon_color    = $DEFAULT_THEME.normal.red;
-        tag_icon           = " ";
-        tag_icon_color     = "B5CEA8";
-
-        text_color  = "D4D4D4";
-        paren_color = "808080";
-    }
-
-    status = @{
-        cmd = @{
-            icon       = " ";
-            text_color = $DEFAULT_THEME.normal.cyan;
-        };
-
-        last_exit = @{
-            icon               = " ";
-            text_color_success = $DEFAULT_THEME.normal.green;
-            text_color_failure = $DEFAULT_THEME.normal.red;
-        }
-
-        duration = @{
-            icon              = " ";
-            text_color_fast   = "#B5CEA8"; ## $DEFAULT_THEME.normal.green;
-            text_color_medium = "#D7BA7D"; ## $DEFAULT_THEME.normal.yellow;
-            text_color_slow   = "#D16969"  ## $DEFAULT_THEME.normal.red;
-        }
-
-        text_color  = "D4D4D4";
-        paren_color = "808080";
-    }
 };
