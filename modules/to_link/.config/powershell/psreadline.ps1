@@ -23,4 +23,5 @@ Set-PSReadLineOption                                  `
     -ViModeChangeHandler $Function:_on_vi_mode_change `
     -EditMode            Vi                           `
     -PredictionSource    History                      `
+    -PredictionViewStyle ListView                     `
     -Colors              $THEME_PS_READLINE;
