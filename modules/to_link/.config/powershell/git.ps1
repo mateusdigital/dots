@@ -4,70 +4,8 @@
 ##------------------------------------------------------------------------------
 function g() { git $args; }
 
-##
-## Utils
-##
-
-##------------------------------------------------------------------------------
-function git-first-date-of()
-{
-    $filename = $args[0];
-    if(-not (sh_file_exists($filename))) {
-        sh_log_fatal "Missing ($filename)";
-        return;
-    }
-
-    $date_format = "%d %b, %Y";
-    $lines       = (git log --diff-filter=A --follow --format=%ad  --date=format:$date_format --reverse -- "${filename}");
-
-    sh_writeline $lines;
-}
-
-##
-## Repo
-##
-
-##------------------------------------------------------------------------------
-function git-get-repo-url()
-{
-    $remote = (git remote -v); # | head -1 | expand -t1 | cut -d" " -f2;
-    if($remote.GetType().Name -eq "Object[]") {
-        $remote = $remote[0]
-    }
-
-    $components = $remote.Replace("`t", " ").Split(" ");
-    $url        = $components[1];
-
-    sh_writeline $url;
-}
-
-##------------------------------------------------------------------------------
-function git-get-repo-root()
-{
-    ## @improve: make the git error not in the output...
-    $result = (git rev-parse --show-toplevel);
-    return $result;
-}
-
-##
 ## Branch
 ##
-
-##------------------------------------------------------------------------------
-function git-get-branch-name()
-{
-    $result = (git branch);
-
-    foreach($item in $result) {
-        $name = $item.Trim();
-        if($name.StartsWith("*")) {
-            $clean_name = $name.Replace("*", "").Trim();
-            return $clean_name;
-        }
-    }
-
-    return "";
-}
 
 ##------------------------------------------------------------------------------
 function git-create-branch()
@@ -102,16 +40,6 @@ function git-delete-branch()
 ## Submodules
 ##
 
-##------------------------------------------------------------------------------
-function git-get-submodules()
-{
-    $result = (git submodule status);
-
-    foreach($item in $result) {
-        $comps = $item.Split();
-        sh_writeline $comps[2];
-    }
-}
 
 ##------------------------------------------------------------------------------
 ## Thanks to: John Douthat - https://stackoverflow.com/a/1260982
@@ -222,18 +150,6 @@ function git-update-submodule()
 ## New Branch
 ##
 
-##------------------------------------------------------------------------------
-function git-push-to-origin()
-{
-    $branch_name = (git-get-branch-name);
-
-    if($branch_name -eq "") {
-        sh_log_fatal "Invalid name...";
-        return;
-    }
-
-    git push --set-upstream origin $branch_name;
-}
 
 ##------------------------------------------------------------------------------
 function git-new-bugfix()
@@ -251,23 +167,6 @@ function git-new-feature()
 ##
 ## Clone
 ##
-
-##------------------------------------------------------------------------------
-function git-clone-full()
-{
-    $url = $args[0];
-    git clone $url;
-
-    $clean_name = (sh_basepath $url);
-    if($clean_name.Contains(".git")) {
-        $clean_name = $clean_name.Replace(".git", "");
-    }
-
-    sh_push_dir $clean_name;
-        (git-update-submodule);
-    sh_pop_dir;
-}
-
 
 ##------------------------------------------------------------------------------
 function git-clone-github()
