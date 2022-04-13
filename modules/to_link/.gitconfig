@@ -4,9 +4,56 @@
 [alias]
     ## Branch
     ##--------------------------------------------------------------------------
-    branches      = branch --all
-    branch-name   = rev-parse --abbrev-ref HEAD
-    delete-merged = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d" ## @XXX(win32): We do't have xargs...
+    all-branches = branch --all
+    branch-name  = rev-parse --abbrev-ref HEAD;
+
+    ## NICE!
+    change-branch = "!f() {                                                                  \
+        a=$(git all-branches | sed s#remotes/origin/##g | sort | uniq | grep -v '*' | peco); \
+        git checkout $a;                                                                              \
+    }; f";
+
+    ## NICE!
+    merge-branch = "!f() {                                                     \
+        b=$(git branch-name);                                                  \
+        t=$(git all-branches | sort | uniq | grep -v '*' | peco);              \
+        git checkout $t;                                                       \
+        git merge --no-ff $b;                                                  \
+    }; f"
+
+    delete-branch = "!f() {                                                    \
+        branch_name=$1;                                                        \
+        echo "Deleting branch: $branch_name";                                  \
+        git branch      --delete $branch_name;                                 \
+        git push origin --delete $branch_name;                                 \
+        echo "Deleted...";                                                     \
+    }; f"
+
+    ## depends on: delete-branch
+    delete-merged = "!git branch --merged | grep -v '*' | xargs -n 1 git delete-branch";
+
+    ##
+    new-branch = "!f() {                 \
+        name=$(echo "$@" |  tr ' ' '-'); \
+        git checkout -b $name;           \
+    }; f";
+
+    new-feat = "!f() {                   \
+        name=$(echo "$@" |  tr ' ' '-'); \
+        git checkout -b "feature/$name"; \
+    }; f";
+
+    new-bug = "!f() {                    \
+        name=$(echo "$@" |  tr ' ' '-'); \
+        git checkout -b "bugfix/$name";  \
+    }; f";
+
+    ab = all-branches;
+    bn = breanch-name;
+    cb = change-branch;
+    nb = new-branch;
+    mb = merge-branch;
+
 
     ## Clone
     ##--------------------------------------------------------------------------

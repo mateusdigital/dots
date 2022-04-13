@@ -4,6 +4,7 @@
 ##
 ## ALIAS
 ##
+
 $CONFIG = "$HOME_DIR/.config";
 $PS     = "$CONFIG/powershell";
 $NV     = "$CONFIG/nvim";

@@ -4,43 +4,6 @@
 ##------------------------------------------------------------------------------
 function g() { git $args; }
 
-## Branch
-##
-
-##------------------------------------------------------------------------------
-function git-create-branch()
-{
-    $prefix   = $args[0];
-    $values   = (sh_expand_array $args 1).ForEach({echo $_.Trim()});
-    $name     = (sh_join_string "-" $values).Replace(" ", "-");
-    $fullname = "${prefix}${name}";
-
-    sh_writeline $fullname;
-    git checkout -b $fullname;
-}
-
-##------------------------------------------------------------------------------
-function git-delete-branch()
-{
-    $branch_name = $args[0];
-    $grep_result = (git branch --all | grep $branch_name);
-
-    if($grep_result.Length -eq 0) {
-        sh_log_fatal "Invalid branch ($branch_name)";
-        return;
-    }
-
-    sh_log "Deleting branch: ($branch_name)";
-        git branch      --delete $branch_name;
-        git push origin --delete $branch_name;
-    sh_log "Deleted...";
-}
-
-##
-## Submodules
-##
-
-
 ##------------------------------------------------------------------------------
 ## Thanks to: John Douthat - https://stackoverflow.com/a/1260982
 function git-remove-submodule()
@@ -140,28 +103,6 @@ function _git_remove_submodule_diff()
         $file_b;
 }
 
-##------------------------------------------------------------------------------
-function git-update-submodule()
-{
-    git submodule update --init --recursive;
-}
-
-##
-## New Branch
-##
-
-
-##------------------------------------------------------------------------------
-function git-new-bugfix()
-{
-    git-create-branch "bugfix/" $args;
-}
-
-##------------------------------------------------------------------------------
-function git-new-feature()
-{
-    git-create-branch "feature/" $args;
-}
 
 
 ##
