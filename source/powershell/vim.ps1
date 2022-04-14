@@ -1,13 +1,15 @@
 
-
-## Remove-Alias -Path Alias:nv -Force -Option AllScope
-$_nv = if($IsWindows) { "nvim.exe" }  else { "nvim" }
+##------------------------------------------------------------------------------
+$NVIM = if($IsWindows) { "nvim.exe" }  else { "nvim" }
+$env:EDITOR = $NVIM;
+$env:VISUAL = $NVIM;
 
 ##------------------------------------------------------------------------------
-Set-Alias -Name vi  -Value $_nv -Force -Option AllScope
-Set-Alias -Name vim -Value $_nv -Force -Option AllScope
-Set-Alias -Name nv  -Value $_nv -Force -Option AllScope
+Set-Alias -Name vi  -Value $NVIM -Force -Option AllScope;
+Set-Alias -Name vim -Value $NVIM -Force -Option AllScope;
+Set-Alias -Name nv  -Value $NVIM -Force -Option AllScope;
 
-##------------------------------------------------------------------------------
-$env:EDITOR = $_nv;
-$env:VISUAL = $_nv;
+## @XXX(Be Brave)!
+## Set-Alias -Name code -Value $NVIM -Force -Option AllScope;
+
+
