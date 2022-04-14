@@ -49,18 +49,17 @@ Set-Alias -Force -Option AllScope -Name cd -Value _stdmatt_cd
 ## ls
 ##
 
+##------------------------------------------------------------------------------
 function _stdmatt_ls()
 {
     exa --icons --git --classify --group-directories-first --no-permissions --no-filesize --no-user --no-time --long --grid $args;
 }
 
 ##------------------------------------------------------------------------------
-if($IsWindows) {
-    Remove-Item -Path Alias:ls
-}
-
+if($IsWindows) { Remove-Item -Path Alias:ls }
 Set-Alias -Force -Option AllScope -Name ls -Value _stdmatt_ls;
 Set-Alias -Force -Option AllScope -Name l  -Value _stdmatt_ls;
+
 
 ##
 ## Files
@@ -114,19 +113,14 @@ function make-link()
         return;
     }
 
-    if((sh_is_unix_like)) {
-        ln $src_path $dst_path;
-    } else {
-        ## @todo(stdmatt): Should we check errors???
-        $null = (New-Item -ItemType HardLink -Target $src_path -Path $dst_path -Force);
-    }
+    (sh_mklink $src_path $dst_path);
 }
 
 
 ##
 ## kill
 ##
-
+## @XXX(kill): Must change to Get-Process and refactor....
 ##------------------------------------------------------------------------------
 function kill-process()
 {

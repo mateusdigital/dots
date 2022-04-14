@@ -1,6 +1,10 @@
 ##------------------------------------------------------------------------------
 (sh_log_verbose (sh_get_script_filename))
 
+##
+## Palettes
+##
+
 ## "#1E1E1E"  ##
 ## "#808080"  ## #include
 ## "#D4D4D4"  ## normal text
@@ -16,6 +20,10 @@
 ## "#F44747"  ## error message
 ## "#C586C0"  ## else if
 
+
+##
+## Themes
+##
 
 ##------------------------------------------------------------------------------
 $THEME_PS_READLINE = @{
@@ -37,6 +45,7 @@ $THEME_PS_READLINE = @{
     Type               = "#569CD6";
     Variable           = "#9CDCFE";
 };
+
 
 function print_theme($theme)
 {

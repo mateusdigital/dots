@@ -1,5 +1,6 @@
-# #
-## https://raw.githubusercontent.com/mathiasbynens/dotfiles/main/.gitconfig
+##
+## First version based upon:
+##    https://raw.githubusercontent.com/mathiasbynens/dotfiles/main/.gitconfig ##
 
 [alias]
     ## Branch
@@ -10,7 +11,7 @@
     ## NICE!
     change-branch = "!f() {                                                                  \
         a=$(git all-branches | sed s#remotes/origin/##g | sort | uniq | grep -v '*' | peco); \
-        git checkout $a;                                                                              \
+        git checkout $a;                                                                     \
     }; f";
 
     ## NICE!
@@ -107,9 +108,6 @@
     sa   = status
     suno = status -suno
 
-    ## Repo
-
-
 
 [apply]
     whitespace = fix
@@ -164,9 +162,11 @@
     name  = stdmatt
     email = stdmatt@pixelwizards.io
 
+
 ##
 ## Colors
 ##
+
 [color "branch"]
     current = yellow reverse
     local   = yellow

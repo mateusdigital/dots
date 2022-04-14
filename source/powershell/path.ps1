@@ -67,4 +67,4 @@ function list-path()
 
 ##------------------------------------------------------------------------------
 $env:PATH_DEFAULT = (_get_default_PATH);
-$env:PATH         = (_configure_PATH);
+$env:PATH         = (_configure_PATH  );

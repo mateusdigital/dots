@@ -8,7 +8,7 @@ function update()
     if($IsMacOS) {
         (sudo softwareupdate -i -a);
 
-        (brew update);
+        (brew update );
         (brew upgrade);
         (brew cleanup);
 
