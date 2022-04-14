@@ -9,7 +9,6 @@ $CONFIG = "$HOME_DIR/.config";
 $PS     = "$CONFIG/powershell";
 $NV     = "$CONFIG/nvim";
 
-
 ##
 ## cd
 ##
@@ -43,8 +42,25 @@ function _stdmatt_cd()
 
 ##------------------------------------------------------------------------------
 Remove-Item -Path Alias:cd
-Set-Alias -Name cd -Value _stdmatt_cd -Force -Option AllScope
+Set-Alias -Force -Option AllScope -Name cd -Value _stdmatt_cd
 
+
+##
+## ls
+##
+
+function _stdmatt_ls()
+{
+    exa --icons --git --classify --group-directories-first --no-permissions --no-filesize --no-user --no-time --long --grid $args;
+}
+
+##------------------------------------------------------------------------------
+if($IsWindows) {
+    Remove-Item -Path Alias:ls
+}
+
+Set-Alias -Force -Option AllScope -Name ls -Value _stdmatt_ls;
+Set-Alias -Force -Option AllScope -Name l  -Value _stdmatt_ls;
 
 ##
 ## Files
