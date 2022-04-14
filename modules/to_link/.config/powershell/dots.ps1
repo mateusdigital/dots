@@ -1,7 +1,9 @@
 
 ## Preset stuff...
 $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
-$env:SHLIB_IS_VERSBOSE           = 1;
+$env:SHLIB_IS_VERSBOSE           = 0;
+
+
 
 ## Load shlib
 $HOME_DIR = if ($HOME -eq "") { "$env:USERPROFILE" } else { $HOME };
