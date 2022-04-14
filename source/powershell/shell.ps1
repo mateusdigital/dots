@@ -1,13 +1,6 @@
 ##------------------------------------------------------------------------------
 (sh_log_verbose (sh_get_script_filename))
 
-##
-## ALIAS
-##
-
-$CONFIG = "${HOME_DIR}/.config";
-$PS     = "${CONFIG}/powershell";
-$NV     = "${CONFIG}/nvim";
 
 ##
 ## cd
