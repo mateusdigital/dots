@@ -60,7 +60,14 @@ function files()
         $target_path=".";
     }
 
-    $file_manager = (_host_get_file_manager);
+    $file_manager = "";
+    if($IsWindows -or (sh_is_wsl)) {
+        $file_manager = "explorer.exe";
+    } elseif($IsMacOS) {
+        $file_manager = "open";
+    }
+    ## @todo(stdmatt): Add for linux someday... at 2022-03-04, 15:54
+
     if($file_manager -eq "") {
         sh_log_fatal("No file manager was found - Aborting...");
         return;
@@ -73,19 +80,6 @@ function files()
 
     & $file_manager $target_path;
     return;
-}
-
-##------------------------------------------------------------------------------
-function _host_get_file_manager()
-{
-    if($IsWindows -or (sh_is_wsl)) {
-        return "explorer.exe";
-    } elseif($IsMacOS) {
-        return "open";
-    }
-
-    ## @todo(stdmatt): Add for linux someday... at 2022-03-04, 15:54
-    return "";
 }
 
 
