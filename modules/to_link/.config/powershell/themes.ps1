@@ -26,6 +26,7 @@ $THEME_PS_READLINE = @{
     Emphasis           = "#CE9178";
     Error              = "#F44747";
     InlinePrediction   = "#808080";
+    ListPrediction     = "#808080";
     Keyword            = "#C586C0";
     Member             = "#D4D4D4";
     Number             = "#B5CEA8";
