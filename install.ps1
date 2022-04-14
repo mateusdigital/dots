@@ -5,6 +5,7 @@
 . "$HOME/.stdmatt/lib/shlib/shlib.ps1"
 . "$HOME/.stdmatt/lib/rainbow/rainbow.ps1"
 
+
 ##----------------------------------------------------------------------------##
 ## Helper Functions                                                           ##
 ##----------------------------------------------------------------------------##
@@ -57,6 +58,7 @@ function _install_fonts()
     sh_log_verbose "Fonts were installed...";
 }
 
+
 ##----------------------------------------------------------------------------##
 ## Entry Point                                                                ##
 ##----------------------------------------------------------------------------##
@@ -75,6 +77,8 @@ $src_path = "${script_dir}/modules/to_link";
 $files    = (Get-ChildItem -Recurse -Force -Attributes Hidden+Normal,!Directory $src_path);
 
 foreach($src_file in $files) {
+    $dir_name = $src_file.DirectoryName;
+
     $dst_dir  = $src_file.DirectoryName.Replace($src_path, $dst_path);
     $dst_file = sh_join_path ${dst_dir} $src_file.Name;
 
@@ -87,7 +91,7 @@ foreach($src_file in $files) {
 sh_log "Done...";
 
 ##
-## Copy: Honestly don't care about the getting nothing from there...
+## Copy
 ##
 
 sh_log "Copying files...";

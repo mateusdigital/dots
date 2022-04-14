@@ -1,7 +1,0 @@
-[
-        {
-            "name": "Main Version",
-            "file": "./src/main.ps1",
-            "content": "PROGRAM_VERSION = \"_VERSION_\""
-        }
-    ]
