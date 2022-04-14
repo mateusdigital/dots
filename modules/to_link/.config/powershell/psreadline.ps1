@@ -1,7 +1,16 @@
 ##------------------------------------------------------------------------------
 (sh_log_verbose (sh_get_script_filename))
 
+
+##
+## Imports
+##
+
 . "$HOME_DIR/.config/powershell/themes.ps1"
+
+##
+## Private Functions
+##
 
 ##------------------------------------------------------------------------------
 function _on_vi_mode_change
@@ -18,10 +27,24 @@ function _on_vi_mode_change
 ## Public
 ##
 
+##------------------------------------------------------------------------------
 Set-PSReadLineOption                                  `
     -ViModeIndicator     Script                       `
     -ViModeChangeHandler $Function:_on_vi_mode_change `
     -EditMode            Vi                           `
-    -PredictionSource    History                      `
+    -HistoryNoDuplicates                              `
+    -PredictionSource    HistoryAndPlugin             `
     -PredictionViewStyle ListView                     `
     -Colors              $THEME_PS_READLINE;
+
+
+##------------------------------------------------------------------------------
+Import-Module PSFzf
+Set-PsFzfOption                             `
+    -PSReadlineChordProvider 'Ctrl+t'       `
+    -PSReadlineChordReverseHistory 'Ctrl+r'
+
+## @todo(stdmatt): Is this tab something that we want?
+Set-PSReadLineKeyHandler -Key Tab -ScriptBlock {
+    Invoke-FzfTabCompletion
+}
