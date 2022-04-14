@@ -18,7 +18,7 @@ function global:prompt
 ##------------------------------------------------------------------------------
 function _make_prompt()
 {
-    $ps1 = (_ps1);
+    $ps1 = (_ps1 $LASTEXITCODE);
 
     $v = $ps1.ForEach({$_.text});
     $v = (sh_join_string " " $v);
@@ -34,12 +34,13 @@ function _ps1()
     ## History
     ##
 
+    $status_last_exit = $args[0];
+
     $history = (Get-History);
     if($history.Count) {
         $last_history = $history[-1];
 
         $status_cmd       = $last_history.CommandLine.Trim();
-        $status_last_exit = (sh_value_or_default $args[0] 0);
         $status_duration  = $last_history.Duration.TotalMilliseconds;
     } else {
         $history = $null;
@@ -162,9 +163,11 @@ function _ps1()
         @{
             text = if($history) {
                 $v = "";
-                if($status_last_exit -ne 0) {
-                    $v += " ($status_last_exit) "
+
+                if($status_last_exit -ne 0 -and $status_last_exit -ne 128) {
+                    $v += "${LightRed} ($status_last_exit){ ${Silver}${status_cmd}${LightRed} } "
                 }
+
                 if($status_duration -ne 0) {
                     $c =     if($status_duration -lt 300) { $LightGreen }
                          elseif($status_duration -lt 600) { $Yellow     }
