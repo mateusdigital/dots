@@ -1,8 +1,4 @@
 ##------------------------------------------------------------------------------
-(sh_log_verbose (sh_get_script_filename))
-
-
-##------------------------------------------------------------------------------
 function update()
 {
     if($IsMacOS) {
@@ -14,5 +10,7 @@ function update()
 
         (npm install npm -g);
         (npm update      -g);
+    } else {
+        sh_log "To implement.."
     }
 }

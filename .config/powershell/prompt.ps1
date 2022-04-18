@@ -189,6 +189,3 @@ if($PROMPT_DEBUG) {
 
     _make_prompt;
 }
-
-##------------------------------------------------------------------------------
-(sh_log_verbose (sh_get_script_filename))

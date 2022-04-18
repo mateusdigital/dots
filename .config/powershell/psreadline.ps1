@@ -1,13 +1,9 @@
-##------------------------------------------------------------------------------
-(sh_log_verbose (sh_get_script_filename))
-
-
 ##
 ## Imports
 ##
 
 Import-Module PSFzf
-. "$HOME_DIR/.config/powershell/themes.ps1"
+. "$HOME/.config/powershell/themes.ps1"
 
 ##
 ## Private Functions

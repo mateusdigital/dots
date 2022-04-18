@@ -1,7 +1,3 @@
-##------------------------------------------------------------------------------
-(sh_log_verbose (sh_get_script_filename))
-
-
 ##
 ## cd
 ##
@@ -23,20 +19,27 @@ function _stdmatt_cd()
     ## maybe one day I'll move it - 22-04-08 @ guaruja
     $target_path = $args[0];
     if($target_path -eq "") {
-        $target_path = "$HOME_DIR";
+        $target_path = "$HOME";
     }
+
     if($target_path -eq "-") {
         $target_path=$global:OLDPWD;
     }
 
-    $global:OLDPWD =  [string](Get-Location);
-    Set-Location $target_path; ## Needs to be the Powershell builtin or infinity recursion
+    $is_valid = (Test-Path -Path $target_path);
+    if($is_valid) {
+        $global:OLDPWD =  [string](Get-Location);
+        Set-Location $target_path; ## Needs to be the Powershell builtin or infinity recursion
+    } else {
+        gosh $target_path;
+    }
 }
 
-##------------------------------------------------------------------------------
-Remove-Item -Path Alias:cd
-Set-Alias -Force -Option AllScope -Name cd -Value _stdmatt_cd
-
+## _stdmatt_cd "../";
+## _stdmatt_cd "/";
+## _stdmatt_cd "-";
+## _stdmatt_cd "";
+## _stdmatt_cd "demos";
 
 ##
 ## ls
@@ -47,12 +50,6 @@ function _stdmatt_ls()
 {
     exa --icons --git --classify --group-directories-first --no-permissions --no-filesize --no-user --no-time --long --grid $args;
 }
-
-##------------------------------------------------------------------------------
-if($IsWindows) { Remove-Item -Path Alias:ls }
-Set-Alias -Force -Option AllScope -Name ls -Value _stdmatt_ls;
-Set-Alias -Force -Option AllScope -Name l  -Value _stdmatt_ls;
-
 
 ##
 ## Files
