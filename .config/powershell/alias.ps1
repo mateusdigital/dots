@@ -23,4 +23,5 @@ Set-Alias -Force -Option AllScope -Name "c" _stdmatt_cd; ## Change dir
 Set-Alias -Force -Option AllScope -Name "e" $NVIM;       ## Edit
 Set-Alias -Force -Option AllScope -Name "f" files;       ## Files
 Set-Alias -Force -Option AllScope -Name "l" _stdmatt_ls; ## List
-Set-Alias -Force -Option AllScope -Name "g" git;         ## Git
+
+
