@@ -17,9 +17,12 @@ function _configure_PATH()
 {
     $paths_to_add = @();
     if($IsMacOS) {
-        ## @notice(gnu-tools): Add all the gnu tools to the path
-        ## so we can use them in mac without prefixing with g.
         $paths_to_add += @(
+            ## Anything first from powershell...
+            "/usr/local/microsoft/powershell/7",
+            ## @notice(gnu-tools): Add all the gnu tools to the path
+            ## so we can use them in mac without prefixing with g.
+            ##    find /usr/local/Cellar -iname "*gnubin" | sort
             "/usr/local/Cellar/coreutils/9.0_1/libexec/gnubin",
             "/usr/local/Cellar/ed/1.18/libexec/gnubin",
             "/usr/local/Cellar/findutils/4.9.0/libexec/gnubin",
@@ -28,22 +31,27 @@ function _configure_PATH()
             "/usr/local/Cellar/gnu-tar/1.34/libexec/gnubin",
             "/usr/local/Cellar/grep/3.7/libexec/gnubin",
             "/usr/local/Cellar/libtool/2.4.6_4/libexec/gnubin",
-            "/usr/local/Cellar/make/4.3/libexec/gnubin"
+            "/usr/local/Cellar/make/4.3/libexec/gnubin",
+            ## Normal stuff...
+            "/usr/local/bin", ## @notice(brew): Homebrew put it's stuff here...
+            "/usr/bin",
+            "/bin",
+            "/usr/sbin",
+            "/sbin",
+            "/opt/X11/bin",
+            ## My stuff...
+            "/usr/local/opt/curl/bin",
+            "/Users/stdmatt/.cargo/bin",
+            "/Users/stdmatt/.stdmatt/bin"
         );
     }
     elseif($IsWindows) {
 
     }
 
-    ## Paths that always will go...
-    $paths_to_add += @(
-        "/Users/stdmatt/.stdmatt/bin"
-    );
-
     $default = $env:PATH_DEFAULT;
     $new     = (sh_join_string ":" $paths_to_add);
-
-    return "${default}:${new}";
+    return "${new}";
 }
 
 ##
