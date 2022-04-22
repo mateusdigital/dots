@@ -1,3 +1,19 @@
+mriya.digtal
+digitalpig
+
+cosmic.green
+cosmicpig
+tamand.ua
+enseada
+cosmic.day
+cosmic.flowers
+cosmical.tech
+cosmically
+cosmical.io
+cosmical.digital
+stoically.digital
+
+
 ac	Agora disponível para registro
 academyAgora disponível para registro
 accountant	Agora disponível para registro
