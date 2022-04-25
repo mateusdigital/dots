@@ -28,18 +28,12 @@ function _stdmatt_cd()
 
     $is_valid = (Test-Path -Path $target_path);
     if($is_valid) {
-        $global:OLDPWD =  [string](Get-Location);
+        $global:OLDPWD = [string](Get-Location);
         Set-Location $target_path; ## Needs to be the Powershell builtin or infinity recursion
     } else {
         gosh $target_path;
     }
 }
-
-## _stdmatt_cd "../";
-## _stdmatt_cd "/";
-## _stdmatt_cd "-";
-## _stdmatt_cd "";
-## _stdmatt_cd "demos";
 
 ##
 ## ls
