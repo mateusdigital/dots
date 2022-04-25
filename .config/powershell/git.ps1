@@ -1,11 +1,3 @@
-function g()
-{
-    if($args.Length -eq 0) {
-        git s;
-    } else {
-        git $args;
-    }
-}
 
 ##------------------------------------------------------------------------------
 ## Thanks to: John Douthat - https://stackoverflow.com/a/1260982
