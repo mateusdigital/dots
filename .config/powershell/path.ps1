@@ -17,6 +17,8 @@ function _configure_PATH()
 {
     $paths_to_add = @();
     if($IsMacOS) {
+        sh_log_verbose "Configuring path for macOS";
+
         $paths_to_add += @(
             ## Anything first from powershell...
             "/usr/local/microsoft/powershell/7",
@@ -45,12 +47,19 @@ function _configure_PATH()
             "/Users/stdmatt/.stdmatt/bin"
         );
     }
+    elseif($sh_is_wsl) {
+        sh_log_verbose "Configuring path for WSL";
+    }
+    elseif($IsLinux) {
+        sh_log_verbose "Configuring path for GNU/Linux";
+    }
     elseif($IsWindows) {
-
+        sh_log_verbose "Configuring path for Windows";
     }
 
     $default = $env:PATH_DEFAULT;
     $new     = (sh_join_string ":" $paths_to_add);
+
     return "${new}";
 }
 

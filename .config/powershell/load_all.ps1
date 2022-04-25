@@ -8,13 +8,16 @@ foreach($item in (Get-ChildItem $PS_DIR)) {
         continue;
     }
 
-    if($name -eq "load_all.ps1"                      -or `
+    ## Ignore all those files...
+    if($name -eq "dots.ps1"                          -or `
+       $name -eq "load_all.ps1"                      -or `
+       $name -eq "_stratch.ps1"                      -or `
        $name -eq "Microsoft.PowerShell_profile.ps1"  -or `
        $name -eq "Microsoft.VSCode_profile.ps1")
     {
         continue;
     }
 
-    # sh_log_verbose "Loading: $name";
+    sh_log_verbose "Loading file: $name";
     . $item.FullName;
 }

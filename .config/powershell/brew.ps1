@@ -1,4 +1,8 @@
+##
+## Private Functions
+##
 
+##------------------------------------------------------------------------------
 function install-brew-packages()
 {
     param(
@@ -7,93 +11,64 @@ function install-brew-packages()
         [switch] $All
     )
 
-    if($All) {
-        $Server       = $true;
-        $Worskstation = $true;
-    };
+    _install_brew "core";
 
-    ##
-    ## Stuff that is installed in all computers.
-    ##
-
-    @(
-        "atool",
-        "curl",
-        "coreutils",
-        "diffutils",
-        "ed",
-        "findutils",
-        "fzf",
-        "git",
-        "exa",
-        "fd",
-        "gawk",
-        "grep",
-        "libtool",
-        "lynx",
-        "neovim-qt",
-        "ripgrep",
-        "tree",
-        "vifm",
-        "wget"
-    ).ForEach({
-        $name = $_.Trim();
-        brew install $name;
-    });
-
-
-    ##
-    ## core + stuff that is installed on server computers.
-    ##
-
-    if($Server) {
-        $server_setup = @(
-            ## Empty...
-        ).ForEach({
-            $name = $_.Trim();
-            brew install $name;
-        });
+    if($All -or $Server) {
+        _install_brew "server";
     }
 
-
-    ##
-    ## core + stuff that is installed in my workstations.
-    ##
-
-    if($Worskstation) {
-        @(
-            "automake",
-            "cmake",
-            "git-gui",
-            "gnu-sed",
-            "gnu-tar",
-            "gource",
-            "gtk+3",
-            "librsvg",
-            "make",
-            "ninja",
-            "openssl@3",
-            "pandoc",
-            "peco",
-            "rust",
-            "rustup-init",
-            "yarn",
-            "youtube-dl"
-        ).ForEach({
-            $name = $_.Trim();
-            brew install $name;
-        });
-
-        ##
-        @(
-            "alacritty",
-            "amethyst",
-            "vlc",
-            "powershell",
-            "transmission"
-        ).ForEach({
-            $name = $_.Trim();
-            brew cask $name;
-        });
+    if($All -or $Workstation) {
+        _install_brew "workstation";
+        _install_brew "casks";
     }
 }
+
+##------------------------------------------------------------------------------
+function update-software()
+{
+    if($IsMacOS) {
+        ## Mac
+        sudo softwareupdate -i -a;
+        ## Brew
+        brew update;
+        brew upgrade;
+        brew cleanup;
+        ## NPM
+        npm install npm -g;
+        npm update      -g;
+    }
+    else {
+        sh_log "To implement.."
+    }
+}
+
+##
+## Helper Functions
+##
+
+##------------------------------------------------------------------------------
+function _install_brew($mode)
+{
+    $os_name  = (sh_get_os_name);
+    $filepath = "${HOME}/.config/${os_name}/brew_${mode}.txt";
+
+    if(-not (sh_file_exists $filepath)) {
+        sh_log "Ignoring $filepath";
+        return;
+    }
+
+    sh_log "Installing brew ($mode):";
+    (Get-Content $filepath).ForEach({
+        $name = $_.Trim();
+        if($name.Length -eq 0) {
+            return;
+        }
+
+        if($mode -eq "casks") {
+            brew install --cask $name;
+        } else {
+            brew install $name;
+        }
+    });
+}
+
