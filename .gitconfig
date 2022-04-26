@@ -1,0 +1,185 @@
+##
+## First version based upon:
+##    https://raw.githubusercontent.com/mathiasbynens/dotfiles/main/.gitconfig ##
+
+[alias]
+    ## Branch
+    ##--------------------------------------------------------------------------
+    all-branches = branch --all
+    branch-name  = rev-parse --abbrev-ref HEAD;
+
+    ## NICE!
+    change-branch = "!f() {                                                                  \
+        a=$(git all-branches | sed s#remotes/origin/##g | sort | uniq | grep -v '*' | peco); \
+        git checkout $a;                                                                     \
+    }; f";
+
+    ## NICE!
+    merge-branch = "!f() {                                                     \
+        b=$(git branch-name);                                                  \
+        t=$(git all-branches | sort | uniq | grep -v '*' | peco);              \
+        git checkout $t;                                                       \
+        git merge --no-ff $b;                                                  \
+    }; f"
+
+    delete-branch = "!f() {                                                    \
+        branch_name=$1;                                                        \
+        echo "Deleting branch: $branch_name";                                  \
+        git branch      --delete $branch_name;                                 \
+        git push origin --delete $branch_name;                                 \
+        echo "Deleted...";                                                     \
+    }; f"
+
+    ## depends on: delete-branch
+    delete-merged = "!git branch --merged | grep -v '*' | xargs -n 1 git delete-branch";
+
+    ##
+    new-branch = "!f() {                 \
+        name=$(echo "$@" |  tr ' ' '-'); \
+        git checkout -b $name;           \
+    }; f";
+
+    new-feat = "!f() {                   \
+        name=$(echo "$@" |  tr ' ' '-'); \
+        git checkout -b "feature/$name"; \
+    }; f";
+
+    new-bug = "!f() {                    \
+        name=$(echo "$@" |  tr ' ' '-'); \
+        git checkout -b "bugfix/$name";  \
+    }; f";
+
+    ab = all-branches;
+    bn = breanch-name;
+    cb = change-branch;
+    nb = new-branch;
+    mb = merge-branch;
+
+
+    ## Clone
+    ##--------------------------------------------------------------------------
+    clone = clone --recursive
+
+    ## Commit
+    ##--------------------------------------------------------------------------
+    ca    = !git add -A && git commit -av ## Commit all changes
+    amend = commit --amend --reuse-message=HEAD
+
+    ## Diff
+    ##--------------------------------------------------------------------------
+    d = diff
+
+    ## Info
+    ##--------------------------------------------------------------------------
+    aliases      = config --get-regexp alias
+    list-alias   = config --get-regexp alias
+
+    contributors = shortlog --summary --numbered
+    whoami       = config user.email
+    root         = rev-parse --show-toplevel
+    url          = config --get remote.origin.url
+    date-of      = log --diff-filter=A --follow --format=%ad  --date=format:"%Y-%m-%d" --reverse --
+
+    ## Log
+    ##--------------------------------------------------------------------------
+    ## Last X lines in a tree
+    l    = log --pretty=oneline -n 10 --graph --abbrev-commit
+    tree = log --oneline --decorate --graph --all
+
+    ## Push
+    ##--------------------------------------------------------------------------
+    p = "!git push --set-upstream origin $(git branch-name);";
+
+    ## Pull
+    ##--------------------------------------------------------------------------
+    pull-all = pull --recurse-submodules
+
+    ## MISC
+    ##--------------------------------------------------------------------------
+    tags     = tag -l
+    remotes  = remote --verbose
+
+    subs = "!(git config --file $(git root)/.gitmodules --name-only --get-regexp path)" ## @XXX: Remote the .path from the subodules...
+    suir = submodule update --init --recursive;
+
+    ## Status
+    ##--------------------------------------------------------------------------
+    s    = status -s
+    sa   = status
+    suno = status -suno
+
+
+[apply]
+    whitespace = fix
+
+[branch]
+    # Show most recently changed branches first.
+    sort = -committerdate
+
+[core]
+    excludesfile = ~/.gitignore
+    editor       = nvim
+    autocrlf     = false
+
+    # Treat spaces before tabs and all kinds of trailing whitespace as an error.
+    # [default] trailing-space: looks for spaces at the end of a line
+    # [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+    whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+
+    # Make `git rebase` safer on macOS.
+    # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+    trustctime = false
+    # Prevent showing files whose names contain non-ASCII symbols as unversioned.
+    # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
+    precomposeunicode = false
+    # Speed up commands involving untracked files such as `git status`.
+    # https://git-scm.com/docs/git-update-index#_untracked_cache
+    untrackedCache = true
+
+[color]
+    ui = auto
+
+[credential]
+    helper = cache --timeout=86400
+
+[diff]
+    renames = copies
+
+[init]
+    defaultBranch = main
+
+[merge]
+    # Include summaries of merged commits in newly created merge commit messages
+    log = true
+
+[push]
+    # https://git-scm.com/docs/git-config#git-config-pushdefault
+    default = simple
+    # Make `git push` push relevant annotated tags when pushing branches out.
+    followTags = true
+
+[user]
+    name  = stdmatt
+    email = stdmatt@pixelwizards.io
+
+
+##
+## Colors
+##
+
+[color "branch"]
+    current = yellow reverse
+    local   = yellow
+    remote  = green
+
+[color "diff"]
+    meta = yellow  bold
+    frag = magenta bold # line info
+    old  = red          # deletions
+    new  = green        # additions
+
+[color "status"]
+    added     = green
+    changed   = yellow
+    deleted   = red
+    untracked = white
