@@ -1,10 +1,47 @@
+
 ##
-## cd
+## Configure NVIM.
 ##
 
 ##------------------------------------------------------------------------------
+$NVIM = if($IsWindows) { "nvim.exe" }  else { "nvim" }
+
+$env:EDITOR = $NVIM;
+$env:VISUAL = $NVIM;
+
+##------------------------------------------------------------------------------
+Set-Alias -Force -Option AllScope -Name vi  -Value $NVIM;
+Set-Alias -Force -Option AllScope -Name vim -Value $NVIM;
+Set-Alias -Force -Option AllScope -Name nv  -Value $NVIM;
+
+
+##
+## Single letter functions.
+##
+
+##------------------------------------------------------------------------------
+function e() ## edit
+{
+    if($args.Count -eq 0) {
+        & $NVIM ".";   ## Edit current path...
+    } else {
+        & $NVIM $args; ## Open with the given args...
+    }
+}
+
+##------------------------------------------------------------------------------
+function g() ## git
+{
+    if($args.Length -eq 0) {
+        git s;      ## git status by default.
+    } else {
+        git $args;  ## Just pass the args...
+    }
+}
+
+##------------------------------------------------------------------------------
 $global:OLDPWD="";
-function _stdmatt_cd()
+function c() ## cd
 {
     ## @notice(stdmatt): This is pretty cool - It makes the cd to behave like
     ## the bash one that i can cd - and it goes to the OLDPWD.
@@ -35,21 +72,15 @@ function _stdmatt_cd()
     }
 }
 
-##
-## ls
-##
-
 ##------------------------------------------------------------------------------
-function _stdmatt_ls()
+function l() ## ls
 {
-    exa --icons --git --classify --group-directories-first --no-permissions --no-filesize --no-user --no-time --long --grid $args;
+    ls $args;
 }
 
-##
-## Files
-##
 
 ##------------------------------------------------------------------------------
+function f() { files $arsg; }
 function files()
 {
     ## Open the Filesystem Manager into a given path.
@@ -79,25 +110,6 @@ function files()
 
     & $file_manager $target_path;
     return;
-}
-
-
-##
-## Make Link
-##
-
-##------------------------------------------------------------------------------
-function make-link()
-{
-    $src_path = $args[0];
-    $dst_path = $args[1];
-
-    if (-not $src_path) {
-        sh_log_fatal("Missing source path - Aborting...");
-        return;
-    }
-
-    (sh_mklink $src_path $dst_path);
 }
 
 

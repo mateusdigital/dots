@@ -20,11 +20,11 @@ $NVIM_DIR   = "${CONFIG_DIR}/nvim";
 ##------------------------------------------------------------------------------
 function dots()
 {
-	if($args.Length -eq 1 -and $args[0] -eq "gui") { 
-            gitui -d $HOME/.dots/ -w $HOME;
-	} else {
-	    (git --git-dir=$HOME/.dots/ --work-tree=$HOME $args);
-	}
+    if($args.Length -eq 1 -and $args[0] -eq "gui") {
+        gitui -d $HOME/.dots/ -w $HOME;
+    } else {
+        git --git-dir=$HOME/.dots/ --work-tree=$HOME $args;
+    }
 }
 
 (dots config --local status.showUntrackedFiles no);

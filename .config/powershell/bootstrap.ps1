@@ -1,5 +1,5 @@
 ##
-## Private Functions
+## Public Functions
 ##
 
 ##------------------------------------------------------------------------------
@@ -29,13 +29,12 @@ function install-brew-packages()
 ##------------------------------------------------------------------------------
 function update-software()
 {
-    sh_log "This will probably shutdown the computer..."
+    sh_log -bg "yellow" -fg "black" "This will probably shutdown the computer...";
     if(-not (sh_ask_confirm "Are you sure to continue?")) {
-        sh_log "Aborting...";
+        sh_log -fg "yellow" "Aborting...";
         return;
     }
-    echo "fuck";
-    return;
+
     if($IsMacOS) {
         ## Mac
         sudo softwareupdate -i -a;
