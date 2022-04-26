@@ -6,18 +6,21 @@
 function install-brew-packages()
 {
     param(
+        [switch] $Core,
         [switch] $Server,
-        [switch] $Worskstation,
+        [switch] $Work,
         [switch] $All
     )
 
-    _install_brew "core";
+    if($All -or $Core) {
+        _install_brew "core";
+    }
 
     if($All -or $Server) {
         _install_brew "server";
     }
 
-    if($All -or $Workstation) {
+    if($All -or $Work) {
         _install_brew "workstation";
         _install_brew "casks";
     }
