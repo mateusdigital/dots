@@ -37,14 +37,15 @@ function _configure_PATH()
             ## Normal stuff...
             "/usr/local/bin", ## @notice(brew): Homebrew put it's stuff here...
             "/usr/bin",
-            "/bin",
             "/usr/sbin",
+            "/bin",
             "/sbin",
             "/opt/X11/bin",
-            ## My stuff...
             "/usr/local/opt/curl/bin",
-            "/Users/stdmatt/.cargo/bin",
-            "/Users/stdmatt/.stdmatt/bin"
+            ## My stuff...
+            "${HOME}/.local/bin",
+            "${HOME}/.fzf/bin",
+            "${HOME}/.cargo/bin"
         );
     }
     elseif($sh_is_wsl) {

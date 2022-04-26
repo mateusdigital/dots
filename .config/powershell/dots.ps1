@@ -12,11 +12,14 @@ $env:DOTS_FORCE_INSTALL          = 0;
 ##
 
 ##------------------------------------------------------------------------------
+$BIN_DIR    = "${HOME}/.local/bin";
+
 $CONFIG_DIR = "${HOME}/.config";
-$BIN_DIR    = "${HOME}/.bin";
 $PS_DIR     = "${CONFIG_DIR}/powershell";
 $NVIM_DIR   = "${CONFIG_DIR}/nvim";
-$SHLIB_DIR  = "${HOME}/.stdmatt/lib/shlib";
+
+$LIB_DIR    = "${HOME}/.local/lib";
+$SHLIB_DIR  = "${LIB_DIR}/shlib";
 
 ##
 ## Load shlib
@@ -31,10 +34,13 @@ if((-not (Test-Path "${SHLIB_DIR}/shlib.ps1")) -or $env:DOTS_FORCE_INSTALL -ne 0
         & "/var/tmp/shlib/install.ps1";
 
     echo "Installing PSReadline...";
-        Install-Module -Name PSReadLine -AllowPrerelease -Force;
+        Install-Module -Name PSReadLine;
 
     echo "Installing PSFzf...";
-        Install-Module -Name PSFzf -AllowPrerelease -Force;
+        git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}/.fzf"
+        $false | & "${HOME}/.fzf/install" --xdg;
+        echo "Installing module...";
+        Install-Module -Name PSFzf;
 }
 
 . "${SHLIB_DIR}/shlib.ps1";
