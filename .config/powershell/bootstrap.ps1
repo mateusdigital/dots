@@ -26,6 +26,13 @@ function install-brew-packages()
 ##------------------------------------------------------------------------------
 function update-software()
 {
+    sh_log "This will probably shutdown the computer..."
+    if(-not (sh_ask_confirm "Are you sure to continue?")) {
+        sh_log "Aborting...";
+        return;
+    }
+    echo "fuck";
+    return;
     if($IsMacOS) {
         ## Mac
         sudo softwareupdate -i -a;
@@ -72,3 +79,27 @@ function _install_brew($mode)
     });
 }
 
+##------------------------------------------------------------------------------
+function update-software()
+{
+    sh_log -bg "yellow" -fg "black" "This will probably shutdown the computer...";
+    if(-not (sh_ask_confirm "Are you sure to continue?")) {
+        sh_log -fg "yellow" "Aborting...";
+        return;
+    }
+
+    if($IsMacOS) {
+        ## Mac
+        sudo softwareupdate -i -a;
+        ## Brew
+        brew update;
+        brew upgrade;
+        brew cleanup;
+        ## NPM
+        npm install npm -g;
+        npm update      -g;
+    }
+    else {
+        sh_log "To implement.."
+    }
+}

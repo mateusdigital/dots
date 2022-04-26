@@ -103,22 +103,22 @@ function _ps1()
         $git_tag = (git describe --tags --abbrev=0);
     }
 
-    $Gray         = (sh_make_ansi_hex_color '#808080');
-    $Violet       = (sh_make_ansi_hex_color '#646695');
-    $Blue         = (sh_make_ansi_hex_color '#569CD6');
-    $DarkBlue     = (sh_make_ansi_hex_color '#223E55');
-    $LightBlue    = (sh_make_ansi_hex_color '#9CDCFE');
-    $Green        = (sh_make_ansi_hex_color '#6A9955');
-    $BlueGreen    = (sh_make_ansi_hex_color '#4EC9B0');
-    $LightGreen   = (sh_make_ansi_hex_color '#B5CEA8');
-    $Red          = (sh_make_ansi_hex_color '#F44747');
-    $Orange       = (sh_make_ansi_hex_color '#CE9178');
-    $LightRed     = (sh_make_ansi_hex_color '#D16969');
-    $YellowOrange = (sh_make_ansi_hex_color '#D7BA7D');
-    $Yellow       = (sh_make_ansi_hex_color '#DCDCAA');
-    $Pink         = (sh_make_ansi_hex_color '#C586C0');
-    $Silver       = (sh_make_ansi_hex_color '#C0C0C0');
-    $reset        = (sh_make_ansi_color     '0');
+    $Gray         = (sh_ansi_color_hex "#808080");
+    $Violet       = (sh_ansi_color_hex "#646695");
+    $Blue         = (sh_ansi_color_hex "#569CD6");
+    $DarkBlue     = (sh_ansi_color_hex "#223E55");
+    $LightBlue    = (sh_ansi_color_hex "#9CDCFE");
+    $Green        = (sh_ansi_color_hex "#6A9955");
+    $BlueGreen    = (sh_ansi_color_hex "#4EC9B0");
+    $LightGreen   = (sh_ansi_color_hex "#B5CEA8");
+    $Red          = (sh_ansi_color_hex "#F44747");
+    $Orange       = (sh_ansi_color_hex "#CE9178");
+    $LightRed     = (sh_ansi_color_hex "#D16969");
+    $YellowOrange = (sh_ansi_color_hex "#D7BA7D");
+    $Yellow       = (sh_ansi_color_hex "#DCDCAA");
+    $Pink         = (sh_ansi_color_hex "#C586C0");
+    $Silver       = (sh_ansi_color_hex "#C0C0C0");
+    $reset        = (sh_ansi_color     "0");
 
     return @(
         @{

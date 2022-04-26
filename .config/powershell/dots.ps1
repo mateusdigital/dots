@@ -1,3 +1,5 @@
+##------------------------------------------------------------------------------
+
 ## Preset stuff...
 $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
 $env:SHLIB_IS_VERSBOSE           = 0;
@@ -15,6 +17,7 @@ $NVIM_DIR   = "${CONFIG_DIR}/nvim";
 ## dots
 ##
 
+##------------------------------------------------------------------------------
 function dots()
 {
     (git --git-dir=$HOME/.dots/ --work-tree=$HOME $args);
