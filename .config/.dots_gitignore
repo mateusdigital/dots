@@ -7,3 +7,6 @@ coc/
 git/
 nvim/plugin/
 
+Nuget/
+yarn/
+.DS_Store
