@@ -1,1 +1,1 @@
-. "${HOME}/.config/powershell/load_all.ps1";
+. "${HOME}/.config/powershell/dots.ps1";
