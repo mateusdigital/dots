@@ -13,6 +13,8 @@ pandoc
 peco
 rust
 rustup-init
+vagrant
+virtualbox
 yarn
 youtube-dl
 
