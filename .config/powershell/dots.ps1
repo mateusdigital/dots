@@ -4,14 +4,21 @@
 $env:POWERSHELL_TELEMETRY_OPTOUT = 1;
 $env:SHLIB_IS_VERSBOSE           = 0;
 
-## Load shlib
-. "${HOME}/.stdmatt/lib/shlib/shlib.ps1";
-
 ## Important directories
 $CONFIG_DIR = "${HOME}/.config";
 $BIN_DIR    = "${HOME}/.bin";
 $PS_DIR     = "${CONFIG_DIR}/powershell";
 $NVIM_DIR   = "${CONFIG_DIR}/nvim";
+$SHLIB_DIR  = "${HOME}/.stdmatt/lib/shlib";
+
+## Load shlib
+if(-not (Test-Path "${SHLIB_DIR}/shlib.ps1")) {
+    Remove-Item -Path "/var/tmp/shlib" -Force -Recurse;
+    git clone "https://gitlab.com/stdmatt-libs/pwsh/shlib" "/var/tmp/shlib";
+    & "/var/tmp/shlib/install.ps1";
+}
+
+. "${SHLIB_DIR}/shlib.ps1";
 
 ##
 ## dots
