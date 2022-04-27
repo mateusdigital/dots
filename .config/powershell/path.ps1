@@ -86,7 +86,7 @@ function _configure_PATH()
 function list-path()
 {
     foreach($item in ${env:PATH}.Split(":")) {
-        sh_writeline $item;
+        sh_log $item;
     }
 }
 
