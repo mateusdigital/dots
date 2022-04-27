@@ -4,7 +4,6 @@ coreutils
 diffutils
 ed
 findutils
-fzf
 git
 exa
 fd
