@@ -53,6 +53,20 @@ function _configure_PATH()
     }
     elseif($IsLinux) {
         sh_log_verbose "Configuring path for GNU/Linux";
+        $paths_to_add += @(
+            ## Anything first from powershell...
+            "/usr/local/microsoft/powershell/7",
+            ## Normal stuff...
+            "/home/linuxbrew/.linuxbrew/bin", ## @notice(brew): Homebrew put it's stuff here...
+            "/usr/local/bin", 
+            "/usr/bin",
+            "/usr/sbin",
+            "/bin",
+            "/sbin",
+            ## My stuff...
+            "${HOME}/.local/bin",
+            "${HOME}/.fzf/bin"
+        );
     }
     elseif($IsWindows) {
         sh_log_verbose "Configuring path for Windows";
@@ -72,7 +86,7 @@ function _configure_PATH()
 function list-path()
 {
     foreach($item in ${env:PATH}.Split(":")) {
-        sh_writeline $item;
+        sh_log $item;
     }
 }
 
