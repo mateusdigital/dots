@@ -64,7 +64,7 @@ function _install_brew($mode)
     $filepath = "${HOME}/.config/${os_name}/brew_${mode}.txt";
 
     if(-not (sh_file_exists $filepath)) {
-        sh_log "Ignoring $filepath";
+        sh_log "Ignoring (${filepath})";
         return;
     }
 
