@@ -123,7 +123,11 @@ function _ps1()
     return @(
         @{
             text = if($cwd) {
-                "${Pink} ${Silver}(${cwd})";
+                $os_icon = if($IsMacOS)   { "" }
+                       elseif($IsLinux)   { "" }
+                       elseif($IsWindows) { "" };
+
+                "${Pink}${os_icon} ${Silver}(${cwd})";
             }
         },
         @{
