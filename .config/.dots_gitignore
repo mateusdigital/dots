@@ -8,4 +8,8 @@ git/
 nvim/plugin/
 Nuget/
 yarn/
+
+fzf/*.bash
+fzf/*.fish
+
 .DS_Store
