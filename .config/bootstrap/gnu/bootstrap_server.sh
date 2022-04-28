@@ -51,7 +51,11 @@ sudo apt-get install -y powershell
 ##------------------------------------------------------------------------------
 _say "Clonning dots";
 
-git clone --bare "https://gitlab.com/stdamtt-personal/dots" "$HOME/.dots";
+git clone --bare "https://gitlab.com/stdmatt-personal/dots" "$HOME/.dots";
 git --git-dir=$HOME/.dots/ --work-tree=$HOME checkout;
 
 
+##------------------------------------------------------------------------------
+_say "Going to powershell...";
+
+pwsh -File $HOME/.config/bootstrap/gnu/setup_server.ps1
