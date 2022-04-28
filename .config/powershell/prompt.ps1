@@ -18,11 +18,12 @@ function global:prompt
 ##------------------------------------------------------------------------------
 function _make_prompt()
 {
-    $ps1 = (_ps1 $LASTEXITCODE);
+    $ps1   = (_ps1 $LASTEXITCODE);
+    $reset = (sh_ansi_color 0);
 
     $v = $ps1.ForEach({$_.text});
     $v = (sh_join_string " " $v);
-    $v = "$v`n:) ";
+    $v = "${v}${reset}`n:) ";
 
     return $v;
 }
