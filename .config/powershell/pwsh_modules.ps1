@@ -26,7 +26,7 @@ Set-PSReadLineOption                                  `
     -ViModeChangeHandler $Function:_on_vi_mode_change `
     -EditMode            Vi                           `
     -HistoryNoDuplicates                              `
-    -PredictionSource    HistoryAndPlugin             `
+    -PredictionSource    History                      `
     -PredictionViewStyle ListView                     `
     -Colors              @{
         Command            = "#DCDCAA";
