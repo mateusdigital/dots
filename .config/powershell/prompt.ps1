@@ -18,11 +18,12 @@ function global:prompt
 ##------------------------------------------------------------------------------
 function _make_prompt()
 {
-    $ps1 = (_ps1 $LASTEXITCODE);
+    $ps1   = (_ps1 $LASTEXITCODE);
+    $reset = (sh_ansi_color 0);
 
     $v = $ps1.ForEach({$_.text});
     $v = (sh_join_string " " $v);
-    $v = "$v`n:) ";
+    $v = "${v}${reset}`n:) ";
 
     return $v;
 }
@@ -193,9 +194,9 @@ function _ps1()
 
         ## OS info
         @{
-            text = if($IsMacOS)   { " (${os_name})" }
-               elseif($IsLinux)   { " (${os_name})" }
-               elseif($IsWindows) { " (${os_name})" }
+            text = if($IsMacOS)   { "${Green} (${os_name})"  }
+               elseif($IsLinux)   { "${Yellow} (${os_name})" }
+               elseif($IsWindows) { "${Blue} (${os_name})"   }
         }
     )
 }

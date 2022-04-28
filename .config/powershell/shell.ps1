@@ -136,34 +136,25 @@ function v()
 function kill-process()
 {
     $process_name = $args[0];
-    $line         = (ps | grep $process_name);
-
-    if($line.Length -eq 0) {
-        sh_log_fatal "No process with name: (${process_name})";
-        return;
-    } elseif($line.Length -gt 1 -and $line.GetType().FullName -ne "System.String") {
-        ## @todo(stdmatt): [Pretty Print] 09 Dec, 2021 at 00:58:30
-        ## Print each process in a different line.
-        sh_log_fatal "More than one process were found: (`n${line}`n)";
-        return;
-    }
-
-    $comps_dirty = $line.Split(" ");
-    $comps_clean = @();
-
-    for($i = 0; $i -lt $comps_dirty.Length; $i += 1) {
-        $comp = $comps_dirty[$i];
-        if($comp.Length -eq 0) {
-            continue;
+    $result       = (ps x | grep $process_name);
+    if($result -is [string]) {
+        if($line.Length -eq 0) {
+            sh_log_fatal "No process with name: (${process_name})";
+            return;
         }
-        $comps_clean += $comp;
+
+        $result = @() + $result; ## Make it be an array...
     }
 
-    $PROCESS_ID_INDEX_IN_PS_OUTPUT = 4;
-    $process_id                    = $comps_clean[$PROCESS_ID_INDEX_IN_PS_OUTPUT];
+    foreach($line in $result) {
+        $line = $line.Trim();
 
-    sh_log "Killing proccess: ($process_name id: ${process_id})";
-    kill $process_id -Force
+        $components = $line.Split(" ");
+        $process_id = $components[0];
+
+        sh_log "Killing proccess: (${process_name}) id: (${process_id})";
+        kill $process_id -Force
+    }
 }
 
 

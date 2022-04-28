@@ -34,16 +34,16 @@ if((-not (Test-Path "${SHLIB_DIR}/shlib.ps1")) -or $env:DOTS_FORCE_INSTALL -ne 0
         & "/var/tmp/shlib/install.ps1";
 
     echo "Installing PSReadline...";
-        Install-Module -Name PSReadLine;
+        Install-Module PSReadLine -AllowPrerelease -Force;
 
     echo "Installing PSFzf...";
         git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}/.fzf"
-        $false | & "${HOME}/.fzf/install" --xdg;
+        $false | & "${HOME}/.fzf/install" --xdg; ## We don't want to install nothing extra...
         echo "Installing module...";
         Install-Module -Name PSFzf;
 }
 
-. "${SHLIB_DIR}/shlib.ps1";
+. "${SHLIB_DIR}/shlib.ps1"; ## Load shlib.
 
 
 ##
@@ -56,7 +56,8 @@ function dots()
     if($args.Length -eq 1 -and $args[0] -eq "gui") {
         gitui -d $HOME/.dots/ -w $HOME;
     } else {
-        git --git-dir=$HOME/.dots/ --work-tree=$HOME $args;
+        $args_ = (sh_value_or_default $args "s")
+        git --git-dir=$HOME/.dots/ --work-tree=$HOME $args_;
     }
 }
 
