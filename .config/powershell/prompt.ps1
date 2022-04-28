@@ -193,9 +193,9 @@ function _ps1()
 
         ## OS info
         @{
-            text = if($IsMacOS)   { " (${os_name})" }
-               elseif($IsLinux)   { " (${os_name})" }
-               elseif($IsWindows) { " (${os_name})" }
+            text = if($IsMacOS)   { "${Green} (${os_name})"  }
+               elseif($IsLinux)   { "${Yellow} (${os_name})" }
+               elseif($IsWindows) { "${Blue} (${os_name})"   }
         }
     )
 }
