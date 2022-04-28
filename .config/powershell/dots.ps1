@@ -34,16 +34,16 @@ if((-not (Test-Path "${SHLIB_DIR}/shlib.ps1")) -or $env:DOTS_FORCE_INSTALL -ne 0
         & "/var/tmp/shlib/install.ps1";
 
     echo "Installing PSReadline...";
-        Install-Module -Name PSReadLine;
+        Install-Module PSReadLine -AllowPrerelease -Force;
 
     echo "Installing PSFzf...";
         git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}/.fzf"
-        $false | & "${HOME}/.fzf/install" --xdg;
+        $false | & "${HOME}/.fzf/install" --xdg; ## We don't want to install nothing extra...
         echo "Installing module...";
         Install-Module -Name PSFzf;
 }
 
-. "${SHLIB_DIR}/shlib.ps1";
+. "${SHLIB_DIR}/shlib.ps1"; ## Load shlib.
 
 
 ##
