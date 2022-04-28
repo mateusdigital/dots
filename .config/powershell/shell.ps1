@@ -113,6 +113,21 @@ function files()
 }
 
 
+##------------------------------------------------------------------------------
+$VAGRANT_DIR = "${HOME}/.vagrant";
+function v()
+{
+    $value = (sh_value_or_default $args[0] "default");
+
+    cd "${VAGRANT_DIR}/${value}";
+
+    vagrant up;
+    vagrant ssh;
+}
+
+
+
+
 ##
 ## kill
 ##
