@@ -3,14 +3,14 @@
 ## Dots                                                                         ##
 ##                                                                              ##
 ##------------------------------------------------------------------------------##
-coc/
-git/
-Nuget/
-NuGet/
-yarn/
-procps/
+*/coc/*
+*/git/*
+*/Nuget/*
+*/NuGet/*
+*/yarn/*
+*/procps/*
 ## NeoVim plugins folder.
-nvim/plugin/
+nvim/plugin/*
 ## FZF configs for other shells.
 fzf/*.bash
 fzf/*.fish
