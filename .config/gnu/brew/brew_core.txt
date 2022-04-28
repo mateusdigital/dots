@@ -15,5 +15,6 @@ lynx
 ripgrep
 tree
 vifm
+virtualenv
 wget
 

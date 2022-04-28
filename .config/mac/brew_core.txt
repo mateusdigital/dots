@@ -15,5 +15,6 @@ neovim-qt
 ripgrep
 tree
 vifm
+virtualenv
 wget
 

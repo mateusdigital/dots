@@ -1,4 +1,4 @@
-
+-- MISC
 vim.o.hidden          = true
 vim.o.mouse           = "a"
 vim.o.ignorecase      = true
@@ -24,6 +24,7 @@ vim.wo.relativenumber = false
 vim.opt.numberwidth   = 3
 vim.wo.signcolumn     = "yes"
 vim.o.wrap            = false
+
 -- Tab / Indent
 vim.o.expandtab   = true
 vim.o.smartcase   = true
@@ -32,6 +33,7 @@ vim.o.smarttab    = true
 vim.o.softtabstop = 4
 vim.o.shiftwidth  = 4
 vim.o.tabstop     = 4
+
 -- Backup
 vim.o.undodir         = vim.fn.stdpath "cache" .. "/undo"
 vim.opt.undofile      = true
