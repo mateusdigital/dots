@@ -10,11 +10,11 @@
 */yarn/*
 */procps/*
 ## NeoVim plugins folder.
-nvim/plugin/*
+*/nvim/plugin/*
 ## FZF configs for other shells.
-fzf/*.bash
-fzf/*.fish
+*/fzf/*.bash
+*/fzf/*.fish
 ## The virtual machine files..
-.vagrant/**/.vagrant
+*/.vagrant/**/.vagrant
 ## Mac
 .DS_Store
