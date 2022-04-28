@@ -5,13 +5,16 @@
 ##------------------------------------------------------------------------------##
 coc/
 git/
-nvim/plugin/
 Nuget/
+NuGet/
 yarn/
-
-.vagrant/**/.vagrant
-
+procps/
+## NeoVim plugins folder.
+nvim/plugin/
+## FZF configs for other shells.
 fzf/*.bash
 fzf/*.fish
-
+## The virtual machine files..
+.vagrant/**/.vagrant
+## Mac
 .DS_Store
