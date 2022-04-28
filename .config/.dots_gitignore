@@ -9,6 +9,8 @@ nvim/plugin/
 Nuget/
 yarn/
 
+.vagrant/**/.vagrant
+
 fzf/*.bash
 fzf/*.fish
 
