@@ -11,20 +11,23 @@ function install-brew-packages()
         [switch] $Core,
         [switch] $Server,
         [switch] $Work,
-        [switch] $All
+        [switch] $All, 
+        [switch] $Verbose
     )
+    
+    $is_verbose = if($Verbose) { "-Verbose" };
 
     if($All -or $Core) {
-        _install_brew "core";
+        _install_brew "core" $is_verbose;
     }
 
     if($All -or $Server) {
-        _install_brew "server";
+        _install_brew "server" $is_verbose;
     }
 
     if($All -or $Work) {
-        _install_brew "workstation";
-        _install_brew "casks";
+        _install_brew "workstation" $is_verbose;
+        _install_brew "casks"       $is_verbose;
     }
 }
 
@@ -58,10 +61,16 @@ function update-software()
 ##
 
 ##------------------------------------------------------------------------------
-function _install_brew($mode)
+function _install_brew()
 {
-    $os_name  = (sh_get_os_name);
-    $filepath = "${HOME}/.config/${os_name}/brew_${mode}.txt";
+    param(
+        $mode,
+        [switch]$Verbose
+    );
+    
+    $os_name    = (sh_get_os_name);
+    $filepath   = "${HOME}/.config/${os_name}/brew/brew_${mode}.txt";
+    $is_verbose = if($Verbose) { "--verbose" } else { "" };
 
     if(-not (sh_file_exists $filepath)) {
         sh_log "Ignoring (${filepath})";
@@ -69,16 +78,30 @@ function _install_brew($mode)
     }
 
     sh_log "Installing brew ($mode):";
+
+    $brew_formulas = (brew list --formula -1).Split(" ");
+    ##$brew_casks    = (brew list --casks   -1);
+    
+
     (Get-Content $filepath).ForEach({
         $name = $_.Trim();
         if($name.Length -eq 0) {
             return;
         }
+        
+        foreach($formula in $brew_formulas) { 
+            if($name -eq $formula.Trim()) { 
+                sh_log -fg "yellow" "Formula already installed: ($name)";
+                return;
+            }
+        }
+             
+        sh_log -fg "blue" "Installing formula: ($name)";
 
         if($mode -eq "casks") {
-            brew install --cask $name;
+            brew install --cask $name $is_verbose;
         } else {
-            brew install $name;
+            brew install $name $is_verbose;
         }
     });
 }
