@@ -30,6 +30,7 @@ function _make_prompt()
 ##------------------------------------------------------------------------------
 function _ps1()
 {
+
     ##
     ## History
     ##
@@ -120,16 +121,19 @@ function _ps1()
     $Silver       = (sh_ansi_color_hex "#C0C0C0");
     $reset        = (sh_ansi_color     "0");
 
+
+    $os_name = (sh_get_os_name);
+    $pc_name = (hostname);
+
     return @(
+        ## Prompt
         @{
             text = if($cwd) {
-                $os_icon = if($IsMacOS)   { "" }
-                       elseif($IsLinux)   { "" }
-                       elseif($IsWindows) { "" };
-
-                "${Pink}${os_icon} ${Silver}(${cwd})";
+                "${Pink} ${Silver}(${cwd})";
             }
         },
+
+        ## Git local status
         @{
             text = if($git) {
                 $v = "$git_local_Branch ";
@@ -147,11 +151,13 @@ function _ps1()
                "${Blue} ${Silver}(${v}${Silver})";
             }
         },
+        ## Git tag
         @{
             text = if($git_tag) {
                 "${Violet} ${Silver}($git_tag)"
             }
         },
+        ## Git remote status
         @{
             text = if($git) {
                 $v = "";
@@ -164,6 +170,8 @@ function _ps1()
                 }
             }
         },
+
+        ## Last command status.
         @{
             text = if($history) {
                 $v = "";
@@ -181,6 +189,13 @@ function _ps1()
 
                 $v.Trim();
             }
+        },
+
+        ## OS info
+        @{
+            text = if($IsMacOS)   { " (${os_name})" }
+               elseif($IsLinux)   { " (${os_name})" }
+               elseif($IsWindows) { " (${os_name})" }
         }
     )
 }
