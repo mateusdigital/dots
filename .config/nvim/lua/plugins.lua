@@ -14,6 +14,9 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 })
 
 
+--------------------------------------------------------------------------------
+-- Plugins                                                                    --
+--------------------------------------------------------------------------------
 require('packer').startup(function(use)
     -- Packer
     use { "wbthomason/packer.nvim" }
@@ -24,14 +27,10 @@ require('packer').startup(function(use)
     use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim' } }
     use { "nvim-telescope/telescope-fzf-native.nvim", run = "make" }
     use { "nvim-telescope/telescope-file-browser.nvim" }
-    use {'ms-jpq/chadtree', branch = 'chad', run = 'python3 -m chadtree deps' }
-
-    -- NeoTree
-    -- use { "kyazdani42/nvim-web-devicons" }
-    -- use { "MunifTanjim/nui.nvim" }
-    -- use { "nvim-neo-tree/neo-tree.nvim", branch = "v1.x" }
     -- UI
-    -- use { "romgrk/barbar.nvim" }
+    use {'ms-jpq/chadtree', branch = 'chad', run = 'python3 -m chadtree deps' }
+    use { "kyazdani42/nvim-web-devicons" }
+    use { 'romgrk/barbar.nvim', requires = {"kyazdani42/nvim-web-devicons"} }
     -- use { 'nvim-lualine/lualine.nvim' }
     -- Code Utils
     use { "junegunn/vim-easy-align" }
@@ -41,3 +40,6 @@ require('packer').startup(function(use)
     -- use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate all" }
     -- use { 'neoclide/coc.nvim', branch = 'release'}
 end)
+
+
+require("plugin_config.barbar");
