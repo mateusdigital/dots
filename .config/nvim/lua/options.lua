@@ -40,3 +40,6 @@ vim.opt.undofile      = true
 vim.opt.swapfile      = false
 vim.opt.backup        = false
 vim.opt.writebackup   = false
+
+
+vim.cmd [[colorscheme codedark]]
