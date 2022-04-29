@@ -32,6 +32,7 @@ require('packer').startup(function(use)
      use { "kyazdani42/nvim-web-devicons" }
      use { 'romgrk/barbar.nvim', requires = {"kyazdani42/nvim-web-devicons"} }
      -- use { 'nvim-lualine/lualine.nvim' }
+     use { "rcarriga/nvim-notify" }
      -- Code Utils
      use { "junegunn/vim-easy-align" }
      use { "norcalli/nvim-colorizer.lua" }
@@ -43,4 +44,5 @@ end)
 
 
 require("plugin_config.barbar");
-require("plugin_config.indent_blankline");
+require("plugin_config.nvim_notify");
+-- require("plugin_config.indent_blankline");
