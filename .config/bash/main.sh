@@ -3,84 +3,16 @@
 
 echo "math.earch config";
 
-##
-## Options
-##
 
-##------------------------------------------------------------------------------
-### SHOPT
-shopt -s autocd         ## change to named directory
-shopt -s cdspell        ## autocorrects cd misspellings
-shopt -s cmdhist        ## save multi-line commands in history as single line
-shopt -s dotglob
-shopt -s histappend     ## do not overwrite history
-shopt -s expand_aliases ## expand aliases
-shopt -s histappend     ## Append to the history file
-shopt -s checkwinsize   ## Check the window size after each command ($LINES, $COLUMNS)
+. "${HOME}/.config/bash/bashy.sh"         ## Base Library
 
-bind "set completion-ignore-case on" ## ignore upper and lowercase when TAB completion
+. "${HOME}/.config/bash/environment.sh"   ## Env setup.
+. "${HOME}/.config/bash/bash_options.sh"  ## Config bash itself.
+. "${HOME}/.config/bash/shell.sh"         ## Functions and utilities.
+. "${HOME}/.config/bash/alias.sh"         ## Make life easier
 
-### Bash completion
-[ -f /etc/bash_completion ] && . /etc/bash_completion
+return;
 
-## VI mode on command line.
-set -o vi
-bind -m vi-command 'Control-l: clear-screen'
-bind -m vi-insert 'Control-l: clear-screen'
-
-##
-## Environment
-##
-
-##------------------------------------------------------------------------------
-export TERM="xterm-256color" ## getting proper colors
-
-
-## History
-export HISTCONTROL=ignoreboth:erasedups
-export HISTSIZE=
-export HISTFILESIZE=
-export HISTTIMEFORMAT="%Y/%m/%d %H:%M:%S:   "
-
-## Dirs
-[ -z "$TMPDIR" ] && TMPDIR=/tmp
-
-## Editor / Pager
-export EDITOR=vim;
-export VISUAL=vim;
-export PAGER=less;
-
-## Locale
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-
-## PATH
-export PATH=~/bin:$PATH
-
-
-
-##
-## Aliases
-##
-
-## cd
-##------------------------------------------------------------------------------
-alias ..='cd ..'
-alias ...='cd ..'
-alias cd.='cd ..'
-alias cd..='cd ..'
-alias c.="cd ..";
-alias c..="cd ..";
-
-## grep
-##------------------------------------------------------------------------------
-alias grep='grep --color=auto'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
-
-## ps
-##------------------------------------------------------------------------------
-alias ps-tree="ps auxf"
 
 
 ##
@@ -88,6 +20,139 @@ alias ps-tree="ps auxf"
 ##
 
 ##------------------------------------------------------------------------------
+
+
+##------------------------------------------------------------------------------
+update-software()
+{
+    echo "This will probably shutdown the computer...";
+    ## if(-not (sh_ask_confirm "Are you sure to continue?")) {
+    ##     sh_log -fg "yellow" "Aborting...";
+    ##     return;
+    ## }
+
+    ## Install the OS things first.
+    if [ -n $SH_IS_MAC ]; then
+        sudo softwareupdate -i -a;
+    else
+        sh_log "To implement.."
+    fi
+
+    ## Brew
+    brew update;
+    brew upgrade;
+    brew cleanup;
+
+    ## NPM
+    npm install npm -g;
+    npm update      -g;
+}
+
+
+##------------------------------------------------------------------------------
+function _configure_PATH()
+{
+    $paths_to_add = @();
+    if($IsMacOS) {
+        sh_log_verbose "Configuring path for macOS";
+
+        $paths_to_add += @(
+            ## Anything first from powershell...
+            "/usr/local/microsoft/powershell/7",
+            ## @notice(gnu-tools): Add all the gnu tools to the path
+            ## so we can use them in mac without prefixing with g.
+            ##    find /usr/local/Cellar -iname "*gnubin" | sort
+            "/usr/local/Cellar/coreutils/9.0_1/libexec/gnubin",
+            "/usr/local/Cellar/ed/1.18/libexec/gnubin",
+            "/usr/local/Cellar/findutils/4.9.0/libexec/gnubin",
+            "/usr/local/Cellar/gawk/5.1.1/libexec/gnubin",
+            "/usr/local/Cellar/gnu-sed/4.8/libexec/gnubin",
+            "/usr/local/Cellar/gnu-tar/1.34/libexec/gnubin",
+            "/usr/local/Cellar/grep/3.7/libexec/gnubin",
+            "/usr/local/Cellar/libtool/2.4.6_4/libexec/gnubin",
+            "/usr/local/Cellar/make/4.3/libexec/gnubin",
+            ## Normal stuff...
+            "/usr/local/bin", ## @notice(brew): Homebrew put it's stuff here...
+            "/usr/bin",
+            "/usr/sbin",
+            "/bin",
+            "/sbin",
+            "/opt/X11/bin",
+            "/usr/local/opt/curl/bin",
+            ## My stuff...
+            "${HOME}/.local/bin",
+            "${HOME}/.fzf/bin",
+            "${HOME}/.cargo/bin"
+        );
+    }
+    elseif($sh_is_wsl) {
+        sh_log_verbose "Configuring path for WSL";
+    }
+    elseif($IsLinux) {
+        sh_log_verbose "Configuring path for GNU/Linux";
+        $paths_to_add += @(
+            ## Anything first from powershell...
+            "/usr/local/microsoft/powershell/7",
+            ## Normal stuff...
+            "/home/linuxbrew/.linuxbrew/bin", ## @notice(brew): Homebrew put it's stuff here...
+            "/usr/local/bin",
+            "/usr/bin",
+            "/usr/sbin",
+            "/bin",
+            "/sbin",
+            ## My stuff...
+            "${HOME}/.local/bin",
+            "${HOME}/.fzf/bin"
+        );
+    }
+    elseif($IsWindows) {
+        sh_log_verbose "Configuring path for Windows";
+    }
+
+    $default = $env:PATH_DEFAULT;
+    $new     = (sh_join_string ":" $paths_to_add);
+
+    return "${new}";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # don't put duplicate lines or lines starting with space in the history.
