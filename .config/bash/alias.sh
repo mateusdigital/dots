@@ -23,6 +23,13 @@ alias egrep="egrep --color=auto";
 alias fgrep="fgrep --color=auto";
 
 ##
+## ls
+##
+##------------------------------------------------------------------------------
+alias ls="ls --color='auto'";
+
+
+##
 ## ps
 ##
 
