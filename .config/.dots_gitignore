@@ -18,3 +18,7 @@ fzf/*.fish
 .vagrant/**/.vagrant
 ## Mac
 .DS_Store
+
+.dots/
+.local/share/nvim/
+.local/share/powershell/
