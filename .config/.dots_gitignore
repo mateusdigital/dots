@@ -12,6 +12,7 @@ procps/
 ## NeoVim plugins folder.
 nvim/plugin/
 ## FZF configs for other shells.
+.fzf/
 fzf/*.bash
 fzf/*.fish
 ## The virtual machine files..
@@ -19,6 +20,12 @@ fzf/*.fish
 ## Mac
 .DS_Store
 
+.ssh/
 .dots/
 .local/share/nvim/
 .local/share/powershell/
+.local/lib/shlib/
+
+.bash_history
+.viminfo
+.wget-hsts
