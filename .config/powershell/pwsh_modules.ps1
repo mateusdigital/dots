@@ -2,9 +2,10 @@
 ## Imports
 ##
 
-. "${HOME}/.config/powershell/path.ps1"; ## PATH must be set to PS modules
-Import-Module PSFzf;
+$SCRIPT_DIR = (sh_get_script_dir);
+. "${SCRIPT_DIR}/path.ps1"; ## PATH must be set to PS modules
 
+Import-Module PSFzf;
 
 ##
 ## PSReadline

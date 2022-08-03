@@ -72,9 +72,7 @@ function _configure_PATH()
         sh_log_verbose "Configuring path for Windows";
     }
 
-    $default = $env:PATH_DEFAULT;
-    $new     = (sh_join_string ":" $paths_to_add);
-
+    $new = (sh_join_string ":" $paths_to_add);
     return "${new}";
 }
 
@@ -83,12 +81,13 @@ function _configure_PATH()
 ##
 
 ##------------------------------------------------------------------------------
-function list-path()
+function path-list()
 {
     foreach($item in ${env:PATH}.Split(":")) {
         sh_log $item;
     }
 }
+
 
 ##
 ## Public Vars

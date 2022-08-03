@@ -1,1 +1,3 @@
-. "${HOME}/.config/powershell/dots.ps1";
+## Call entry point...
+. "${HOME}/.config/powershell/main.ps1";
+
