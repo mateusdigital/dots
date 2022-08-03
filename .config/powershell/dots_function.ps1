@@ -22,7 +22,7 @@ function dots()
     ## For now we are just handling:
     ##   git, gitui
 
-    $GIT_BARE_DIR = "${HOME/dots}";
+    $GIT_BARE_DIR = "${HOME/.dots_bare}";
     $GIT_WORK_DIR = "${HOME}";
 
     ## usage: dots gui -> Don't use the graphical one, but preserve the muscle memory.
