@@ -16,6 +16,7 @@ function _get_default_PATH()
 function _configure_PATH()
 {
     $paths_to_add = @();
+    ##--------------------------------------------------------------------------
     if($IsMacOS) {
         sh_log_verbose "Configuring path for macOS";
 
@@ -48,10 +49,12 @@ function _configure_PATH()
             "${HOME}/.cargo/bin"
         );
     }
+    ##--------------------------------------------------------------------------
     elseif($sh_is_wsl) {
         sh_log_verbose "Configuring path for WSL";
     }
-    elseif($IsLinux) {
+    ##--------------------------------------------------------------------------
+    elseif($IsLinux -or $sh_is_wsl) {
         sh_log_verbose "Configuring path for GNU/Linux";
         $paths_to_add += @(
             ## Anything first from powershell...
@@ -72,8 +75,8 @@ function _configure_PATH()
         sh_log_verbose "Configuring path for Windows";
     }
 
-    $new = (sh_join_string ":" $paths_to_add);
-    return "${new}";
+    $new_path = (sh_join_string ":" $paths_to_add);
+    return "${new_path}";
 }
 
 ##
@@ -96,3 +99,7 @@ function path-list()
 ##------------------------------------------------------------------------------
 $env:PATH_DEFAULT = (_get_default_PATH);
 $env:PATH         = (_configure_PATH  );
+
+if($env:DOTS_IS_VERSBOSE) { 
+    path-list;
+}
