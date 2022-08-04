@@ -45,23 +45,29 @@ git --git-dir="${DOTS_BARE_PATH}" --work-tree="${HOME}" checkout --force;
 echo "Done..."
 
 
+## 
+## Load userful things.
+## 
+
+. "${HOME}/.config/powershell/directories.ps1";
+
 ##
 ## Ensure dependencies 
 ##
  
 ##------------------------------------------------------------------------------
-$has_shlib       = (Test-Path "${SHLIB_DIR}/shlib.ps1");
+$has_shlib       = (Test-Path "${DOTS_SHLIB_DIR}/shlib.ps1");
 $has_ps_readline = (Get-InstalledModule).Name.Contains("PSReadLine");
 $has_ps_fzf      = (Get-InstalledModule).Name.Contains("PSFzf");
 
 echo "Installing dependecies...";
 if($FORCE_INSTALL -or (-not $has_shlib)) { 
     echo "  Installing shlib...";
-    if(-not (Test-Path "${TEMP_DIR}/shlib")) {
-        git clone "https://gitlab.com/mateus-earth-libs/pwsh/shlib" "${TEMP_DIR}/shlib";
-    }
+    if(-not (Test-Path "${DOTS_TEMP_DIR}/shlib")) {
+        git clone "https://gitlab.com/mateus-earth-libs/pwsh/shlib" "${DOTS_TEMP_DIR}/shlib";
+    } 
     
-    & "${TEMP_DIR}/shlib/install.ps1";
+    & "${DOTS_TEMP_DIR}/shlib/install.ps1";
 }
 
 if($FORCE_INSTALL -or (-not $has_ps_readline)) { 
@@ -69,16 +75,15 @@ if($FORCE_INSTALL -or (-not $has_ps_readline)) {
     Install-Module PSReadLine -AllowPrerelease -Force;
 }
 
-if($FORCE_INSTALL -or (-not $has_ps_fzf)) {
-    echo "  Installing PSFzf...";
-
-    if(-not (Test-Path "${HOME}/.fzf")) {
-        git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}/.fzf";
+##
+## Windows Specific Hack:
+##      $profile location is diferent between Windows and Unix.
+##      Copy the unix versiont to the location that Windows expects them.
+if($IsWindows) { 
+    $items = @("Microsoft.PowerShell_profile.ps1", "Microsoft.VSCode_profile.ps1");
+    foreach($item in $items) {
+        Copy-Item -Force                         `
+            "${HOME}/.config/powershell/${item}"  `
+            "${HOME}/Documents/PowerShell/$item"
     }
-
-    $false | & "${HOME}/.fzf/install" --xdg; ## We don't want to install nothing extra...
-    
-    echo "    Installing module...";
-    Install-Module -Name PSFzf;
 }
-echo "Done..."
