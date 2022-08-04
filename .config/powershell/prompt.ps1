@@ -58,7 +58,7 @@ function _ps1()
     ## Git
     ##
 
-    $git = (git status -sbu 2> /dev/null);
+    $git = (git status -sbu 2> $null);
     if($git) {
         ## make array...
         if($git -is [string]) {
