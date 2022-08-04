@@ -1,3 +1,6 @@
+. "${HOME}/.lib/shlib/shlib.ps1";
+
+
 ##
 ## Configure dots function
 ##
