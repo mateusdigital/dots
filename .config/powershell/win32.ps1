@@ -13,7 +13,7 @@ function install_fonts()
 
     $obj_folder = $OBJ_SHELL.Namespace($FONTS);
     
-    $username        = $env:UserName;
+    $username        = (sh_get_user_name);
     $where_the_fonts_are_installed = "C:/Users/${username}/AppData/Local/Microsoft/Windows/Fonts"; 
 
     $fonts_folder = ${BIN_FODER}
