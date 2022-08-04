@@ -22,7 +22,7 @@ function dots()
     ## For now we are just handling:
     ##   git, gitui
 
-    $GIT_BARE_DIR = "${HOME/.dots_bare}";
+    $GIT_BARE_DIR = "${HOME}/.dots_bare";
     $GIT_WORK_DIR = "${HOME}";
 
     ## usage: dots gui -> Don't use the graphical one, but preserve the muscle memory.
@@ -33,7 +33,7 @@ function dots()
     ##        dots                  : We gonna use the alias:s as default when nothing is given.
     else {
         $args_ = (sh_value_or_default $args "s")
-        git --git-dir=${GIT_BARE_DIR} --work-tree=${GIT_WORK_DIR} $args_;
+        git --git-dir ${GIT_BARE_DIR} --work-tree ${GIT_WORK_DIR} $args_;
     }
 }
 
