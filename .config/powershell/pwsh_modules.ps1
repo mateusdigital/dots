@@ -5,8 +5,6 @@
 $SCRIPT_DIR = (sh_get_script_dir);
 . "${SCRIPT_DIR}/path.ps1"; ## PATH must be set to PS modules
 
-Import-Module PSFzf;
-
 ##
 ## PSReadline
 ##
@@ -48,18 +46,3 @@ Set-PSReadLineOption                                  `
         Type               = "#569CD6";
         Variable           = "#9CDCFE";
     };
-
-## @todo(stdmatt): Is this tab something that we want?
-Set-PSReadLineKeyHandler -Key Tab -ScriptBlock {
-    Invoke-FzfTabCompletion;
-}
-
-##
-## PsFzf
-##
-
-##------------------------------------------------------------------------------
-Set-PsFzfOption                             `
-    -PSReadlineChordProvider       "Ctrl+t" `
-    -PSReadlineChordReverseHistory "Ctrl+r"
-
