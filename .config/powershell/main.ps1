@@ -13,7 +13,7 @@ $SCRIPT_DIR = (Split-Path -Parent $MyInvocation.MyCommand.Path);
 ## Load shlib :)
 ##
 
-. "${SHLIB_DIR}/shlib.ps1"; ## Load shlib.
+. "${DOTS_SHLIB_DIR}/shlib.ps1"; ## Load shlib.
 
 ##
 ## Load things!!!
