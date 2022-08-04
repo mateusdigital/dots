@@ -1,3 +1,3 @@
 ## Call entry point...
-. "${HOME}/.config/powershell/main.ps1";
+## . "${HOME}/.config/powershell/main.ps1";
 
