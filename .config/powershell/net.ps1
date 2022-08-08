@@ -28,3 +28,9 @@ function http-server()
     }
 }
 
+##------------------------------------------------------------------------------
+function show-wifi-password() 
+{
+    $wifi_name = $args[0];
+    netsh wlan show profile "${wifi_name}" key=clear;
+}
