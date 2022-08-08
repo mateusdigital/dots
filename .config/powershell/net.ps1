@@ -31,6 +31,11 @@ function http-server()
 ##------------------------------------------------------------------------------
 function show-wifi-password() 
 {
+    if(-not $IsWindows) { 
+        sh_log "Not implemented for non-windows";
+        return;
+    }
+
     $wifi_name = $args[0];
     netsh wlan show profile "${wifi_name}" key=clear;
 }
