@@ -1,5 +1,5 @@
 ##------------------------------------------------------------------------------
-function version()
+function dots-version()
 {
     $PROGRAM_NAME            = "dots";
     $PROGRAM_VERSION         = "4.0.0";
