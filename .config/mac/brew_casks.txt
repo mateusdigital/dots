@@ -1,5 +1,0 @@
-alacritty
-amethyst
-vlc
-transmission
-
