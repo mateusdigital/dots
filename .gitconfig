@@ -1,6 +1,11 @@
 ##
 ## First version based upon:
 ##    https://raw.githubusercontent.com/mathiasbynens/dotfiles/main/.gitconfig ##
+##
+##
+## Dependencies: 
+##    - peco
+##
 
 [alias]
     ## Branch
@@ -79,6 +84,13 @@
     root         = rev-parse --show-toplevel
     url          = config --get remote.origin.url
     date-of      = log --diff-filter=A --follow --format=%ad  --date=format:"%Y-%m-%d" --reverse --
+
+    ## GUI
+    gui = "!f() {   \
+        gitui "$@";  \
+    }; f";
+    g = gui;
+
 
     ## Log
     ##--------------------------------------------------------------------------
