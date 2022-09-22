@@ -28,6 +28,9 @@ alias l='ls -CF';
 alias reload-profile="source ${PROFILE}";
 alias edit-profile="code ${PROFILE}";
 
+alias g="git";
+alias gg="g g";
+
 ## 
 ## Bash Completion
 ##
