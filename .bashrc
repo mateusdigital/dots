@@ -96,6 +96,12 @@ function dots()
 dots config --local status.showUntrackedFiles no;                        ## Reduce noise.
 dots config --local core.excludesfile "${HOME}/.config/.dots_gitignore"; ## Custom gitignore.
 
+##
+## Emscriptem
+##
+export EMSDK_QUIET=1;
+source "${HOME}/.emsdk/emsdk_env.sh";
+
 
 ##
 ## File Manager
@@ -138,6 +144,7 @@ PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[0
 ##
 ## PATH
 ##
+
 PATH="${PATH}:${HOME}/.bin/dots/gnu:"
 
 
