@@ -5,13 +5,16 @@ case $- in
 esac
 
 ##
-## _Exports 
+## _Exports
 ##
 
-export PROFILE="${HOME}/.bashrc";
-export IS_WSL="$(uname -a | grep "WSL2")";
+readonly PROFILE="${HOME}/.bashrc";
+export PROFILE;
 
-if [ -n "${IS_WSL}" ]; then 
+readonly IS_WSL="$(uname -a | grep "WSL2")";
+export IS_WSL;
+
+if [ -n "${IS_WSL}" ]; then
     export WIN_HOME="${HOME}/win_home";
 fi;
 
