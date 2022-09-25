@@ -1,8 +1,8 @@
-# If not running interactively, don't do anything
-# case $- in
-#     *i*) ;;
-#       *) return;;
-# esac
+## If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
 
 ##
 ## _Exports 
