@@ -34,7 +34,13 @@ alias edit-profile="code ${PROFILE}";
 alias g="git";
 alias gg="g g";
 
-## 
+function mkcd()
+{
+    mkdir -p "$1" && cd "$1" && pwd;
+}
+
+
+##
 ## Bash Completion
 ##
 
@@ -47,9 +53,9 @@ if ! shopt -oq posix; then
 fi
 
 
-## 
+##
 ## Colors
-## 
+##
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
@@ -69,15 +75,15 @@ function dots()
     ## @notice: [How dots are structure and mindset]
     ##
     ## We use a git bare repository with the work tree on $HOME.
-    ## This means that with an addition of a custom gitignore 
-    ## to avoid the noise, we can have all the files auto managed 
+    ## This means that with an addition of a custom gitignore
+    ## to avoid the noise, we can have all the files auto managed
     ## by git itself, not needing for us to mess with syslinks and such.
     ##
-    ## But in return we have a very long line to type everytime to make 
-    ## git understand the repo's structure, even worse other tools doesn't 
+    ## But in return we have a very long line to type everytime to make
+    ## git understand the repo's structure, even worse other tools doesn't
     ## quite like the way that it's set by default (requiring a lot of typing as well.)
     ##
-    ## So this function works as and entry point that actually makes the 
+    ## So this function works as and entry point that actually makes the
     ## needed hacks and forwards the maximum to the tools.
     ##
     ## For now we are just handling:
@@ -85,9 +91,9 @@ function dots()
 
     local GIT_DIR="${HOME}/.dots-bare";
     local GIT_WORK_TREE="${HOME}";
-    if [ $# -eq 0 ]; then 
+    if [ $# -eq 0 ]; then
         dots status;
-    else 
+    else
         git                                \
             --git-dir    "${GIT_DIR}"      \
             --work-tree "${GIT_WORK_TREE}" \
@@ -102,21 +108,22 @@ dots config --local core.excludesfile "${HOME}/.config/.dots_gitignore"; ## Cust
 ##
 ## Emscriptem
 ##
+
 export EMSDK_QUIET=1;
 source "${HOME}/.emsdk/emsdk_env.sh";
 
 
 ##
 ## File Manager
-## 
+##
 
 ##------------------------------------------------------------------------------
-function files() 
+function files()
 {
     ## @incomplete: Just works on wsl right now... - Mesquita 22-09-20
-    if [ -z "$1" ]; then 
+    if [ -z "$1" ]; then
         explorer.exe .
-    else 
+    else
         explorer.exe $1;
     fi;
 }
@@ -124,9 +131,9 @@ function files()
 ##------------------------------------------------------------------------------
 alias fm="files";
 
-## 
+##
 ## History
-## 
+##
 
 shopt -s histappend
 HISTCONTROL=ignoreboth
@@ -136,7 +143,7 @@ HISTFILESIZE=2000
 
 ##
 ## MISC
-## 
+##
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -153,6 +160,6 @@ PATH="${PATH}:${HOME}/.bin/dots/gnu:"
 
 ##
 ## Entry Point
-## 
+##
 
 echo "Welcome Matt - Let's do it for the family!!! $(date)"; ## @incomplete: Add some more random motivation...
