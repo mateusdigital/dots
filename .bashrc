@@ -163,6 +163,36 @@ PATH="${PATH}:${HOME}/.bin/dots/gnu:"
 
 
 ##
+## Youtube-dl
+##
+
+##------------------------------------------------------------------------------
+function youtube-dl()
+{
+    /usr/bin/youtube-dl        \
+        --write-description    \
+        --write-info-json      \
+        --write-annotations    \
+        --write-thumbnail      \
+        --prefer-free-formats  \
+        --add-metadata         \
+        "$@"                   \
+    ;
+}
+
+##------------------------------------------------------------------------------
+function youtube-mp3()
+{
+    youtube-dl               \
+        --extract-audio      \
+        --audio-format="mp3" \
+        --embed-thumbnail    \
+        "$@"                 \
+    ;
+}
+
+
+##
 ## Entry Point
 ##
 
