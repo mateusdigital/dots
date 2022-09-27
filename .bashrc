@@ -8,16 +8,20 @@ esac
 ## _Exports
 ##
 
-readonly PROFILE="${HOME}/.bashrc";
+declare -r PROFILE="${HOME}/.bashrc";
 export PROFILE;
 
-readonly IS_WSL="$(uname -a | grep "WSL2")";
+declare -r IS_WSL="$(uname -a | grep "WSL2")";
 export IS_WSL;
 
 if [ -n "${IS_WSL}" ]; then
-    export WIN_HOME="${HOME}/win_home";
+    declare -r WIN_HOME="${HOME}/win_home";
+    declare -r USER_DATA_HOME="$WIN_HOME";
+else
+    declare -r USER_DATA_HOME="$HOME";
 fi;
 
+declare -r AUDIOBOOKS_DIR="$USER_DATA_HOME/Documents/Audiobooks";
 
 ##
 ## Aliases
