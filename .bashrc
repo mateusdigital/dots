@@ -23,6 +23,7 @@ fi;
 
 declare -r AUDIOBOOKS_DIR="$USER_DATA_HOME/Documents/Audiobooks";
 
+
 ##
 ## Aliases
 ##
@@ -42,6 +43,15 @@ function mkcd()
 {
     mkdir -p "$1" && cd "$1" && pwd;
 }
+
+function download-audiobook()
+{
+    test -d "${AUDIOBOOKS_DIR}" || mkdir -p "${AUDIOBOOKS_DIR}";
+    pushd "${AUDIOBOOKS_DIR}";
+        youtube-mp3 "$@";
+    popd;
+}
+
 
 
 ##
@@ -134,6 +144,7 @@ function files()
 
 ##------------------------------------------------------------------------------
 alias fm="files";
+
 
 ##
 ## History
