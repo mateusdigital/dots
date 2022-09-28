@@ -73,6 +73,8 @@ Projects/
 .config/JetBrains/
 .config/menus/
 .config/coc/
+.config/pulse/
+.config/ytdl-gui/
 
 ##------------------------------------------------------------------------------
 .ssh/
