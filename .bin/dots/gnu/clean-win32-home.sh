@@ -1,3 +1,9 @@
+#!/usr/bin/env bash
+
+if [ -z "$(uname -a | grep WSL)" ]; then
+    echo "$0 not running in WSL - Exiting...";
+    exit 1;
+fi;
 
 ## Clean all the links to folders that we don"t care on the ## C:/Users/USERNAME.
 ## For now just works on the Brazilian Portuguese version of Windows 11.
@@ -18,4 +24,3 @@ rm -rf                       \
     "Saved Games"            \
     "Searches"
     ;
-
