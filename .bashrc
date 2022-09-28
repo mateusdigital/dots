@@ -177,6 +177,20 @@ PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[0
 
 PATH="${PATH}:${HOME}/.bin/dots/gnu:${HOME}/.local/bin";
 
+##
+## Powerline
+##
+
+##------------------------------------------------------------------------------
+function _update_ps1()
+{
+    PS1=$(powerline-shell $?)
+}
+
+if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
+    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+fi
+
 
 ##
 ## Youtube-dl
