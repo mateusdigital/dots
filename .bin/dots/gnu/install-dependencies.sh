@@ -5,8 +5,6 @@
 ## Nothing more than a big list of "required" packages to all machines....
 ##
 
-
-
 sudo apt-get update  -y && \
 sudo apt-get upgrade -y && \
 sudo apt-get install -y    \
