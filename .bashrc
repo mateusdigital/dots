@@ -39,20 +39,6 @@ alias edit-profile="code ${PROFILE}";
 alias g="git";
 alias gg="g g";
 
-function mkcd()
-{
-    mkdir -p "$1" && cd "$1" && pwd;
-}
-
-function download-audiobook()
-{
-    test -d "${AUDIOBOOKS_DIR}" || mkdir -p "${AUDIOBOOKS_DIR}";
-    pushd "${AUDIOBOOKS_DIR}";
-        youtube-mp3 "$@";
-    popd;
-}
-
-
 
 ##
 ## Bash Completion
@@ -77,6 +63,24 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+
+##
+## Custom Functions
+##
+
+function mkcd()
+{
+    mkdir -p "$1" && cd "$1" && pwd;
+}
+
+function download-audiobook()
+{
+    test -d "${AUDIOBOOKS_DIR}" || mkdir -p "${AUDIOBOOKS_DIR}";
+    pushd "${AUDIOBOOKS_DIR}";
+        youtube-mp3 "$@";
+    popd;
+}
 
 
 ##
@@ -118,6 +122,7 @@ function dots()
 ##------------------------------------------------------------------------------
 dots config --local status.showUntrackedFiles no;                        ## Reduce noise.
 dots config --local core.excludesfile "${HOME}/.config/.dots_gitignore"; ## Custom gitignore.
+
 
 ##
 ## Emscriptem
