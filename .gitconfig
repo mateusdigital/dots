@@ -117,8 +117,8 @@
     ## Status
     ##--------------------------------------------------------------------------
     s    = status -s
-    sa   = status
     suno = status -suno
+    sa   = status -u
 
 
 [apply]
