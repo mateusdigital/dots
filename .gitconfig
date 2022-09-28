@@ -3,7 +3,7 @@
 ##    https://raw.githubusercontent.com/mathiasbynens/dotfiles/main/.gitconfig ##
 ##
 ##
-## Dependencies: 
+## Dependencies:
 ##    - peco
 ##
 
@@ -55,7 +55,7 @@
     }; f";
 
     ab = all-branches;
-    bn = breanch-name;
+    bn = branch-name;
     cb = change-branch;
     nb = new-branch;
     mb = merge-branch;
@@ -79,11 +79,11 @@
     aliases      = config --get-regexp alias
     list-alias   = config --get-regexp alias
 
-    contributors = shortlog --summary --numbered
-    whoami       = config user.email
+    whoami       = config      user.email
+    contributors = shortlog  --summary --numbered
     root         = rev-parse --show-toplevel
-    url          = config --get remote.origin.url
-    date-of      = log --diff-filter=A --follow --format=%ad  --date=format:"%Y-%m-%d" --reverse --
+    url          = config    --get remote.origin.url
+    date-of      = log       --diff-filter=A --follow --format=%ad  --date=format:"%Y-%m-%d" --reverse --
 
     ## GUI
     gui = "!f() {   \
@@ -174,7 +174,7 @@
     rebase = false
 
 [user]
-    name  = mateus-earth 
+    name  = mateus-earth
     email = matt@cosmicpig.digital
 
 
