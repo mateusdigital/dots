@@ -35,13 +35,6 @@ cursor:
     blinking: On
 
 ##------------------------------------------------------------------------------
-shell:
-  program: /usr/local/bin/pwsh
-  args:
-    - -l
-    - -nol
-
-##------------------------------------------------------------------------------
 key_bindings:
   - { key: A, mods: Alt, chars: "\ea" }
   - { key: B, mods: Alt, chars: "\eb" }
