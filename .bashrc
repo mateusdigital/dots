@@ -113,7 +113,7 @@ function dots()
         dots status;
     else
         git                                \
-            --git-dir    "${GIT_DIR}"      \
+            --git-dir   "${GIT_DIR}"       \
             --work-tree "${GIT_WORK_TREE}" \
             "$@";
     fi;
