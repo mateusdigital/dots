@@ -23,6 +23,8 @@ fi;
 
 declare -r AUDIOBOOKS_DIR="$USER_DATA_HOME/Documents/Audiobooks";
 
+export EDITOR="code";
+export VISUAL="${EDITOR}";
 
 ##
 ## Aliases
