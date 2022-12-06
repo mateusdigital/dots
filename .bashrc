@@ -4,6 +4,7 @@ case $- in
       *) return;;
 esac
 
+
 ##
 ## _Exports
 ##
@@ -16,9 +17,9 @@ export IS_WSL;
 
 if [ -n "${IS_WSL}" ]; then
     declare -r WIN_HOME="${HOME}/win_home";
-    declare -r USER_DATA_HOME="$WIN_HOME";
+    declare -r USER_DATA_HOME="${WIN_HOME}";
 else
-    declare -r USER_DATA_HOME="$HOME";
+    declare -r USER_DATA_HOME="${HOME}";
 fi;
 
 declare -r AUDIOBOOKS_DIR="$USER_DATA_HOME/Documents/Audiobooks";
@@ -30,16 +31,30 @@ export VISUAL="${EDITOR}";
 ## Aliases
 ##
 
-# some more ls aliases
+##------------------------------------------------------------------------------
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF';
 
+## Editor aliases
+##------------------------------------------------------------------------------
+alias e="${EDITOR}";
+alias ee="e .";
+
+## Profile aliases
+##------------------------------------------------------------------------------
 alias reload-profile="source ${PROFILE}";
 alias edit-profile="code ${PROFILE}";
 
+## Git aliases
+##------------------------------------------------------------------------------
 alias g="git";
 alias gg="g g";
+alias gs="g s";
+
+## Dots aliases
+##------------------------------------------------------------------------------
+alias d="dots";
 
 
 ##
@@ -64,18 +79,21 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+declare -r GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01';
+export GCC_COLORS;
 
 
 ##
 ## Custom Functions
 ##
 
+##------------------------------------------------------------------------------
 function mkcd()
 {
     mkdir -p "$1" && cd "$1" && pwd;
 }
 
+##------------------------------------------------------------------------------
 function download-audiobook()
 {
     test -d "${AUDIOBOOKS_DIR}" || mkdir -p "${AUDIOBOOKS_DIR}";
@@ -111,6 +129,7 @@ function dots()
 
     local GIT_DIR="${HOME}/.dots-bare";
     local GIT_WORK_TREE="${HOME}";
+
     if [ $# -eq 0 ]; then
         dots status;
     else
