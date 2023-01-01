@@ -1,25 +1,54 @@
 #!/usr/bin/env bash
 
 ##
-## Update, upgrade and then install all the packages on the system.
-## Nothing more than a big list of "required" packages to all machines....
+## GNU / LINUX
 ##
 
-sudo apt-get update  -y && \
-sudo apt-get upgrade -y && \
-sudo apt-get install -y    \
-    alacritty              \
-    atool                  \
-    cmake                  \
-    build-essential        \
-    firefox                \
-    gdb                    \
-    gimp                   \
-    libgimp2.0-dev         \
-    libgtk-3-dev           \
-    libgtkmm-3.0-dev       \
-    libsdl2-*              \
-    net-tools              \
-    shellcheck             \
-    whois                  \
-;
+## Install
+readonly software_list=(
+    "alacritty"
+    "atool"
+    "automake"
+    "build-essential"
+    "cmake"
+    "coreutils"
+    "curl"
+    "diffutils"
+    "ed"
+    "exa"
+    "fd-find"
+    "findutils"
+    "firefox"
+    "gawk"
+    "gdb"
+    "gimp"
+    "git-gui"
+    "git"
+    "grep"
+    "lynx"
+    "make"
+    "net-tools"
+    "pandoc"
+    "peco"
+    "ripgrep"
+    "shellcheck"
+    "tree"
+    "vifm"
+    "wget"
+    "whois"
+    "youtube-dl"
+);
+
+
+## Update
+echo "==> Installing GNU/Linux software...";
+sudo apt-get update       -y || exit 1;
+sudo apt-get upgrade      -y || exit 1;
+sudo apt-get dist-upgrade -y || exit 1;
+
+for item in ${software_list[@]}; do
+    echo "==> Installing ${item}";
+    sudo apt-get install -y "${item}" || exit 1;
+done;
+
+echo "==> Done...";
