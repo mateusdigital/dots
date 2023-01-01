@@ -37,6 +37,7 @@ readonly software_list=(
     "wget"
     "whois"
     "youtube-dl"
+    "xsel"
 );
 
 
@@ -45,6 +46,9 @@ echo "==> Installing GNU/Linux software...";
 sudo apt-get update       -y || exit 1;
 sudo apt-get upgrade      -y || exit 1;
 sudo apt-get dist-upgrade -y || exit 1;
+
+## Add Repositories
+sudo add-apt-repository ppa:aslatter/ppa -y || exit 1; ## Alacritty.
 
 for item in ${software_list[@]}; do
     echo "==> Installing ${item}";
