@@ -58,6 +58,7 @@ Videos/
 .cosmic/
 
 win_home
+win-home
 Projects/
 
 
@@ -66,15 +67,17 @@ Projects/
 .local/share/
 .local/lib/
 
+.config/coc/
 .config/GIMP/
+.config/godot/
 .config/grammarly*
-.config/karabiner/automatic_backups/
 .config/gtk*
 .config/JetBrains/
+.config/karabiner/automatic_backups/
 .config/menus/
-.config/coc/
 .config/pulse/
 .config/ytdl-gui/
+
 
 ##------------------------------------------------------------------------------
 .ssh/
