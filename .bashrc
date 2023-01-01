@@ -131,7 +131,7 @@ function dots()
     local GIT_WORK_TREE="${HOME}";
 
     if [ $# -eq 0 ]; then
-        dots status;
+        dots status -u;
     else
         git                                \
             --git-dir   "${GIT_DIR}"       \
