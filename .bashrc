@@ -1,14 +1,15 @@
-## If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-      *) return;;
-esac
+# ## If not running interactively, don't do anything
+# case $- in
+#     *i*) ;;
+#       *) return;;
+# esac
 
 
 ##
 ## _Exports
 ##
 
+##------------------------------------------------------------------------------
 declare -r PROFILE="${HOME}/.bashrc";
 export PROFILE;
 
@@ -30,12 +31,18 @@ export VISUAL="${EDITOR}";
 ## PATH
 PATH="$PATH:/home/mateus/.mateus-earth/bin";
 export PATH ;
+
+
+
 ##
 ##  _Imports
 ##
+
 ##------------------------------------------------------------------------------
 ## Gosh
 source "/home/mateus/.mateus-earth/bin/gosh/gosh.sh";
+
+
 ##
 ## Aliases
 ##
@@ -53,6 +60,7 @@ alias ee="e .";
 ## File manager
 ##------------------------------------------------------------------------------
 alias fm="files";
+
 ## Profile aliases
 ##------------------------------------------------------------------------------
 alias reload-profile="source ${PROFILE}";
@@ -61,6 +69,7 @@ alias edit-profile="code ${PROFILE}";
 ## Git aliases
 ##------------------------------------------------------------------------------
 alias git="__my_git";
+
 alias g="git";
 alias gg="g g";
 alias gs="g s";
@@ -74,6 +83,7 @@ alias d="dots";
 ## Bash Completion
 ##
 
+##------------------------------------------------------------------------------
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
@@ -87,6 +97,7 @@ fi
 ## Colors
 ##
 
+##------------------------------------------------------------------------------
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
@@ -125,6 +136,8 @@ export BIN_DIR;
 
 readonly CONFIG_DIR="${HOME}/.config";
 export CONFIG_DIR;
+
+
 ##
 ## Dots
 ##
@@ -144,7 +157,7 @@ function dots()
     ## quite like the way that it's set by default (requiring a lot of typing as well.)
     ##
     ## So this function works as and entry point that actually makes the
-    ## needed hacks and forwards the maximum to the tools.
+    ## needed hacks and forwards the arguments to the underlying tools.
     ##
     ## For now we are just handling:
     ##   git, gitui
@@ -184,9 +197,10 @@ function files()
     if [ -z "$1" ]; then
         explorer.exe .
     else
-        explorer.exe $1;
+        explorer.exe "$1";
     fi;
 }
+
 
 ##
 ## GIT
@@ -195,6 +209,7 @@ function files()
 ##------------------------------------------------------------------------------
 function __my_git() {
     local git_exe="$(which git)"; ## The original git executable.
+
     if [ "$1" == "clone" ]; then
         shift; ## Remove the "clone" argument.
 
@@ -229,8 +244,8 @@ function __my_git() {
 
 shopt -s histappend
 HISTCONTROL=ignoreboth
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=100000
+HISTFILESIZE=200000
 
 
 ##
@@ -304,6 +319,8 @@ function youtube-mp3()
 ## Entry Point
 ##
 
-echo "Welcome Matt - Let's do it for the family!!! $(date)"; ## @incomplete: Add some more random motivation...
+#echo "Welcome Matt - Let's do it for the family!!! $(date)"; ## @incomplete: Add some more random motivation...
+
+
 ## Starship...
 eval "$(starship init bash)"
