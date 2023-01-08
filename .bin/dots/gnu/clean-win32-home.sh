@@ -19,8 +19,14 @@ rm -rf                       \
     "Configurações Locais"   \
     "Favorites"	             \
     "Cookies"                \
+    "Menu Iniciar"           \
+    "Modelos"                \
+    "Contacts"               \
+    "Links"                  \
     "Dados de Aplicativos"   \
     "Meus Documentos"        \
     "Saved Games"            \
-    "Searches"
+    "Recent"                 \
+    "SendTo"                 \
+    "Searches"               \
     ;
