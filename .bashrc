@@ -31,6 +31,12 @@ export VISUAL="${EDITOR}";
 PATH="$PATH:/home/mateus/.mateus-earth/bin";
 export PATH ;
 ##
+##  _Imports
+##
+##------------------------------------------------------------------------------
+## Gosh
+source "/home/mateus/.mateus-earth/bin/gosh/gosh.sh";
+##
 ## Aliases
 ##
 
