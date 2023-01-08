@@ -27,6 +27,9 @@ declare -r AUDIOBOOKS_DIR="$USER_DATA_HOME/Documents/Audiobooks";
 export EDITOR="code";
 export VISUAL="${EDITOR}";
 
+## PATH
+PATH="$PATH:/home/mateus/.mateus-earth/bin";
+export PATH ;
 ##
 ## Aliases
 ##
