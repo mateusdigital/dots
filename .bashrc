@@ -163,13 +163,14 @@ function dots()
 }
 
 
-
 ##
 ## Emscriptem
 ##
 
-export EMSDK_QUIET=1;
-source "${HOME}/.emsdk/emsdk_env.sh";
+if [ -f "${HOME}/.emsdk/emsdk_env.sh" ]; then
+    export EMSDK_QUIET=1;
+    source "${HOME}/.emsdk/emsdk_env.sh";
+fi;
 
 
 ##
