@@ -4,6 +4,15 @@
 ## GNU / LINUX
 ##
 
+## Update
+echo "==> Installing GNU/Linux software...";
+sudo apt-get update       -y || exit 1;
+sudo apt-get upgrade      -y || exit 1;
+sudo apt-get dist-upgrade -y || exit 1;
+
+## Add Repositories
+sudo add-apt-repository ppa:aslatter/ppa -y || exit 1; ## Alacritty.
+
 ## Install
 readonly software_list=(
     "alacritty"
@@ -40,19 +49,20 @@ readonly software_list=(
     "xsel"
 );
 
-
-## Update
-echo "==> Installing GNU/Linux software...";
-sudo apt-get update       -y || exit 1;
-sudo apt-get upgrade      -y || exit 1;
-sudo apt-get dist-upgrade -y || exit 1;
-
-## Add Repositories
-sudo add-apt-repository ppa:aslatter/ppa -y || exit 1; ## Alacritty.
-
 for item in ${software_list[@]}; do
     echo "==> Installing ${item}";
     sudo apt-get install -y "${item}" || exit 1;
 done;
+
+
+##
+## Custom Software
+##
+
+## Startship
+curl -sS https://starship.rs/install.sh > /var/tmp/starship_install.sh;
+chmod 744 /var/tmp/starship_install.sh;    ## @clean: All this is just to pass --force
+sudo /var/tmp/starship_install.sh --force; ##      mateus - 23-01-02
+
 
 echo "==> Done...";
