@@ -60,6 +60,7 @@ alias edit-profile="code ${PROFILE}";
 
 ## Git aliases
 ##------------------------------------------------------------------------------
+alias git="__my_git";
 alias g="git";
 alias gg="g g";
 alias gs="g s";
@@ -180,8 +181,39 @@ function files()
     fi;
 }
 
+##
+## GIT
+##
+
 ##------------------------------------------------------------------------------
-alias fm="files";
+function __my_git() {
+    local git_exe="$(which git)"; ## The original git executable.
+    if [ "$1" == "clone" ]; then
+        shift; ## Remove the "clone" argument.
+
+        local args_count=${#};
+        local user_repo="";
+
+        if [ $args_count -eq 2 ]; then  ## github-clone TheFakeMontyOnTheRun dungeons-of-noudar
+            user_repo="${1}/${2}";
+        else
+            if [ -n "$(echo "$1" | grep \/)" ]; then ## github-clone firsh/jsnes
+                user_repo="${1}";
+            else
+                local git_user="mateus-earth";
+                user_repo="${git_user}/${1}";
+            fi;
+        fi;
+
+        local clone_url="git@github.com:${user_repo}";
+
+        echo "[${FUNCNAME[0]}] Clonning repo: (${clone_url})";
+        $git_exe clone --recursive "${clone_url}";
+    else
+        echo "[${FUNCNAME[0]}] exec: $git_exe $@)";
+        $git_exe "$@";
+    fi;
+}
 
 
 ##
