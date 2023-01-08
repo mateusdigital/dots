@@ -50,6 +50,9 @@ alias l='ls -CF';
 alias e="${EDITOR}";
 alias ee="e .";
 
+## File manager
+##------------------------------------------------------------------------------
+alias fm="files";
 ## Profile aliases
 ##------------------------------------------------------------------------------
 alias reload-profile="source ${PROFILE}";
