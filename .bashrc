@@ -162,9 +162,6 @@ function dots()
     fi;
 }
 
-##------------------------------------------------------------------------------
-dots config --local status.showUntrackedFiles no;                        ## Reduce noise.
-dots config --local core.excludesfile "${HOME}/.config/.dots_gitignore"; ## Custom gitignore.
 
 
 ##
