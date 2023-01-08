@@ -115,7 +115,16 @@ function download-audiobook()
     popd;
 }
 
+##
+## Directories
+##
 
+##------------------------------------------------------------------------------
+readonly BIN_DIR="${HOME}/.bin/dots/gnu";
+export BIN_DIR;
+
+readonly CONFIG_DIR="${HOME}/.config";
+export CONFIG_DIR;
 ##
 ## Dots
 ##
