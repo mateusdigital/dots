@@ -1,0 +1,27 @@
+
+[record]
+; Command to record, default: $SHELL
+command = /bin/bash -l
+
+; Enable stdin (keyboard) recording, default: no
+stdin = yes
+
+; List of environment variables to capture, default: SHELL,TERM
+env = SHELL,TERM,USER
+
+; Limit recorded terminal inactivity to max n seconds, default: off
+idle_time_limit = 1
+
+; Answer "yes" to all interactive prompts, default: no
+yes = no
+
+; Be quiet, suppress all notices/warnings, default: no
+quiet = no
+
+[play]
+
+; Playback speed (can be fractional), default: 1
+speed = 2
+
+; Limit replayed terminal inactivity to max n seconds, default: off
+idle_time_limit = 1
