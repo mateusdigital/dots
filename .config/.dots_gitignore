@@ -56,9 +56,11 @@ Videos/
 .dots-bare/
 
 .cosmic/
+.mateus-earth/
 
 win_home
 win-home
+
 Projects/
 
 
@@ -77,7 +79,9 @@ Projects/
 .config/menus/
 .config/pulse/
 .config/ytdl-gui/
+.config/asciinema/install-id
 
+.config/gosh/gosh-paths.txt
 
 ##------------------------------------------------------------------------------
 .ssh/
@@ -162,3 +166,8 @@ fzf/*.fish
 ## Windows
 NTUSER*
 ntuser*
+
+##--------------------------------------------------------------------------------
+## Windows
+## GNU/Linux
+.dbus/
