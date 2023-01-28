@@ -37,6 +37,7 @@ readonly software_list=(
     "lynx"
     "make"
     "net-tools"
+    "npm"
     "pandoc"
     "peco"
     "ripgrep"
@@ -59,10 +60,13 @@ done;
 ## Custom Software
 ##
 
-## Startship
-curl -sS https://starship.rs/install.sh > /var/tmp/starship_install.sh;
-chmod 744 /var/tmp/starship_install.sh;    ## @clean: All this is just to pass --force
-sudo /var/tmp/starship_install.sh --force; ##      mateus - 23-01-02
+## Starship
+if [ -z "$(which starship)" ]; then
+    echo "==> Installing starship...";
 
+    curl -sS https://starship.rs/install.sh > /var/tmp/starship_install.sh;
+    chmod 744 /var/tmp/starship_install.sh;    ## @clean: All this is just to pass --force
+    sudo /var/tmp/starship_install.sh --force; ##      mateus - 23-01-02
+fi;
 
 echo "==> Done...";
