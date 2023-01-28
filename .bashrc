@@ -125,9 +125,9 @@ function mkcd()
 function download-audiobook()
 {
     test -d "${AUDIOBOOKS_DIR}" || mkdir -p "${AUDIOBOOKS_DIR}";
-    pushd "${AUDIOBOOKS_DIR}";
+    pushd "${AUDIOBOOKS_DIR}" || return;
         youtube-mp3 "$@";
-    popd;
+    popd || return;
 }
 
 ##
