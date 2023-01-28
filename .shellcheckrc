@@ -1,2 +1,3 @@
 external-sources=true
 disable=SC2155
+disable=SC2128 # Expanding an array without an index only gives the first element.
