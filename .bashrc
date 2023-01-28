@@ -63,8 +63,8 @@ alias fm="files";
 
 ## Profile aliases
 ##------------------------------------------------------------------------------
-alias reload-profile="source ${PROFILE}";
-alias edit-profile="code ${PROFILE}";
+alias reload-profile='source ${PROFILE}';
+alias edit-profile='code ${PROFILE}';
 
 ## Git aliases
 ##------------------------------------------------------------------------------
