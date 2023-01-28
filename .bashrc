@@ -223,7 +223,7 @@ function __my_git() {
         if [ $args_count -eq 2 ]; then  ## github-clone TheFakeMontyOnTheRun dungeons-of-noudar
             user_repo="${1}/${2}";
         else
-            if [ -n "$(echo "$1" | grep \/)" ]; then ## github-clone firsh/jsnes
+            if echo "$1" | grep -q '/'; then
                 user_repo="${1}";
             else
                 local git_user="mateus-earth";
@@ -236,7 +236,7 @@ function __my_git() {
         echo "[${FUNCNAME[0]}] Clonning repo: (${clone_url})";
         $git_exe clone --recursive "${clone_url}";
     else
-        echo "[${FUNCNAME[0]}] exec: $git_exe $@)";
+        echo "[${FUNCNAME[0]}] exec: $git_exe $*)";
         $git_exe "$@";
     fi;
 }
