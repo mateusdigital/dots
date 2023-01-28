@@ -54,7 +54,7 @@ alias l='ls -CF';
 
 ## Editor aliases
 ##------------------------------------------------------------------------------
-alias e="${EDITOR}";
+alias e='${EDITOR}';
 alias ee="e .";
 
 ## File manager
