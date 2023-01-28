@@ -10,12 +10,12 @@
 [alias]
     ## Branch
     ##--------------------------------------------------------------------------
-    all-branches = branch --all
+    list-branches = branch --all
     branch-name  = rev-parse --abbrev-ref HEAD;
 
     ## NICE!
     change-branch = "!f() {            \
-        a=$(git all-branches           \
+        a=$(git list-branches          \
             | sed s#remotes/origin/##g \
             | sort                     \
             | uniq                     \
@@ -29,7 +29,7 @@
     merge-branch = "!f() {      \
         b=$(git branch-name);   \
                                 \
-        t=$(git all-branches    \
+        t=$(git list-branches   \
             | sort              \
             | uniq              \
             | grep -v '*'       \
@@ -40,7 +40,7 @@
         git merge --no-ff $b;   \
     }; f"
 
-    delete-branch = "!f() {                    \
+    remove-branch = "!f() {                    \
         branch_name=$1;                        \
         echo "Deleting branch: $branch_name";  \
         git branch      --delete $branch_name; \
@@ -49,38 +49,28 @@
     }; f"
 
     ## depends on: delete-branch
-    delete-merged = "!git branch --merged | grep -v '*' | xargs -n 1 git delete-branch";
+    delete-merged-branches = "!git branch --merged | grep -v '*' | xargs -n 1 git delete-branch";
 
     ##
-    new-branch = "!f() {                 \
-        name=$(echo "$@" |  tr ' ' '-'); \
+    make-branch = "!f() {                \
+        name=$(echo "$@" | tr ' ' '-');  \
         git checkout -b $name;           \
     }; f";
 
-    new-feat = "!f() {                   \
-        name=$(echo "$@" |  tr ' ' '-'); \
-        git checkout -b "feature/$name"; \
-    }; f";
-
-    new-bug = "!f() {                    \
-        name=$(echo "$@" |  tr ' ' '-'); \
-        git checkout -b "bugfix/$name";  \
-    }; f";
-
-    ab = all-branches;
-    bn = branch-name;
-    cb = change-branch;
-    nb = new-branch;
-    mb = merge-branch;
+    bls = list-branches;
+    bn  = branch-name;
+    bcd = change-branch;
+    bmk = new-branch;
 
 
     ## Clone
     ##--------------------------------------------------------------------------
-    clone = clone --recursive
+    clone-recursive = clone --recursive;
+    rclone          = clone-recursive;
 
     ## Commit
     ##--------------------------------------------------------------------------
-    ca    = !git add -A && git commit -av ## Commit all changes
+    commit-all = !git add -A && git commit -av ## Commit all changes
     amend = commit --amend --reuse-message=HEAD
 
     ## Diff
@@ -89,8 +79,9 @@
 
     ## Info
     ##--------------------------------------------------------------------------
-    aliases      = config --get-regexp alias
-    list-alias   = config --get-regexp alias
+    list-alias   = "!f() { \
+        git-aliases.sh;    \
+    }; f";
 
     whoami       = config      user.email
     contributors = shortlog  --summary --numbered
@@ -99,6 +90,7 @@
     date-of      = log       --diff-filter=A --follow --format=%ad  --date=format:"%Y-%m-%d" --reverse --
 
     ## GUI
+    ##--------------------------------------------------------------------------
     g = "!f() {     \
         gitui "$@"; \
     }; f";
@@ -109,28 +101,25 @@
     l    = log --pretty=oneline -n 10 --graph --abbrev-commit
     tree = log --oneline --decorate --graph --all
 
-    ## Push
-    ##--------------------------------------------------------------------------
-    p = "!git push --set-upstream origin $(git branch-name);";
 
-    ## Pull
+    ## Push / Pull
     ##--------------------------------------------------------------------------
+    p        = "!git push --set-upstream origin $(git branch-name);";
     pull-all = pull --recurse-submodules
 
     ## MISC
     ##--------------------------------------------------------------------------
-    tags     = tag -l
-    remotes  = remote --verbose
+    list-tags    = tag -l
+    list-remotes = remote --verbose
+    list-subs    = "!(git config --file $(git root)/.gitmodules --name-only --get-regexp path)" ## @XXX: Remote the .path from the subodules...
 
-    subs = "!(git config --file $(git root)/.gitmodules --name-only --get-regexp path)" ## @XXX: Remote the .path from the subodules...
-    suir = submodule update --init --recursive;
+    update-submodules = submodule update --init --recursive;
 
     ## Status
     ##--------------------------------------------------------------------------
-    s    = status -s
-    suno = status -suno
-    su   = status -u
-
+    s  = status -s;
+    ss = status -su;
+    sss = status -su; ## @notice: Don't want do get an error cause miss key...
 
 [apply]
     whitespace = fix
