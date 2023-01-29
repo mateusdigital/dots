@@ -37,7 +37,6 @@ readonly software_list=(
     "lynx"
     "make"
     "net-tools"
-    "npm"
     "pandoc"
     "peco"
     "ripgrep"
@@ -68,5 +67,11 @@ if [ -z "$(which starship)" ]; then
     chmod 744 /var/tmp/starship_install.sh;    ## @clean: All this is just to pass --force
     sudo /var/tmp/starship_install.sh --force; ##      mateus - 23-01-02
 fi;
+
+## Nodejs
+curl -sL https://deb.nodesource.com/setup_18.x -o /var/tmp/nodesource_setup.sh
+sudo bash /var/tmp/nodesource_setup.sh;
+sudo apt-get install -y nodejs
+
 
 echo "==> Done...";
