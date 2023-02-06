@@ -13,6 +13,7 @@
 declare -r PROFILE="${HOME}/.bashrc";
 export PROFILE;
 
+##------------------------------------------------------------------------------
 declare -r IS_WSL="$(uname -a | grep "WSL2")";
 export IS_WSL;
 
@@ -23,15 +24,24 @@ else
     declare -r USER_DATA_HOME="${HOME}";
 fi;
 
-declare -r AUDIOBOOKS_DIR="$USER_DATA_HOME/Documents/Audiobooks";
-
+##------------------------------------------------------------------------------
 export EDITOR="code";
 export VISUAL="${EDITOR}";
 
-## PATH
+##------------------------------------------------------------------------------
 PATH="$PATH:/home/mateus/.mateus-earth/bin";
-export PATH ;
+export PATH;
 
+##------------------------------------------------------------------------------
+declare -r GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01';
+export GCC_COLORS;
+
+##------------------------------------------------------------------------------
+readonly BIN_DIR="${HOME}/.bin/dots/gnu";
+export BIN_DIR;
+
+readonly CONFIG_DIR="${HOME}/.config";
+export CONFIG_DIR;
 
 
 ##
@@ -40,7 +50,8 @@ export PATH ;
 
 ##------------------------------------------------------------------------------
 ## Gosh
-source "/home/mateus/.mateus-earth/bin/gosh/gosh.sh";
+test -f /home/mateus/.mateus-earth/bin/gosh/gosh.sh && \
+    source "/home/mateus/.mateus-earth/bin/gosh/gosh.sh";
 
 
 ##
@@ -48,6 +59,12 @@ source "/home/mateus/.mateus-earth/bin/gosh/gosh.sh";
 ##
 
 ##------------------------------------------------------------------------------
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+##------------------------------------------------------------------------------
+alias ls='ls --color=auto'
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF';
@@ -70,9 +87,9 @@ alias edit-profile='code ${PROFILE}';
 ##------------------------------------------------------------------------------
 alias git="__my_git";
 
-alias g="git";
-alias gg="g g";
-alias gs="g s";
+alias g="__my_git";
+alias gg="__my_git g";
+alias gs="__my_git s";
 
 ## Dots aliases
 ##------------------------------------------------------------------------------
@@ -82,6 +99,18 @@ alias d="dots";
 ##------------------------------------------------------------------------------
 alias pydoc="pydoc3";
 
+function wd {
+    echo "Work done - ";
+    dots ss;
+
+    echo "Select files to add.."
+    read -n1 key;
+
+    local files_to_add=$(dots ss | grep "??" | tr -d "?? " | peco);
+    dots add $files_to_add;
+
+    dots g;
+}
 
 ##
 ## Bash Completion
@@ -97,19 +126,6 @@ if ! shopt -oq posix; then
 fi
 
 
-##
-## Colors
-##
-
-##------------------------------------------------------------------------------
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-
-declare -r GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01';
-export GCC_COLORS;
-
 
 ##
 ## Custom Functions
@@ -120,26 +136,6 @@ function mkcd()
 {
     mkdir -p "$1" && cd "$1" && pwd;
 }
-
-##------------------------------------------------------------------------------
-function download-audiobook()
-{
-    test -d "${AUDIOBOOKS_DIR}" || mkdir -p "${AUDIOBOOKS_DIR}";
-    pushd "${AUDIOBOOKS_DIR}" || return;
-        youtube-mp3 "$@";
-    popd || return;
-}
-
-##
-## Directories
-##
-
-##------------------------------------------------------------------------------
-readonly BIN_DIR="${HOME}/.bin/dots/gnu";
-export BIN_DIR;
-
-readonly CONFIG_DIR="${HOME}/.config";
-export CONFIG_DIR;
 
 
 ##
@@ -233,10 +229,10 @@ function __my_git() {
 
         local clone_url="git@github.com:${user_repo}";
 
-        echo "[${FUNCNAME[0]}] Clonning repo: (${clone_url})";
+        ## echo "[${FUNCNAME[0]}] Clonning repo: (${clone_url})"; ## VERBOSE-LOG
         $git_exe clone --recursive "${clone_url}";
     else
-        echo "[${FUNCNAME[0]}] exec: $git_exe $*)";
+        ## echo "[${FUNCNAME[0]}] exec: $git_exe $*)"; ## VERBOSE-LOG
         $git_exe "$@";
     fi;
 }
@@ -320,11 +316,9 @@ function youtube-mp3()
 
 
 ##
-## Entry Point
+##
 ##
 
-#echo "Welcome Matt - Let's do it for the family!!! $(date)"; ## @incomplete: Add some more random motivation...
-
-
-## Starship...
-eval "$(starship init bash)"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
