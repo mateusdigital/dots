@@ -254,6 +254,16 @@ function __my_git() {
     fi;
 }
 
+function git-feature-start()
+{
+    git flow feature start "$@";
+}
+
+function git-feature-finish()
+{
+    git flow feature finish "$@";
+}
+
 
 ##
 ## History
