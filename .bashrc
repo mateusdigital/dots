@@ -81,7 +81,19 @@ alias fm="files";
 ## Profile aliases
 ##------------------------------------------------------------------------------
 alias reload-profile='source ${PROFILE}';
-alias edit-profile='code ${PROFILE}';
+
+alias edit='code ${HOME}';
+alias edit-profile='code ${HOME}';
+
+function edit-ignore() {
+    local local_ignore="${PWD}/.gitignore";
+    local global_ignore="${CONFIG_DIR}/.dots_gitignore";
+    test -d "${local_ignore}"           \
+        && ${EDITOR} "${local_ignore}"  \
+        || ${EDITOR} "${global_ignore}";
+}
+
+
 
 ## Git aliases
 ##------------------------------------------------------------------------------
