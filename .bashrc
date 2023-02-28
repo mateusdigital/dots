@@ -227,21 +227,26 @@ function __my_git() {
 
         local args_count=${#};
         local user_repo="";
+        local clone_url="";
 
-        if [ $args_count -eq 2 ]; then  ## github-clone TheFakeMontyOnTheRun dungeons-of-noudar
-            user_repo="${1}/${2}";
+        if [ -n "$(echo "${1}" | grep "https://")" ]; then ## Complete path...
+            clone_url="${1}";
         else
-            if echo "$1" | grep -q '/'; then
-                user_repo="${1}";
+            if [ $args_count -eq 2 ]; then  ## github-clone TheFakeMontyOnTheRun dungeons-of-noudar
+                user_repo="${1}/${2}";
             else
-                local git_user="mateus-earth";
-                user_repo="${git_user}/${1}";
+                if echo "$1" | grep -q '/'; then
+                    user_repo="${1}";
+                else
+                    local git_user="mateus-earth";
+                    user_repo="${git_user}/${1}";
+                fi;
             fi;
+
+            clone_url="git@github.com:${user_repo}";
         fi;
 
-        local clone_url="git@github.com:${user_repo}";
-
-        ## echo "[${FUNCNAME[0]}] Clonning repo: (${clone_url})"; ## VERBOSE-LOG
+        echo "[${FUNCNAME[0]}] Clonning repo: (${clone_url})"; ## VERBOSE-LOG
         $git_exe clone --recursive "${clone_url}";
     else
         ## echo "[${FUNCNAME[0]}] exec: $git_exe $*)"; ## VERBOSE-LOG
