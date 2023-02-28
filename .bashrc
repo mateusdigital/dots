@@ -286,20 +286,24 @@ PATH="${PATH}:${HOME}/.bin/dots/gnu:${HOME}/.local/bin";
 ##
 
 ##------------------------------------------------------------------------------
-function _update_ps1()
-{
-    PS1=$(powerline-shell $?)
-}
+function set_git_ps1() {
+    local git_branch="$(git branch 2>/dev/null)";
 
-if [ -f ".local/bin/powerline-shell" ]; then
-    if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
-        PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+    if [[ -n $git_branch ]]; then
+        local git_url="$(git url)";
+        if [ -n "$git_url" ]; then
+            str="[$git_url] : $git_branch $>"
+        else
+            local git_dir=$(basename "$(git root)");
+            str="[$git_dir] : $git_branch\n> "
+        fi;
+    else
+        echo "$> ";
     fi
-else
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-fi;
 
-export PS1;
+    echo -e "$str";
+}
+export PS1='$(set_git_ps1)'
 
 
 ##
