@@ -12,8 +12,8 @@
     ##--------------------------------------------------------------------------
     list-branches = branch --all;
     curr-branch   = rev-parse --abbrev-ref HEAD;
-    change-branch = "!f() { git-change-branch.sh; }";
-    merge-branch  = "!f() { git-merge-branch.sh;  }";
+    change-branch = "!f() { git-change-branch.sh; }; f";
+    merge-branch  = "!f() { git-merge-branch.sh;  }; f";
 
     ## Deprecated....
     branch-name   = curr-branch
@@ -35,6 +35,7 @@
 
     ## Commit
     ##--------------------------------------------------------------------------
+    add-untracked = "!f() { git add $(git status -su | grep "??" | tr -d "??" | peco); }; f"
     amend = commit --amend --reuse-message=HEAD
 
     ## Info
