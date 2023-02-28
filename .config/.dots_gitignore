@@ -79,6 +79,9 @@ Projects/
 .config/menus/
 .config/pulse/
 .config/ytdl-gui/
+.config/create-next-app-nodejs/
+.config/gatsby/
+.config/nextjs-nodejs/
 .config/asciinema/install-id
 
 .config/gosh/gosh-paths.txt
