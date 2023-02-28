@@ -297,7 +297,7 @@ PATH="${PATH}:${HOME}/.bin/dots/gnu:${HOME}/.local/bin";
 
 ##------------------------------------------------------------------------------
 function set_git_ps1() {
-    local git_branch="$(git branch 2>/dev/null)";
+    local git_branch="$(git curr-branch 2>/dev/null)";
 
     if [[ -n $git_branch ]]; then
         local git_url="$(git url)";
