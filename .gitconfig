@@ -10,35 +10,13 @@
 [alias]
     ## Branch
     ##--------------------------------------------------------------------------
-    list-branches = branch --all
-    branch-name  = rev-parse --abbrev-ref HEAD;
+    list-branches = branch --all;
+    curr-branch   = rev-parse --abbrev-ref HEAD;
+    change-branch = "!f() { git-change-branch.sh; }";
+    merge-branch  = "!f() { git-merge-branch.sh;  }";
 
-    ## NICE!
-    change-branch = "!f() {            \
-        a=$(git list-branches          \
-            | sed s#remotes/origin/##g \
-            | sort                     \
-            | uniq                     \
-            | grep -v '*'              \
-            | peco                     \
-        );                             \
-        git checkout $a;               \
-    }; f";
-
-    ## NICE!
-    merge-branch = "!f() {      \
-        b=$(git branch-name);   \
-                                \
-        t=$(git list-branches   \
-            | sort              \
-            | uniq              \
-            | grep -v '*'       \
-            | peco              \
-        );                      \
-                                \
-        git checkout $t;        \
-        git merge --no-ff $b;   \
-    }; f"
+    ## Deprecated....
+    branch-name   = curr-branch
 
     remove-branch = "!f() {                    \
         branch_name=$1;                        \
@@ -48,37 +26,20 @@
         echo "Deleted...";                     \
     }; f"
 
-    ## depends on: delete-branch
-    delete-merged-branches = "!git branch --merged | grep -v '*' | xargs -n 1 git delete-branch";
-
-    ##
-    make-branch = "!f() {                \
-        name=$(echo "$@" | tr ' ' '-');  \
-        git checkout -b $name;           \
-    }; f";
-
-    bls = list-branches;
-    bn  = branch-name;
-    bcd = change-branch;
-    bmk = new-branch;
-
+    ## depends on: remove-branch
+    remove-merged-branches = "!git branch --merged | grep -v '*' | xargs -n 1 git remove-branch";
 
     ## Clone
     ##--------------------------------------------------------------------------
     clone-recursive = clone --recursive;
-    rclone          = clone-recursive;
 
     ## Commit
     ##--------------------------------------------------------------------------
     amend = commit --amend --reuse-message=HEAD
 
-    ## Diff
-    ##--------------------------------------------------------------------------
-    d = diff
-
     ## Info
     ##--------------------------------------------------------------------------
-    list-alias   = "!f() { \
+    list-alias = "!f() { \
         git-aliases.sh;    \
     }; f";
 
@@ -88,22 +49,13 @@
     url          = config    --get remote.origin.url
     date-of      = log       --diff-filter=A --follow --format=%ad  --date=format:"%Y-%m-%d" --reverse --
 
-    ## GUI
-    ##--------------------------------------------------------------------------
-    g = "!f() {     \
-        gitui "$@"; \
-    }; f";
-
     ## Log
     ##--------------------------------------------------------------------------
     ## Last X lines in a tree
-    l    = log --pretty=oneline -n 10 --graph --abbrev-commit
     tree = log --oneline --decorate --graph --all
-
 
     ## Push / Pull
     ##--------------------------------------------------------------------------
-    p        = "!git push --set-upstream origin $(git branch-name);";
     pull-all = pull --recurse-submodules
 
     ## MISC
@@ -114,9 +66,17 @@
 
     update-submodules = submodule update --init --recursive;
 
+    ## Single Letter
+    ##--------------------------------------------------------------------------
+    a = list-alias;
+    d = diff;
+    g = "!f() { gitui "$@";    }; f"; l = log --pretty=oneline -n 10 --graph --abbrev-commit
+    m = "!f() { git-merge.sh;  }; f";
+    p = "!git push --set-upstream origin $(git branch-name);";
+    s = status -s;
+
     ## Status
     ##--------------------------------------------------------------------------
-    s  = status -s;
     ss = status -su;
     sss = status -su; ## @notice: Don't want do get an error cause miss key...
 
@@ -129,7 +89,7 @@
 
 [core]
     excludesfile = ~/.gitignore
-    editor       = nvim
+    editor       = code
     autocrlf     = false
 
     # Treat spaces before tabs and all kinds of trailing whitespace as an error.
