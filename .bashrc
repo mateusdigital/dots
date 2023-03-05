@@ -69,6 +69,10 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF';
 
+## Dots aliases
+##------------------------------------------------------------------------------
+alias d="dots";
+
 ## Editor aliases
 ##------------------------------------------------------------------------------
 function e() {
@@ -86,6 +90,14 @@ function v() {
         ${VISUAL} "$@"; ## Open with args.
     fi;
 }
+
+## Git aliases
+##------------------------------------------------------------------------------
+alias git="__my_git";
+
+alias g="__my_git";
+alias gg="__my_git g";
+alias gs="__my_git s";
 
 
 ## File manager
@@ -107,35 +119,14 @@ function edit-ignore() {
         || ${EDITOR} "${global_ignore}";
 }
 
-
-## Git aliases
-##------------------------------------------------------------------------------
-alias git="__my_git";
-
-alias g="__my_git";
-alias gg="__my_git g";
-alias gs="__my_git s";
-
-## Dots aliases
-##------------------------------------------------------------------------------
-alias d="dots";
-
 ## Python aliases
 ##------------------------------------------------------------------------------
 alias pydoc="pydoc3";
 
-function wd {
-    echo "Work done - ";
-    dots ss;
+## repochecker aliases
+##------------------------------------------------------------------------------
+alias repoall="repochecker --remote --show-all --submodules"
 
-    echo "Select files to add.."
-    read -n1 key;
-
-    local files_to_add=$(dots ss | grep "??" | tr -d "?? " | peco);
-    dots add $files_to_add;
-
-    dots g;
-}
 
 ##
 ## Bash Completion
