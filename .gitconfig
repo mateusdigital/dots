@@ -14,6 +14,7 @@
     curr-branch   = rev-parse --abbrev-ref HEAD;
     change-branch = "!f() { git-change-branch.sh; }; f";
     merge-branch  = "!f() { git-merge-branch.sh;  }; f";
+    create-branch = checkout -b
 
     ## Deprecated....
     branch-name   = curr-branch
@@ -40,20 +41,20 @@
 
     ## Info
     ##--------------------------------------------------------------------------
-    list-alias = "!f() { \
-        git-aliases.sh;    \
-    }; f";
+    list-alias = "!f() { git-aliases.sh;}; f";
+    list-tags    = tag -l
+    list-remotes = remote --verbose
+    list-subs    = "!(git config --file $(git root)/.gitmodules --name-only --get-regexp path)" ## @XXX: Remote the .path from the subodules...
 
+    ## Last X lines in a tree
     whoami       = config      user.email
     contributors = shortlog  --summary --numbered
     root         = rev-parse --show-toplevel
     url          = config    --get remote.origin.url
     date-of      = log       --diff-filter=A --follow --format=%ad  --date=format:"%Y-%m-%d" --reverse --
 
-    ## Log
-    ##--------------------------------------------------------------------------
-    ## Last X lines in a tree
     tree = log --oneline --decorate --graph --all
+
 
     ## Push / Pull
     ##--------------------------------------------------------------------------
@@ -61,15 +62,12 @@
 
     ## MISC
     ##--------------------------------------------------------------------------
-    list-tags    = tag -l
-    list-remotes = remote --verbose
-    list-subs    = "!(git config --file $(git root)/.gitmodules --name-only --get-regexp path)" ## @XXX: Remote the .path from the subodules...
-
     update-submodules = submodule update --init --recursive;
 
     ## Single Letter
     ##--------------------------------------------------------------------------
     a = list-alias;
+    b = create-branch
     d = diff;
     g = "!f() { gitui "$@";    }; f"; l = log --pretty=oneline -n 10 --graph --abbrev-commit
     m = "!f() { git-merge.sh;  }; f";
