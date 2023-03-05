@@ -108,7 +108,6 @@ function edit-ignore() {
 }
 
 
-
 ## Git aliases
 ##------------------------------------------------------------------------------
 alias git="__my_git";
@@ -311,22 +310,34 @@ PATH="${PATH}:${HOME}/.bin/dots/gnu:${HOME}/.local/bin";
 
 ##------------------------------------------------------------------------------
 function set_git_ps1() {
+    local last_code=$?;
     local git_branch="$(git curr-branch 2>/dev/null)";
 
     if [[ -n $git_branch ]]; then
-        local git_url="$(git url)";
+        ## HACK: Just to remove the ssh from the url, we must find a generic way...
+        local git_url="$(git url | sed s/"git@github.com:"/""/g)";
         if [ -n "$git_url" ]; then
-            str="[$git_url] : $git_branch $>"
+            local head="$(dirname $git_url)";
+            local tail="$(basename $git_url)";
+            str="[${head}/${tail}] ($PWD)";
         else
             local git_dir=$(basename "$(git root)");
-            str="[$git_dir] : $git_branch\n> "
+            str="[$git_dir] : $git_branch";
         fi;
+
+        str="${str} : ${git_branch}";
     else
-        echo "$> ";
+        str="${PWD} ";
     fi
 
-    echo -e "$str";
+    local smile_face=":)";
+    if [ $last_code -ne 0 ]; then
+        smile_face=":(";
+    fi;
+
+    printf "%s\n%s " "${str}" ${smile_face};
 }
+
 export PS1='$(set_git_ps1)'
 
 
