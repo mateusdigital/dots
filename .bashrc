@@ -25,8 +25,8 @@ else
 fi;
 
 ##------------------------------------------------------------------------------
-export EDITOR="code";
-export VISUAL="${EDITOR}";
+export EDITOR="vim";
+export VISUAL="code";
 
 ##------------------------------------------------------------------------------
 PATH="$PATH:/home/mateus/.mateus-earth/bin";
@@ -55,7 +55,7 @@ test -f /home/mateus/.mateus-earth/bin/gosh/gosh.sh && \
 
 
 ##
-## Aliases
+## Aliases - and small functions that should behave like aliases.
 ##
 
 ##------------------------------------------------------------------------------
@@ -71,8 +71,22 @@ alias l='ls -CF';
 
 ## Editor aliases
 ##------------------------------------------------------------------------------
-alias e='${EDITOR} .';
-alias ee='${EDITOR}';
+function e() {
+    if [ -z "$@" ] ;then
+        ${EDITOR} .; ## Open current directory by default.
+    else
+        ${EDITOR} "$@"; ## Open with args.
+    fi;
+}
+
+function v() {
+    if [ -z "$@" ] ;then
+        ${VISUAL} .; ## Open current directory by default.
+    else
+        ${VISUAL} "$@"; ## Open with args.
+    fi;
+}
+
 
 ## File manager
 ##------------------------------------------------------------------------------
