@@ -14,9 +14,10 @@ if [ -z "${branch_to_merge}" ]; then
     exit;
 fi;
 
-echo "--> Merging to ${branch_to_merge} <- from ${current_branch}...";
-git checkout      "${branch_to_merge}";
-git merge --no-ff "${current_branch}";
+echo "--> Merging into ${branch_to_merge} <- from ${current_branch}...";
+test -z "$@" && echo "--> Args: $*";
+
+git checkout            "${branch_to_merge}";
+git merge --no-ff "$@" "${current_branch}";
 
 echo "--> Merged...";
-git l;
