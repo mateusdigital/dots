@@ -41,8 +41,15 @@
 
     ## Info
     ##--------------------------------------------------------------------------
-    list-alias = "!f() { git-aliases.sh;}; f";
+    list-alias    = "!f() { git-aliases.sh;}; f";
+    list-alia    = list-alias;
+    list-aliases = list-alias;
+
+    list-branches = branch --all;
+    list-branch   = list-branches;
+
     list-tags    = tag -l
+
     list-remotes = remote --verbose
     list-subs    = "!(git config --file $(git root)/.gitmodules --name-only --get-regexp path)" ## @XXX: Remote the .path from the subodules...
 
@@ -73,6 +80,7 @@
     m = "!f() { git-merge.sh;  }; f";
     p = "!git push --set-upstream origin $(git branch-name);";
     s = status -s;
+    t = tree;
 
     ## Status
     ##--------------------------------------------------------------------------
