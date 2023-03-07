@@ -7,14 +7,14 @@
 ##    - peco
 ##
 
+
 [alias]
     ## Branch
     ##--------------------------------------------------------------------------
-    list-branches = branch --all;
     curr-branch   = rev-parse --abbrev-ref HEAD;
-    change-branch = "!f() { git-change-branch.sh; }; f";
-    merge-branch  = "!f() { git-merge-branch.sh;  }; f";
-    create-branch = checkout -b
+    change-branch = "!f() { git-change-branch.sh  \"$@\"; }; f";
+    merge-branch  = "!f() { git-merge.sh          \"$@\"; }; f";
+    create-branch = checkout -b;
 
     ## Deprecated....
     branch-name   = curr-branch
