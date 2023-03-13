@@ -71,10 +71,6 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF';
 
-## Dots aliases
-##------------------------------------------------------------------------------
-alias d="dots";
-
 ## Editor aliases
 ##------------------------------------------------------------------------------
 function e() {
@@ -117,15 +113,24 @@ function nfe() {
 }
 
 
-## Git aliases
+## Git aliases (Dots bellow)
 ##------------------------------------------------------------------------------
 alias git="__my_git";
 
 alias g="__my_git";
 alias gg="__my_git g";
 alias gs="__my_git s";
+alias gp="__my_git p";
 
-alias rr='cd $(git root)';
+alias gr='cd $(git root)';
+
+## --->
+alias d="dots";
+alias dg="dots g";
+alias ds="dots s";
+alias dp="dots p";
+
+
 
 ## File manager
 ##------------------------------------------------------------------------------
