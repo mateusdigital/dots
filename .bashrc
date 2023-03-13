@@ -305,10 +305,23 @@ function git-feature-finish()
 ## History
 ##
 
-shopt -s histappend
-HISTCONTROL=ignoreboth
-HISTSIZE=100000
-HISTFILESIZE=200000
+# append to the history file, don't overwrite it
+shopt -s histappend;
+PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
+
+# Store multiline commands as one line.
+shopt -s cmdhist
+
+shopt -s checkwinsize # check the window size after each command and, if necessary,
+                      # update the values of LINES and COLUMNS.
+
+shopt -s dirspell
+
+export HISTCONTROL=ignoreboth;
+export HISTIGNORE="&:ls:[bf]g:pwd:exit:cd ..";
+
+export HISTSIZE=100000;
+export HISTFILESIZE=200000;
 
 
 ##
