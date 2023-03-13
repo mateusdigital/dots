@@ -97,7 +97,7 @@
 
 [core]
     excludesfile = ~/.gitignore
-    editor       = code
+    editor       = $EDITOR
     autocrlf     = false
 
     # Treat spaces before tabs and all kinds of trailing whitespace as an error.
