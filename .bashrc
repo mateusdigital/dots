@@ -406,7 +406,6 @@ function youtube-mp3()
     ;
 }
 
-
 ##
 ##
 ##
@@ -414,3 +413,7 @@ function youtube-mp3()
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+## PRIVATE DOTFILES...
+test -f "${HOME}/.bashrc_private" && source "${HOME}/.bashrc_private";

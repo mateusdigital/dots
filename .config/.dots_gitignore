@@ -15,6 +15,7 @@
 ##------------------------------------------------------------------------------
 .*_history
 *private*
+.bashrc_private
 
 Google_Drive/
 GoogleDrive/
