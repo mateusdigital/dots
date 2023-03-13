@@ -75,6 +75,7 @@
     ##--------------------------------------------------------------------------
     a = list-alias;
     b = create-branch
+    cb= change-branch;
     d = diff;
     g = "!f() { gitui "$@";    }; f"; l = log --pretty=oneline -n 10 --graph --abbrev-commit
     m = "!f() { git-merge.sh;  }; f";
