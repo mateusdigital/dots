@@ -43,6 +43,8 @@ export BIN_DIR;
 readonly CONFIG_DIR="${HOME}/.config";
 export CONFIG_DIR;
 
+readonly SCRAP_FILE_DIR="${HOME}/.scrap_files";
+export SCRAP_FILE_DIR;
 
 ##
 ##  _Imports
@@ -91,6 +93,30 @@ function v() {
     fi;
 }
 
+## New File...
+##------------------------------------------------------------------------------
+function __nf_helper() {
+    if [ -z "$1" ]; then
+        local datetime=$(date +%Y-%m-%d_%H-%M-%S)
+        local filename="file_${datetime}.txt"
+
+        echo "${SCRAP_FILE_DIR}/${filename}";
+    else
+        echo "$1";
+    fi;
+}
+
+function nf() {
+    local filename="$(__nf_helper "$@")";
+    make-file.sh "${filename}" && v "${filename}";
+}
+
+function nfe() {
+    local filename="$(__nf_helper "$@")";
+    make-file.sh -e "${filename}" && v "${filename}";
+}
+
+
 ## Git aliases
 ##------------------------------------------------------------------------------
 alias git="__my_git";
@@ -99,6 +125,7 @@ alias g="__my_git";
 alias gg="__my_git g";
 alias gs="__my_git s";
 
+alias rr='cd $(git root)';
 
 ## File manager
 ##------------------------------------------------------------------------------
