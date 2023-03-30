@@ -60,6 +60,9 @@ test -f /home/mateus/.mateus-earth/bin/gosh/gosh.sh && \
 ## Aliases - and small functions that should behave like aliases.
 ##
 
+alias list-bin='ls -1 $BIN_DIR';
+alias edit-bin='$VISUAL $BIN_DIR';
+
 ##------------------------------------------------------------------------------
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
