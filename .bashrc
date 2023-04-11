@@ -4,6 +4,10 @@ case $- in
       *) return;;
 esac
 
+export BASH_SILENCE_DEPRECATION_WARNING=1; ## For macs to be quiet	
+
+
+
 echo "dots loaded...";
 
 ##
