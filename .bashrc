@@ -4,7 +4,7 @@ case $- in
       *) return;;
 esac
 
-export BASH_SILENCE_DEPRECATION_WARNING=1; ## For macs to be quiet	
+export BASH_SILENCE_DEPRECATION_WARNING=1; ## For macs to be quiet
 
 
 
@@ -38,7 +38,7 @@ fi;
 export EDITOR="vim";
 if [ -z "$SSH_CLIENT" ]; then
 	export VISUAL="code";
-else 
+else
 	export VISUAL="$EDITOR";
 fi;
 
@@ -47,9 +47,9 @@ fi;
 readonly BIN_DIR="${HOME}/.local/bin/dots";
 export BIN_DIR;
 
-if [ -n "$IS_GNU_LINUX" ]; then 
+if [ -n "$IS_GNU_LINUX" ]; then
 	readonly BIN_DIR_OS="${BIN_DIR}/gnu";
-elif [ -n "$IS_MAC" ]; then 
+elif [ -n "$IS_MAC" ]; then
 	readonly BIN_DIR_OS="${BIN_DIR}/mac";
 fi;
 export BIN_DIR_OS;
@@ -370,7 +370,7 @@ shopt -s checkwinsize
 ##------------------------------------------------------------------------------
 PATH="${PATH}:${BIN_DIR}:${BIN_DIR_OS}:${HOME}/.local/bin";
 export PATH;
-alias list-path="echo $PATH | tr ':' '\n'";
+alias list-path='echo "$PATH" | tr ":" "\n"';
 
 ##
 ## PS1
