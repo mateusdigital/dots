@@ -61,8 +61,6 @@ test -f /home/mateus/.mateus-earth/bin/gosh/gosh.sh && \
 ## Aliases - and small functions that should behave like aliases.
 ##
 
-alias list-bin='ls -1 $BIN_DIR';
-alias edit-bin='$VISUAL $BIN_DIR';
 
 ##------------------------------------------------------------------------------
 alias grep='grep --color=auto'
@@ -74,7 +72,6 @@ alias ls='ls --color=auto'
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF';
-
 
 
 ## Editor aliases
@@ -119,6 +116,11 @@ function nfe() {
 }
 
 
+## File manager
+##------------------------------------------------------------------------------
+alias fm="files";
+
+
 ## Git aliases (Dots bellow)
 ##------------------------------------------------------------------------------
 alias git="__my_git";
@@ -136,12 +138,6 @@ alias dg="dots g";
 alias ds="dots s";
 alias dp="dots p";
 
-
-
-## File manager
-##------------------------------------------------------------------------------
-alias fm="files";
-
 ## Profile aliases
 ##------------------------------------------------------------------------------
 alias reload-profile='source ${PROFILE}';
@@ -149,12 +145,20 @@ alias reload-profile='source ${PROFILE}';
 alias edit='code ${HOME}';
 alias edit-profile='code ${HOME}';
 
+alias list-bin='ls -1 $BIN_DIR';
+alias edit-bin='$VISUAL $BIN_DIR';
+
+alias bug='${VISUAL} ${HOME}/.mateus-earth/bugs.yml';
+
+
 function edit-ignore() {
     local local_ignore="${PWD}/.gitignore";
     local global_ignore="${CONFIG_DIR}/.dots_gitignore";
-    test -d "${local_ignore}"           \
-        && ${EDITOR} "${local_ignore}"  \
-        || ${EDITOR} "${global_ignore}";
+    if [ -d "${local_ignore}" ]; then
+        ${EDITOR} "${local_ignore}";
+    else
+        ${EDITOR} "${global_ignore}";
+    fi;
 }
 
 ## Python aliases
