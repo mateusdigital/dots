@@ -42,19 +42,17 @@ else
 	export VISUAL="$EDITOR";
 fi;
 
-##------------------------------------------------------------------------------
-PATH="$PATH:/home/mateus/.mateus-earth/bin";
-export PATH;
 
 ##------------------------------------------------------------------------------
-if [ -n "$IS_GNU_LINUX" ]; then 
-	echo "Bin for gnu";
-	readonly BIN_DIR="${HOME}/.bin/dots/gnu";
-elif [ -n "$IS_MAC" ]; then 
-	echo "Bin for mac";
-	readonly BIN_DIR="${HOME}/.bin/dots/mac";
-fi;
+readonly BIN_DIR="${HOME}/.local/bin/dots";
 export BIN_DIR;
+
+if [ -n "$IS_GNU_LINUX" ]; then 
+	readonly BIN_DIR_OS="${BIN_DIR}/gnu";
+elif [ -n "$IS_MAC" ]; then 
+	readonly BIN_DIR_OS="${BIN_DIR}/mac";
+fi;
+export BIN_DIR_OS;
 
 readonly CONFIG_DIR="${HOME}/.config";
 export CONFIG_DIR;
@@ -370,8 +368,9 @@ shopt -s checkwinsize
 ##
 
 ##------------------------------------------------------------------------------
-PATH="${PATH}:${BIN_DIR}:${HOME}/.local/bin";
-
+PATH="${PATH}:${BIN_DIR}:${BIN_DIR_OS}:${HOME}/.local/bin";
+export PATH;
+alias list-path="echo $PATH | tr ':' '\n'";
 
 ##
 ## PS1
