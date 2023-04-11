@@ -19,30 +19,41 @@ declare -r PROFILE="${HOME}/.bashrc";
 export PROFILE;
 
 ##------------------------------------------------------------------------------
-declare -r IS_WSL="$(uname -a | grep "WSL2")";
+readonly IS_WSL="$(uname -a | grep "WSL2")";
+readonly IS_MAC="$(uname -a | grep "Darwin")";
+readonly IS_GNU_LINUX="$(uname -a | grep "GNU")";
+
 export IS_WSL;
+export IS_MAC;
+export IS_GNU_LINUX;
+
+readonly OS_NAME="$(uname -s)";
+readonly NODE_NAME="$(uname -n)";
 
 if [ -n "${IS_WSL}" ]; then
     declare -r WIN_HOME="${HOME}/win_home";
-    declare -r USER_DATA_HOME="${WIN_HOME}";
-else
-    declare -r USER_DATA_HOME="${HOME}";
 fi;
 
 ##------------------------------------------------------------------------------
 export EDITOR="vim";
-export VISUAL="code";
+if [ -z "$SSH_CLIENT" ]; then
+	export VISUAL="code";
+else 
+	export VISUAL="$EDITOR";
+fi;
 
 ##------------------------------------------------------------------------------
 PATH="$PATH:/home/mateus/.mateus-earth/bin";
 export PATH;
 
 ##------------------------------------------------------------------------------
-declare -r GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01';
-export GCC_COLORS;
-
-##------------------------------------------------------------------------------
-readonly BIN_DIR="${HOME}/.bin/dots/gnu";
+if [ -n "$IS_GNU_LINUX" ]; then 
+	echo "Bin for gnu";
+	readonly BIN_DIR="${HOME}/.bin/dots/gnu";
+elif [ -n "$IS_MAC" ]; then 
+	echo "Bin for mac";
+	readonly BIN_DIR="${HOME}/.bin/dots/mac";
+fi;
 export BIN_DIR;
 
 readonly CONFIG_DIR="${HOME}/.config";
@@ -50,6 +61,10 @@ export CONFIG_DIR;
 
 readonly SCRAP_FILE_DIR="${HOME}/.scrap_files";
 export SCRAP_FILE_DIR;
+
+##------------------------------------------------------------------------------
+declare -r GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01';
+export GCC_COLORS;
 
 ##
 ##  _Imports
@@ -146,8 +161,8 @@ alias dp="dots p";
 ##------------------------------------------------------------------------------
 alias reload-profile='source ${PROFILE}';
 
-alias edit='code ${HOME}';
-alias edit-profile='code ${HOME}';
+alias edit='$VISUAL ${HOME}';
+alias edit-profile='$VISUAL ${HOME}/.bashrc';
 
 alias list-bin='ls -1 $BIN_DIR';
 alias edit-bin='$VISUAL $BIN_DIR';
@@ -242,6 +257,7 @@ function dots()
 ## Emscriptem
 ##
 
+##------------------------------------------------------------------------------
 if [ -f "${HOME}/.emsdk/emsdk_env.sh" ]; then
     export EMSDK_QUIET=1;
     source "${HOME}/.emsdk/emsdk_env.sh";
@@ -319,6 +335,7 @@ function git-feature-finish()
 ## History
 ##
 
+##------------------------------------------------------------------------------
 # append to the history file, don't overwrite it
 shopt -s histappend;
 PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
@@ -329,7 +346,7 @@ shopt -s cmdhist
 shopt -s checkwinsize # check the window size after each command and, if necessary,
                       # update the values of LINES and COLUMNS.
 
-shopt -s dirspell
+## shopt -s dirspell ## @bug: doesn't work on mac
 
 export HISTCONTROL=ignoreboth;
 export HISTIGNORE="&:ls:[bf]g:pwd:exit:cd ..";
@@ -342,6 +359,7 @@ export HISTFILESIZE=200000;
 ## MISC
 ##
 
+##------------------------------------------------------------------------------
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -351,7 +369,8 @@ shopt -s checkwinsize
 ## PATH
 ##
 
-PATH="${PATH}:${HOME}/.bin/dots/gnu:${HOME}/.local/bin";
+##------------------------------------------------------------------------------
+PATH="${PATH}:${BIN_DIR}:${HOME}/.local/bin";
 
 
 ##
@@ -385,7 +404,7 @@ function set_git_ps1() {
         smile_face=":(";
     fi;
 
-    printf "%s\n%s " "${str}" ${smile_face};
+    printf "%s @%s(%s)\n%s " "${str}" "${NODE_NAME}" "${OS_NAME}"  ${smile_face};
 }
 
 export PS1='$(set_git_ps1)'
