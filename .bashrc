@@ -186,6 +186,10 @@ alias pydoc="pydoc3";
 ##------------------------------------------------------------------------------
 alias repoall="repochecker --remote --show-all --submodules"
 
+## WSL aliases
+alias wsl-ip='expose-wsl | grep "WSL should" | cut -d":" -f2 | tr -d " "';
+
+
 
 ##
 ## Bash Completion
