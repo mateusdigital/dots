@@ -70,9 +70,26 @@ Projects/
 .local/share/
 .local/lib/
 
+.config/transmission/settings.json
+
+.config/.gsd-keyboard*
+.config/autostart/
+.config/dconf/
+.config/enchant/
+.config/evolution/
+.config/gnome-initial-setup-done
+.config/ibus/
+.config/input-remapper/
+.config/mimeapps.list
+.config/monitors.xml
+.config/nautilus/
+.config/user-dirs*
+
 .config/coc/
+.config/Code/
 .config/GIMP/
 .config/godot/
+.config/google-chrome/
 .config/grammarly*
 .config/gtk*
 .config/JetBrains/
@@ -84,7 +101,6 @@ Projects/
 .config/gatsby/
 .config/nextjs-nodejs/
 .config/asciinema/install-id
-
 .config/gosh/gosh-paths.txt
 
 ##------------------------------------------------------------------------------
@@ -169,6 +185,11 @@ NTUSER*
 ntuser*
 
 ##--------------------------------------------------------------------------------
-## Windows
 ## GNU/Linux
 .dbus/
+.snap/
+snap/
+.fontconfig/
+.gnupg/
+.local/state/
+.pki/
