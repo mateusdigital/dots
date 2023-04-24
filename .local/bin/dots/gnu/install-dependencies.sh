@@ -6,6 +6,7 @@
 
 ## Update
 echo "==> Installing GNU/Linux software...";
+
 sudo apt-get update       -y || exit 1;
 sudo apt-get upgrade      -y || exit 1;
 sudo apt-get dist-upgrade -y || exit 1;
@@ -36,6 +37,7 @@ readonly software_list=(
     "lynx"
     "make"
     "net-tools"
+    "openssh-server"
     "pandoc"
     "peco"
     "ripgrep"
@@ -63,7 +65,7 @@ curl -sL https://deb.nodesource.com/setup_18.x -o /var/tmp/nodesource_setup.sh
 sudo bash /var/tmp/nodesource_setup.sh;
 sudo apt-get install -y nodejs
 
-## Google Chrome 
+## Google Chrome
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo apt install ./google-chrome-stable_current_amd64.deb
 rm   ./google-chrome-stable_current_amd64.deb
