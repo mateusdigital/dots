@@ -297,7 +297,8 @@ function __my_git() {
         local user_repo="";
         local clone_url="";
 
-        if [ -n "$(echo "${1}" | grep "https://")" ]; then ## Complete path...
+        if [ -n "$(echo "${1}" | grep "https://")" ] \
+        || [ -n "$(echo "${1}" | grep "git@")" ]; then ## Complete path...
             clone_url="${1}";
         else
             if [ $args_count -eq 2 ]; then  ## github-clone TheFakeMontyOnTheRun dungeons-of-noudar
