@@ -193,3 +193,15 @@ snap/
 .gnupg/
 .local/state/
 .pki/
+
+## Stop ignoring it and add the rc files to track the config.
+.jackdrc
+.hplip/*
+.config/transmission/*
+.config/vifm/*
+.config/vlc/*
+.sane/xsane/*
+.config/spicy/*
+.config/rncbc.org/*
+.config/obs-studio/*
+.config/kde.org/*

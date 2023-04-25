@@ -109,16 +109,20 @@ function v() {
     fi;
 }
 
+##------------------------------------------------------------------------------
 readonly __original_editor=$EDITOR;
 readonly __original_visual=$VISUAL;
+
 function all-visual() {
     export EDITOR=$__original_visual;
     echo "e v -> $EDITOR";
 }
+
 function all-editor() {
     export VISUAL=$__original_editor;
     echo "e v -> $VISUAL";
 }
+
 
 ## New File...
 ##------------------------------------------------------------------------------
