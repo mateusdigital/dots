@@ -2,7 +2,7 @@
 
 set -e;
 
-readonly username="mateus-earth";
+readonly username="$(git config user.name)";
 
 url_type="ssh_url";
 if [ "$1" == "--http" ]; then

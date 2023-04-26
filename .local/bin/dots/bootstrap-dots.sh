@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-echo "==> Installing mateus-earth's dots!";
+
+echo "==> Installing Mateus Mesquita's dots!";
 
 set -o errexit ## fail script if command fails. add "|| true" to commands that you allow to fail
 set -o nounset ## exit if undeclared variables are used
@@ -14,7 +15,7 @@ function _git() {
     git --git-dir="${HOME}/.dots-bare" --work-tree="${HOME}" $@;
 }
 
-git clone --bare https://github.com/mateus-earth/dots "${HOME}/.dots-bare";
+git clone --bare https://github.com/mateusdigital/dots "${HOME}/.dots-bare";
 _git checkout;
 
 ##------------------------------------------------------------------------------
