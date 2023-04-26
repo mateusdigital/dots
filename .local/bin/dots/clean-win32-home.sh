@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+set -e; ## Stop on errors.
+
+
 if [ -z "$(uname -a | grep WSL)" ]; then
     echo "$0 not running in WSL - Exiting...";
     exit 1;
