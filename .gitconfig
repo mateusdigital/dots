@@ -141,8 +141,8 @@
     rebase = false
 
 [user]
-    name  = mateus-earth
-    email = mateus@cosmicpig.digital
+    name  = mateusdigital
+    email = mateus@cosmicpig.digital ## @todo: Change the email.
 
 
 ##
