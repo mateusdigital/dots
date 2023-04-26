@@ -5,7 +5,6 @@ readonly WHO_AM_I="$(git whoami)";
 readonly DIRNAME="${HOME}/.ssh";
 readonly FILENAME="${DIRNAME}/id_ed25519.pub";
 
-
 mkdir -p "${DIRNAME}";
 
 ## Generate a new ssh key.
@@ -20,6 +19,7 @@ fi;
 chmod 600 -R "${DIRNAME}/"*;
 
 
+cat "${FILENAME}";
 if [ -n "$(which xsel)" ]; then  ## gnu
 	cat "${FILENAME}" | xsel --input --clipboard;
 	echo "==> Copied to clipboard...";

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+readonly SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 
 # Get the app name from user input
 read -p "Enter app name: " app_name
