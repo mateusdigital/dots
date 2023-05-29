@@ -28,6 +28,7 @@ sudo apt-get install -y \
     peco                \
     ripgrep             \
     shellcheck          \
+    sshfs               \
     tree                \
     wget                \
     whois               \

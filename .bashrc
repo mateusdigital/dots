@@ -6,8 +6,6 @@ esac
 
 export BASH_SILENCE_DEPRECATION_WARNING=1; ## For macs to be quiet
 
-
-
 echo "dots loaded...";
 
 ##
@@ -322,7 +320,7 @@ function __my_git() {
                 if echo "$1" | grep -q '/'; then
                     user_repo="${1}";
                 else
-                    local git_user="mateus-earth";
+                    local git_user="mateusdigital"; ## @todo: remove hardcode.
                     user_repo="${git_user}/${1}";
                 fi;
             fi;
@@ -457,6 +455,15 @@ function youtube-mp3()
         "$@"                 \
     ;
 }
+
+
+##
+## Gosh
+## 
+
+##------------------------------------------------------------------------------
+source "/home/mateus/.mateus-earth/bin/gosh/gosh.sh"
+
 
 ##
 ##
