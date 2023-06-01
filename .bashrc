@@ -441,7 +441,7 @@ function set_git_ps1() {
         user_info=" (${USER}) <$(git whoami)>";
     fi
 
-    printf "${location} - ${user_info} - (${_PS1_IP_ADDRESS}) ${using_ssh} \n${smile_face} "
+    printf "${location} - ${user_info} - (${_PS1_IP_ADDRESS}) ${using_ssh} - ${NODE_NAME} \n${smile_face} "
 }
 
 _ps1_update_ip;
