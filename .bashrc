@@ -394,38 +394,60 @@ alias list-path='echo "$PATH" | tr ":" "\n"';
 ## PS1
 ##
 
+_PS1_IP_ADDRESS="";
+
+function _ps1_update_ip() {
+    _PS1_IP_ADDRESS=$(ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $2}' | head -n 1) ;
+}
+
 ##------------------------------------------------------------------------------
 function set_git_ps1() {
     local last_code=$?;
     local git_branch="$(git curr-branch 2>/dev/null)";
 
-    if [[ -n $git_branch ]]; then
-        ## HACK: Just to remove the ssh from the url, we must find a generic way...
-        local git_url="$(git url | sed s/"git@github.com:"/""/g)";
-        if [ -n "$git_url" ]; then
-            local head="$(dirname $git_url)";
-            local tail="$(basename $git_url)";
-            str="[${head}/${tail}] ($PWD)";
-        else
-            local git_dir=$(basename "$(git root)");
-            str="[$git_dir] : $git_branch";
-        fi;
+    local location="${PWD}";
+    local user_info=" ${USER}";
 
-        str="${str} : ${git_branch}";
-    else
-        str="${PWD} ";
-    fi
+    local using_ssh="";
+    if [ -n "$SSH_CONNECTION" ]; then
+        using_ssh="";
+    fi;
 
     local smile_face=":)";
     if [ $last_code -ne 0 ]; then
         smile_face=":(";
     fi;
 
-    printf "%s @%s(%s)\n%s " "${str}" "${NODE_NAME}" "${OS_NAME}"  ${smile_face};
+    if [ -n "$git_branch" ]; then
+        local num_unpushed_commits="$(git log --oneline @{u}.. 2>/dev/null | wc -l)";
+        local num_unpulled_commits="$(git log --oneline ..@{u} 2>/dev/null | wc -l)";
+        local is_dirty="$(git status --porcelain)";
+
+        local status_info="";
+
+        if [ $num_unpushed_commits -gt 0 ]; then
+            status_info+="${num_unpushed_commits}";
+        fi
+
+        if [ $num_unpulled_commits -gt 0 ]; then
+            status_info+="${num_unpulled_commits}";
+        fi
+
+        # if [ -n "$is_dirty" ]; then
+        #     status_info+=" ";
+        # fi
+
+        location="[${PWD}] : ( ${git_branch} ${status_info})";
+        user_info=" (${USER}) <$(git whoami)>";
+    fi
+
+    printf "${location} - ${user_info} - (${_PS1_IP_ADDRESS}) ${using_ssh} \n${smile_face} "
 }
 
-export PS1='$(set_git_ps1)'
+_ps1_update_ip;
 
+
+export PS1='$(set_git_ps1)'
 
 ##
 ## Youtube-dl
@@ -459,7 +481,7 @@ function youtube-mp3()
 
 ##
 ## Gosh
-## 
+##
 
 ##------------------------------------------------------------------------------
 source "/home/mateus/.mateus-earth/bin/gosh/gosh.sh"
