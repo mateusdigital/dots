@@ -478,15 +478,6 @@ function youtube-mp3()
     ;
 }
 
-
-##
-## Gosh
-##
-
-##------------------------------------------------------------------------------
-source "/home/mateus/.mateus-earth/bin/gosh/gosh.sh"
-
-
 ##
 ##
 ##
