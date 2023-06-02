@@ -2,6 +2,13 @@
 
 set -e;
 
+readonly has_jq="$(which jq)";
+if [ -z "$has_jq" ]; then
+	echo "please install jq.";
+	exit 1;
+fi
+
+
 readonly username="$(git config user.name)";
 
 url_type="ssh_url";
