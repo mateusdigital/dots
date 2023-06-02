@@ -288,9 +288,9 @@ function files()
 {
     ## @incomplete: Just works on wsl right now... - Mesquita 22-09-20
     if [ -z "$1" ]; then
-        explorer.exe .
+        $(wslpath -au "C:/windows/explorer.exe") .
     else
-        explorer.exe "$1";
+        $(wslpath -au "C:/windows/explorer.exe") "$1";
     fi;
 }
 
