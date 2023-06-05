@@ -390,14 +390,34 @@ PATH="${PATH}:${BIN_DIR}:${BIN_DIR_OS}:${HOME}/.local/bin";
 export PATH;
 alias list-path='echo "$PATH" | tr ":" "\n"';
 
+
+
 ##
 ## PS1
 ##
 
 _PS1_IP_ADDRESS="";
+_PS1_OS_ICON="";
 
 function _ps1_update_ip() {
     _PS1_IP_ADDRESS=$(ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $2}' | head -n 1) ;
+}
+
+function _ps1_os_icon() {
+    if [ -n "$IS_WSL" ]; then
+        _PS1_OS_ICON="";
+    elif [ -n "$IS_MAC" ]; then
+       _PS1_OS_ICON="";
+    elif [ -n "$IS_GNU_LINUX" ]; then
+        _PS1_OS_ICON="";
+    fi;
+}
+
+__trim() {
+    local str="${1}"
+    str="${str#"${str%%[![:space:]]*}"}"  # Trim leading whitespace
+    str="${str%"${str##*[![:space:]]}"}"  # Trim trailing whitespace
+    echo "${str}"
 }
 
 ##------------------------------------------------------------------------------
@@ -406,7 +426,7 @@ function set_git_ps1() {
     local git_branch="$(git curr-branch 2>/dev/null)";
 
     local location="${PWD}";
-    local user_info=" ${USER}";
+    local user_info="${USER}";
 
     local using_ssh="";
     if [ -n "$SSH_CONNECTION" ]; then
@@ -437,17 +457,42 @@ function set_git_ps1() {
         #     status_info+=" ";
         # fi
 
-        location="[${PWD}] : ( ${git_branch} ${status_info})";
-        user_info=" (${USER}) <$(git whoami)>";
+        git_info=$(__trim "${git_branch} ${status_info}");
+
+        location="[${PWD}] : ( ${git_info})";
+        user_info="(${USER}) <$(git whoami)>";
     fi
 
-    printf "${location} - ${user_info} - (${_PS1_IP_ADDRESS}) ${using_ssh} - ${NODE_NAME} \n${smile_face} "
+    printf "${location} - ${user_info} - (${_PS1_IP_ADDRESS}) ${using_ssh} -  ${_PS1_OS_ICON} ${NODE_NAME} \n${smile_face} "
 }
 
+## Run once PS1 setup...
 _ps1_update_ip;
-
+_ps1_os_icon;
 
 export PS1='$(set_git_ps1)'
+
+
+##
+## SSH
+##
+
+##------------------------------------------------------------------------------
+function mount_ssh() {
+    local remote_host="$1";
+    local local_path="${HOME}/${remote_host}";
+    local remote_path="/home/${USER}"; ## Linux
+
+    local remote_is_mac="$(echo "${remote_host}" | grep "mac")";
+    if [ -n "${remote_is_mac}" ]; then
+        remote_path="/Users/${USER}";
+    fi;
+
+    echo "==> Mounting: ($remote_host) path: ($remote_path) at: ($local_path)";
+    sshfs ${USER}@${remote_host}:${remote_path} ${local_path}
+}
+
+
 
 ##
 ## Youtube-dl
