@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## set -e;
+set -e; ## break on errors.
 
 
 readonly PROJECTS_DIR="${HOME}/Projects";
