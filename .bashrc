@@ -35,7 +35,7 @@ fi;
 ##------------------------------------------------------------------------------
 export EDITOR="vim";
 if [ -z "$SSH_CLIENT" ]; then
-	export VISUAL="code";
+	export VISUAL="code --disable-gpu --enable-use-zoom-for-dsf";
 else
 	export VISUAL="$EDITOR";
 fi;
