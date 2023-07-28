@@ -35,7 +35,7 @@ fi;
 ##------------------------------------------------------------------------------
 export EDITOR="vim";
 if [ -z "$SSH_CLIENT" ]; then
-	export VISUAL="code --disable-gpu --enable-use-zoom-for-dsf";
+	export VISUAL="code --disable-gpu";
 else
 	export VISUAL="$EDITOR";
 fi;
@@ -498,18 +498,12 @@ function mount_ssh() {
 ## Youtube-dl
 ##
 
+readonly __YOUTUBE_DL="yt-dlp";
+
 ##------------------------------------------------------------------------------
 function youtube-dl()
 {
-    /usr/bin/youtube-dl        \
-        --write-description    \
-        --write-info-json      \
-        --write-annotations    \
-        --write-thumbnail      \
-        --prefer-free-formats  \
-        --add-metadata         \
-        "$@"                   \
-    ;
+    $__YOUTUBE_DL "$@";
 }
 
 ##------------------------------------------------------------------------------
@@ -522,6 +516,7 @@ function youtube-mp3()
         "$@"                 \
     ;
 }
+alias mp3="youtube-mp3";
 
 ##
 ##
