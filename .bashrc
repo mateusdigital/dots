@@ -233,6 +233,7 @@ function mkcd()
 ##
 ## Dots
 ##
+alias dots-alias='git --git-dir "${GIT_DIR}" --work-tree "${GIT_WORK_TREE}"';
 
 ##------------------------------------------------------------------------------
 function dots()
@@ -260,10 +261,7 @@ function dots()
     if [ $# -eq 0 ]; then
         dots status -u;
     else
-        git                                \
-            --git-dir   "${GIT_DIR}"       \
-            --work-tree "${GIT_WORK_TREE}" \
-            "$@";
+        dots-alias "$@";
     fi;
 }
 
