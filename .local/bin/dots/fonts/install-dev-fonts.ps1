@@ -19,7 +19,7 @@ function install_font()
         $FONTS_OBJ = (New-Object -ComObject Shell.Application).Namespace(0x14);
         $FONTS_OBJ.CopyHere($font_path);
 
-        Copy-Item "$font_path" "$target_path";
+        ## Copy-Item "$font_path" "$target_path";
     }
 }
 
