@@ -1,5 +1,7 @@
 #!/bin/bash
 
+## export GIT_TO_USE=""; add-header-file-info.sh
+
 readonly fullpath="$1";
 readonly directory=$(dirname "$fullpath");
 readonly filename=$(basename "$fullpath");
@@ -10,15 +12,27 @@ echo "directory: $directory";
 echo "filename: $filename";
 echo "extension: $extension";
 
-if git -C "$directory" rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-  remote_url=$(git -C "$directory" remote get-url origin);
+if [ -z "$GIT_TO_USE" ]; then
+    GIT_TO_USE="git";
+fi
+
+echo "using git: $GIT_TO_USE";
+$GIT_TO_USE -C "$directory" rev-parse --is-inside-work-tree;
+exit;
+
+if $GIT_TO_USE -C "$directory" rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+  echo "Getting information from git...";
+
+  remote_url=$($GIT_TO_USE  -C "$directory" remote get-url origin);
   project_name=$(basename "$remote_url" .git);
 
-  creation_date=$(git -C "$directory" log --diff-filter=A --format="%aI" -- "$filename" | tail -n 1);
+  creation_date=$($GIT_TO_USE -C "$directory" log --diff-filter=A --format="%aI" -- "$filename" | tail -n 1);
   creation_date=$(date -d "$creation_date" "+%Y-%m-%d")
 
   creation_year=$(date -d "$creation_date" "+%Y")
 else
+  echo "Getting information from filesystem...";
+
   project_name=$(basename "$directory");
 
   if [ -n "$(uname -a | grep -i "Linux")" ]; then
