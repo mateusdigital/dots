@@ -18,7 +18,9 @@ fi;
 ## Make sure that the keys directory has the least amount access possible...
 chmod 600 -R "${DIRNAME}/"*;
 
-
+## @BUG: There's an error that we don't copy to the clipboard the first time
+## that application is run and we don't have the file still...
+echo "------------------------------------------------------------------------";
 cat "${FILENAME}";
 if [ -n "$(which xsel)" ]; then  ## gnu
 	cat "${FILENAME}" | xsel --input --clipboard;
