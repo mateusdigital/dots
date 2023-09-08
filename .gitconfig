@@ -78,6 +78,7 @@
     cb= change-branch;
     d = diff;
     g = "!f() { gitui "$@";    }; f"; l = log --pretty=oneline -n 10 --graph --abbrev-commit
+    l = log;
     m = "!f() { git-merge.sh;  }; f";
     p = "!git push --set-upstream origin $(git branch-name);";
     s = status -s;
