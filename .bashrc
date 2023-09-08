@@ -421,7 +421,6 @@ __trim() {
 ##------------------------------------------------------------------------------
 function set_git_ps1() {
     local last_code=$?;
-    local git_branch="$(git curr-branch 2>/dev/null)";
 
     local location="${PWD}";
     local user_info="${USER}";
@@ -436,30 +435,35 @@ function set_git_ps1() {
         smile_face=":(";
     fi;
 
-    if [ -n "$git_branch" ]; then
-        local num_unpushed_commits="$(git log --oneline @{u}.. 2>/dev/null | wc -l)";
-        local num_unpulled_commits="$(git log --oneline ..@{u} 2>/dev/null | wc -l)";
-        local is_dirty="$(git status --porcelain)";
+    if [[ $location != /mnt/* ]]; then
+        local git_branch="$(git curr-branch 2>/dev/null)";
+        if [ -n "$git_branch" ]; then
+            local num_unpushed_commits="$(git log --oneline @{u}.. 2>/dev/null | wc -l)";
+            local num_unpulled_commits="$(git log --oneline ..@{u} 2>/dev/null | wc -l)";
+            local is_dirty="$(git status --porcelain)";
 
-        local status_info="";
+            local status_info="";
 
-        if [ $num_unpushed_commits -gt 0 ]; then
-            status_info+="${num_unpushed_commits}";
+            if [ $num_unpushed_commits -gt 0 ]; then
+                status_info+=" ${num_unpushed_commits}";
+            fi
+
+            if [ $num_unpulled_commits -gt 0 ]; then
+                status_info+=" ${num_unpulled_commits}";
+            fi
+
+            # if [ -n "$is_dirty" ]; then
+            #     status_info+=" ";
+            # fi
+
+            git_info=$(__trim "${git_branch} ${status_info}");
+
+            location="[${PWD}] : ( ${git_info})";
+            user_info="(${USER}) <$(git whoami)>";
         fi
-
-        if [ $num_unpulled_commits -gt 0 ]; then
-            status_info+="${num_unpulled_commits}";
-        fi
-
-        # if [ -n "$is_dirty" ]; then
-        #     status_info+=" ";
-        # fi
-
-        git_info=$(__trim "${git_branch} ${status_info}");
-
-        location="[${PWD}] : ( ${git_info})";
-        user_info="(${USER}) <$(git whoami)>";
-    fi
+    else
+        location="$location (on wsl)";
+    fi;
 
     printf "${location} - ${user_info} - (${_PS1_IP_ADDRESS}) ${using_ssh} -  ${_PS1_OS_ICON} ${NODE_NAME} \n${smile_face} "
 }
